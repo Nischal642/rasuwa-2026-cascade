@@ -1,0 +1,156 @@
+{
+  "places": {
+    "Rasuwagadhi": {
+      "chainage_km": 0.1,
+      "off_river_m": 44,
+      "arrival_min": 7.0,
+      "arrival_5_95_min": [
+        7.0,
+        7.0
+      ],
+      "arrival_npt": "08:44",
+      "after_sms_min": -31.0,
+      "warning_with_auto_alert_min": 5.0,
+      "extrapolated": false
+    },
+    "Timure": {
+      "chainage_km": 3.4,
+      "off_river_m": 170,
+      "arrival_min": 8.3,
+      "arrival_5_95_min": [
+        8.1,
+        8.4
+      ],
+      "arrival_npt": "08:45",
+      "after_sms_min": -29.7,
+      "warning_with_auto_alert_min": 6.3,
+      "extrapolated": false
+    },
+    "Syabrubesi": {
+      "chainage_km": 14.5,
+      "off_river_m": 111,
+      "arrival_min": 12.3,
+      "arrival_5_95_min": [
+        11.7,
+        12.9
+      ],
+      "arrival_npt": "08:49",
+      "after_sms_min": -25.7,
+      "warning_with_auto_alert_min": 10.3,
+      "extrapolated": false
+    },
+    "Chilime Hydropower Powerhouse": {
+      "chainage_km": 15.8,
+      "off_river_m": 59,
+      "arrival_min": 13.6,
+      "arrival_5_95_min": [
+        13.0,
+        14.3
+      ],
+      "arrival_npt": "08:50",
+      "after_sms_min": -24.4,
+      "warning_with_auto_alert_min": 11.6,
+      "extrapolated": false
+    },
+    "Upper Trishuli 3A": {
+      "chainage_km": 40.0,
+      "off_river_m": 119,
+      "arrival_min": 35.6,
+      "arrival_5_95_min": [
+        32.2,
+        39.0
+      ],
+      "arrival_npt": "09:12",
+      "after_sms_min": -2.4,
+      "warning_with_auto_alert_min": 33.6,
+      "extrapolated": false
+    },
+    "Upper Trishuli 3A Powerhouse": {
+      "chainage_km": 40.0,
+      "off_river_m": 348,
+      "arrival_min": 35.6,
+      "arrival_5_95_min": [
+        32.2,
+        39.0
+      ],
+      "arrival_npt": "09:12",
+      "after_sms_min": -2.4,
+      "warning_with_auto_alert_min": 33.6,
+      "extrapolated": false
+    },
+    "Upper Trishuli-3B Powerhouse": {
+      "chainage_km": 44.0,
+      "off_river_m": 86,
+      "arrival_min": 39.6,
+      "arrival_5_95_min": [
+        35.6,
+        43.5
+      ],
+      "arrival_npt": "09:16",
+      "after_sms_min": 1.6,
+      "warning_with_auto_alert_min": 37.6,
+      "extrapolated": false
+    },
+    "Betrawati": {
+      "chainage_km": 46.9,
+      "off_river_m": 192,
+      "arrival_min": 43.1,
+      "arrival_5_95_min": [
+        38.5,
+        47.5
+      ],
+      "arrival_npt": "09:20",
+      "after_sms_min": 5.1,
+      "warning_with_auto_alert_min": 41.1,
+      "extrapolated": false
+    },
+    "Trishuli Hydropower Station": {
+      "chainage_km": 55.7,
+      "off_river_m": 78,
+      "arrival_min": 57.6,
+      "arrival_5_95_min": [
+        50.9,
+        64.2
+      ],
+      "arrival_npt": "09:34",
+      "after_sms_min": 19.6,
+      "warning_with_auto_alert_min": 55.6,
+      "extrapolated": true
+    },
+    "Trishuli Bridge": {
+      "chainage_km": 58.0,
+      "off_river_m": 23,
+      "arrival_min": 61.2,
+      "arrival_5_95_min": [
+        54.0,
+        68.3
+      ],
+      "arrival_npt": "09:38",
+      "after_sms_min": 23.2,
+      "warning_with_auto_alert_min": 59.2,
+      "extrapolated": true
+    }
+  },
+  "flood_speed_k": [
+    103.5,
+    118.3,
+    139.2
+  ],
+  "implied_flood_depth_m": {
+    "manning_n": 0.05,
+    "5_50_95": [
+      5.5,
+      6.7,
+      8.5
+    ]
+  },
+  "observations": {
+    "gyirong_port_min": 7,
+    "syabrubesi_latest_min": 13,
+    "betrawati_window_min": [
+      38,
+      48
+    ],
+    "sms_min": 38
+  }
+}

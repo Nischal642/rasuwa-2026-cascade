@@ -1,0 +1,104 @@
+{
+  "Syabrubesi (AOI01)": {
+    "any": {
+      "precision": 0.982,
+      "recall": 0.814,
+      "f1": 0.89,
+      "iou": 0.802,
+      "ours_km2": 0.921,
+      "copernicus_km2": 1.111
+    },
+    "optical": {
+      "precision": 0.982,
+      "recall": 0.813,
+      "f1": 0.89,
+      "iou": 0.801,
+      "ours_km2": 0.92,
+      "copernicus_km2": 1.111
+    },
+    "radar": {
+      "precision": 0.989,
+      "recall": 0.027,
+      "f1": 0.053,
+      "iou": 0.027,
+      "ours_km2": 0.031,
+      "copernicus_km2": 1.111
+    },
+    "both": {
+      "precision": 0.988,
+      "recall": 0.026,
+      "f1": 0.051,
+      "iou": 0.026,
+      "ours_km2": 0.029,
+      "copernicus_km2": 1.111
+    }
+  },
+  "Timure (AOI02)": {
+    "any": {
+      "precision": 0.983,
+      "recall": 0.727,
+      "f1": 0.836,
+      "iou": 0.718,
+      "ours_km2": 0.954,
+      "copernicus_km2": 1.29
+    },
+    "optical": {
+      "precision": 0.983,
+      "recall": 0.726,
+      "f1": 0.835,
+      "iou": 0.717,
+      "ours_km2": 0.953,
+      "copernicus_km2": 1.29
+    },
+    "radar": {
+      "precision": 0.993,
+      "recall": 0.041,
+      "f1": 0.079,
+      "iou": 0.041,
+      "ours_km2": 0.054,
+      "copernicus_km2": 1.29
+    },
+    "both": {
+      "precision": 1.0,
+      "recall": 0.04,
+      "f1": 0.077,
+      "iou": 0.04,
+      "ours_km2": 0.052,
+      "copernicus_km2": 1.29
+    }
+  },
+  "Bidur (AOI03)": {
+    "any": {
+      "precision": 0.929,
+      "recall": 0.757,
+      "f1": 0.834,
+      "iou": 0.716,
+      "ours_km2": 5.715,
+      "copernicus_km2": 7.014
+    },
+    "optical": {
+      "precision": 0.931,
+      "recall": 0.753,
+      "f1": 0.833,
+      "iou": 0.713,
+      "ours_km2": 5.672,
+      "copernicus_km2": 7.014
+    },
+    "radar": {
+      "precision": 0.975,
+      "recall": 0.267,
+      "f1": 0.419,
+      "iou": 0.265,
+      "ours_km2": 1.921,
+      "copernicus_km2": 7.014
+    },
+    "both": {
+      "precision": 0.98,
+      "recall": 0.263,
+      "f1": 0.415,
+      "iou": 0.261,
+      "ours_km2": 1.878,
+      "copernicus_km2": 7.014
+    }
+  }
+}

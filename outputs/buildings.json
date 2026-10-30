@@ -1,0 +1,79 @@
+{
+  "cems": {
+    "Syabrubesi (AOI01)": {
+      "Destroyed": {
+        "graded": 323,
+        "in_footprint": 311
+      },
+      "Damaged": {
+        "graded": 32,
+        "in_footprint": 10
+      },
+      "Possibly damaged": {
+        "graded": 78,
+        "in_footprint": 1
+      }
+    },
+    "Timure (AOI02)": {
+      "Destroyed": {
+        "graded": 372,
+        "in_footprint": 332
+      },
+      "Damaged": {
+        "graded": 33,
+        "in_footprint": 29
+      },
+      "Possibly damaged": {
+        "graded": 26,
+        "in_footprint": 1
+      }
+    },
+    "Bidur (AOI03)": {
+      "Destroyed": {
+        "graded": 2479,
+        "in_footprint": 2293
+      },
+      "Damaged": {
+        "graded": 246,
+        "in_footprint": 169
+      },
+      "Possibly damaged": {
+        "graded": 333,
+        "in_footprint": 70
+      }
+    }
+  },
+  "open_buildings": {
+    "in_corridor": 14808,
+    "in_footprint": 2519,
+    "by_stretch": {
+      "Lhende Khola": 0,
+      "Rasuwagadhi to Syabrubesi": 516,
+      "Syabrubesi to Betrawati": 574,
+      "Betrawati to Bidur and below": 1429
+    },
+    "in_footprint_by_cems_area": {
+      "Syabrubesi (AOI01)": 167,
+      "Timure (AOI02)": 282,
+      "Bidur (AOI03)": 1878
+    },
+    "min_confidence": 0.75
+  },
+  "cems_pooled": {
+    "Destroyed": {
+      "graded": 3174,
+      "in_footprint": 2936,
+      "share": 0.925
+    },
+    "Damaged": {
+      "graded": 311,
+      "in_footprint": 208,
+      "share": 0.669
+    },
+    "Possibly damaged": {
+      "graded": 437,
+      "in_footprint": 72,
+      "share": 0.165
+    }
+  }
+}

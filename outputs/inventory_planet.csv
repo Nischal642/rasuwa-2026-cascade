@@ -1,0 +1,59 @@
+date,id,bands
+2026-05-27 05:32,20260527_053217_72_254a_analytic_sr_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053217_72_254a_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053219_95_254a_analytic_sr_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053219_95_254a_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053221_96_254a_analytic_sr_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053221_96_254a_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053224_18_254a_analytic_sr_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053224_18_254a_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053226_41_254a_analytic_sr_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-05-27 05:32,20260527_053226_41_254a_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050125_99_255f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050125_99_255f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050128_33_255f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050128_33_255f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050130_66_255f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050130_66_255f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050133_00_255f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050133_00_255f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050135_34_255f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:01,20260826_050135_34_255f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:44,20260826_054456_67_251f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:44,20260826_054456_67_251f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:44,20260826_054458_74_251f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:44,20260826_054458_74_251f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:45,20260826_054500_80_251f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:45,20260826_054500_80_251f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:45,20260826_054502_86_251f_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-26 05:45,20260826_054502_86_251f_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-27 02:00,20260827_020055_ssc1_u0001_pansharpened,blue green red nir
+2026-08-27 02:00,20260827_020055_ssc1_u0001_visual,red green blue
+2026-08-27 02:00,20260827_020055_ssc1_u0002_pansharpened,blue green red nir
+2026-08-27 02:00,20260827_020055_ssc1_u0002_visual,red green blue
+2026-08-27 06:09,20260827_060956_98_3009_pansharpened_udm2,b1 b2 b3 b4 b5 b6 clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-27 06:09,20260827_060956_98_3009_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-27 06:09,20260827_060958_31_3009_pansharpened_udm2,b1 b2 b3 b4 b5 b6 clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-27 06:09,20260827_060958_31_3009_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-27 06:09,20260827_060959_65_3009_pansharpened_udm2,b1 b2 b3 b4 b5 b6 clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-27 06:09,20260827_060959_65_3009_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045742_14_2544_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045742_14_2544_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045744_48_2544_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045744_48_2544_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045746_81_2544_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045746_81_2544_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045749_15_2544_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 04:57,20260828_045749_15_2544_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 05:01,20260828_050143_19_2520_analytic_udm2,blue green red nir clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-28 05:01,20260828_050143_19_2520_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-08-31 09:25,20260831_092523_ssc9_u0002_pansharpened,blue green red nir
+2026-08-31 09:25,20260831_092523_ssc9_u0002_visual,red green blue
+2026-08-31 09:25,20260831_092523_ssc9_u0003_pansharpened,blue green red nir
+2026-08-31 09:25,20260831_092523_ssc9_u0003_visual,red green blue
+2026-09-01 05:06,20260901_050632_98_300b_pansharpened_udm2,b1 b2 b3 b4 b5 b6 clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-09-01 05:06,20260901_050632_98_300b_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-09-01 05:06,20260901_050634_33_300b_pansharpened_udm2,b1 b2 b3 b4 b5 b6 clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-09-01 05:06,20260901_050634_33_300b_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-09-01 05:06,20260901_050635_67_300b_pansharpened_udm2,b1 b2 b3 b4 b5 b6 clear snow shadow haze_light haze_heavy cloud confidence udm1
+2026-09-01 05:06,20260901_050635_67_300b_visual_udm2,red green blue clear snow shadow haze_light haze_heavy cloud confidence udm1

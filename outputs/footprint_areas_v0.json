@@ -1,0 +1,14 @@
+{
+  "areas_km2": {
+    "Optical only": 16.93,
+    "Radar only": 4.85,
+    "Both (higher confidence)": 4.28
+  },
+  "sentinel1_orbit": 85,
+  "thresholds": {
+    "NDVI_DROP": -0.2,
+    "NDVI_AFTER_MAX": 0.35,
+    "VH_CHANGE_DB": 3,
+    "HAND_MAX_M": 60
+  }
+}

@@ -1,0 +1,7 @@
+.venv/
+.ipynb_checkpoints/
+__pycache__/
+# third-party downloads: re-fetch them (see README)
+data/emsr927/
+data/osm/
+outputs/last.log

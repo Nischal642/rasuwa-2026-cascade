@@ -1,0 +1,144 @@
+{
+  "baseline": {
+    "params": {
+      "ndvi_drop": -0.1,
+      "cva_min": 0.08,
+      "ndvi_after_max": 0.35,
+      "vh_db": 4,
+      "hand_max_m": 150
+    },
+    "control_flagged": 0.0153,
+    "scores": {
+      "Syabrubesi (AOI01)": {
+        "precision": 0.991,
+        "recall": 0.827,
+        "f1": 0.902,
+        "iou": 0.82,
+        "ours_km2": 0.928,
+        "copernicus_km2": 1.112
+      },
+      "Timure (AOI02)": {
+        "precision": 0.985,
+        "recall": 0.736,
+        "f1": 0.842,
+        "iou": 0.728,
+        "ours_km2": 0.962,
+        "copernicus_km2": 1.289
+      },
+      "Bidur (AOI03)": {
+        "precision": 0.917,
+        "recall": 0.775,
+        "f1": 0.84,
+        "iou": 0.724,
+        "ours_km2": 5.924,
+        "copernicus_km2": 7.01
+      }
+    }
+  },
+  "leave_one_area_out": {
+    "Syabrubesi (AOI01)": {
+      "params": {
+        "ndvi_drop": -0.1,
+        "cva_min": 0.08,
+        "ndvi_after_max": 0.35,
+        "vh_db": 4,
+        "hand_max_m": 150
+      },
+      "train_f1": 0.841,
+      "control_flagged": 0.0153,
+      "test_scores": {
+        "precision": 0.991,
+        "recall": 0.827,
+        "f1": 0.902,
+        "iou": 0.82,
+        "ours_km2": 0.928,
+        "copernicus_km2": 1.112
+      }
+    },
+    "Timure (AOI02)": {
+      "params": {
+        "ndvi_drop": -0.1,
+        "cva_min": 0.08,
+        "ndvi_after_max": 0.35,
+        "vh_db": 4,
+        "hand_max_m": 150
+      },
+      "train_f1": 0.871,
+      "control_flagged": 0.0153,
+      "test_scores": {
+        "precision": 0.985,
+        "recall": 0.736,
+        "f1": 0.842,
+        "iou": 0.728,
+        "ours_km2": 0.962,
+        "copernicus_km2": 1.289
+      }
+    },
+    "Bidur (AOI03)": {
+      "params": {
+        "ndvi_drop": -0.15,
+        "cva_min": 0.08,
+        "ndvi_after_max": 0.45,
+        "vh_db": 4,
+        "hand_max_m": 150
+      },
+      "train_f1": 0.874,
+      "control_flagged": 0.0198,
+      "test_scores": {
+        "precision": 0.896,
+        "recall": 0.783,
+        "f1": 0.836,
+        "iou": 0.718,
+        "ours_km2": 6.124,
+        "copernicus_km2": 7.01
+      }
+    }
+  },
+  "final": {
+    "params": {
+      "ndvi_drop": -0.1,
+      "cva_min": 0.08,
+      "ndvi_after_max": 0.35,
+      "vh_db": 4,
+      "hand_max_m": 150
+    },
+    "control_flagged": 0.0153,
+    "scores": {
+      "Syabrubesi (AOI01)": {
+        "precision": 0.991,
+        "recall": 0.827,
+        "f1": 0.902,
+        "iou": 0.82,
+        "ours_km2": 0.928,
+        "copernicus_km2": 1.112
+      },
+      "Timure (AOI02)": {
+        "precision": 0.985,
+        "recall": 0.736,
+        "f1": 0.842,
+        "iou": 0.728,
+        "ours_km2": 0.962,
+        "copernicus_km2": 1.289
+      },
+      "Bidur (AOI03)": {
+        "precision": 0.917,
+        "recall": 0.775,
+        "f1": 0.84,
+        "iou": 0.724,
+        "ours_km2": 5.924,
+        "copernicus_km2": 7.01
+      }
+    }
+  },
+  "unconstrained_best": {
+    "params": {
+      "ndvi_drop": -0.05,
+      "cva_min": 0.03,
+      "ndvi_after_max": 0.35,
+      "vh_db": 4,
+      "hand_max_m": 150
+    },
+    "control_flagged": 0.0527
+  },
+  "note": "Scores here skip the 20 px patch filter; `validate` gives the exact numbers."
+}

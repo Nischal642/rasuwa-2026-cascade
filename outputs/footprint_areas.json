@@ -1,0 +1,17 @@
+{
+  "areas_km2": {
+    "Optical only": 18.83,
+    "Radar only": 0.21,
+    "Both (higher confidence)": 2.94
+  },
+  "sentinel1_orbit": 85,
+  "thresholds": {
+    "ndvi_drop": -0.1,
+    "cva_min": 0.08,
+    "ndvi_after_max": 0.35,
+    "vh_db": 4,
+    "hand_max_m": 150,
+    "snow_ndsi": 0.4,
+    "min_patch_px": 20
+  }
+}

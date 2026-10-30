@@ -1,0 +1,101 @@
+{
+  "cems": {
+    "Syabrubesi (AOI01)": {
+      "destroyed_road_km": 6.15,
+      "in_footprint_km": 5.76,
+      "destroyed_bridges": 5,
+      "bridges_in_footprint": 5
+    },
+    "Timure (AOI02)": {
+      "destroyed_road_km": 9.52,
+      "in_footprint_km": 7.51,
+      "destroyed_bridges": 1,
+      "bridges_in_footprint": 1
+    },
+    "Bidur (AOI03)": {
+      "destroyed_road_km": 41.09,
+      "in_footprint_km": 36.15,
+      "destroyed_bridges": 24,
+      "bridges_in_footprint": 24
+    }
+  },
+  "osm": {
+    "road_km_in_footprint": {
+      "Lhende Khola": {
+        "main": 0.0,
+        "local": 0.0,
+        "track": 0.0
+      },
+      "Rasuwagadhi to Syabrubesi": {
+        "main": 2.21,
+        "local": 0.52,
+        "track": 0.29
+      },
+      "Syabrubesi to Betrawati": {
+        "main": 0.5,
+        "local": 18.58,
+        "track": 2.72
+      },
+      "Betrawati to Bidur and below": {
+        "main": 7.02,
+        "local": 13.4,
+        "track": 5.57
+      }
+    },
+    "bridges_in_footprint": {
+      "Lhende Khola": {
+        "road": 0,
+        "foot": 1
+      },
+      "Rasuwagadhi to Syabrubesi": {
+        "road": 0,
+        "foot": 0
+      },
+      "Syabrubesi to Betrawati": {
+        "road": 12,
+        "foot": 4
+      },
+      "Betrawati to Bidur and below": {
+        "road": 6,
+        "foot": 1
+      }
+    },
+    "hydropower_sites_within_100m": {
+      "Chilime Hydropower Powerhouse": [
+        "hydro"
+      ],
+      "Trishuli Hydro Power Dam": [
+        "dam"
+      ],
+      "Trishuli Hydropower Station": [
+        "generator",
+        "plant"
+      ],
+      "Upper Trishuli 3A": [
+        "plant"
+      ],
+      "Upper Trishuli-3B Powerhouse": [
+        "plant"
+      ],
+      "unnamed node 2532475226": [
+        "weir"
+      ],
+      "unnamed node 3503962448": [
+        "weir"
+      ],
+      "unnamed node 3503962450": [
+        "weir"
+      ],
+      "unnamed way 342505749": [
+        "dam"
+      ]
+    }
+  },
+  "cems_pooled": {
+    "destroyed_road_km": 56.76,
+    "share_in_footprint": 0.871,
+    "destroyed_bridges": 30,
+    "bridges_in_footprint": 30,
+    "bridge_tolerance_m": 40
+  }
+}
