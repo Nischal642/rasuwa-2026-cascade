@@ -47,7 +47,7 @@
         13.0,
         14.3
       ],
-      "arrival_npt": "08:50",
+      "arrival_npt": "08:51",
       "after_sms_min": -24.4,
       "warning_with_auto_alert_min": 11.6,
       "extrapolated": false
@@ -60,7 +60,7 @@
         32.2,
         39.0
       ],
-      "arrival_npt": "09:12",
+      "arrival_npt": "09:13",
       "after_sms_min": -2.4,
       "warning_with_auto_alert_min": 33.6,
       "extrapolated": false
@@ -73,7 +73,7 @@
         32.2,
         39.0
       ],
-      "arrival_npt": "09:12",
+      "arrival_npt": "09:13",
       "after_sms_min": -2.4,
       "warning_with_auto_alert_min": 33.6,
       "extrapolated": false
@@ -86,7 +86,7 @@
         35.6,
         43.5
       ],
-      "arrival_npt": "09:16",
+      "arrival_npt": "09:17",
       "after_sms_min": 1.6,
       "warning_with_auto_alert_min": 37.6,
       "extrapolated": false
@@ -112,7 +112,7 @@
         50.9,
         64.2
       ],
-      "arrival_npt": "09:34",
+      "arrival_npt": "09:35",
       "after_sms_min": 19.6,
       "warning_with_auto_alert_min": 55.6,
       "extrapolated": true

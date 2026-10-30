@@ -389,14 +389,15 @@ def corridor_buildings():
     return ee.data.computeFeatures({'expression': buildings, 'fileFormat': 'PANDAS_DATAFRAME'})
 
 
-# Flood-front timing on 26 Aug 2026, minutes after the 08:37 NPT collapse (Wikipedia timeline sources:
-# CCTV, ReliefWeb, Onlinekhabar; Rapid Situation Analysis report). Chainage 0 = Rasuwagadhi / Gyirong Port.
+# Flood-front timing on 26 Aug 2026, minutes after the 08:37 NPT collapse (USGS event us7000tbwb). Sources, as cited
+# in the paper: Xinhua, 28 Aug 2026 (collapse to Gyirong Port); The Kathmandu Post, 27 Aug 2026, summarising the
+# Flood Forecasting Division's technical report (gauges, SMS). Chainage 0 = Rasuwagadhi / Gyirong Port.
 COLLAPSE_NPT_MIN = 8 * 60 + 37
-PORT_MIN = 7                      # CCTV: Gyirong Port destroyed from 08:44, ~20 km below the collapse
-SYABRUBESI_LATEST_MIN = 13        # gauge normal at 08:40, silent from 08:50
-BETRAWATI_WINDOW_MIN = (38, 48)   # gauge 3.55 m until 09:20; situation report: arrival 09:15-09:25
+PORT_MIN = 7                      # "about seven minutes" from the collapse to Gyirong Port, ~20 km below it
+SYABRUBESI_LATEST_MIN = 13        # gauge read 1.62 m at 08:40 and stopped transmitting at 08:50
+BETRAWATI_WINDOW_MIN = (38, 48)   # gauge stopped transmitting at 09:20 (last 3.55 m); our +-5 min band around it
 DEBRIS_MAX_MS = 52                # collapse to Gyirong Port speed; the debris flow did not go faster
-SMS_MIN = 38                      # SMS alert to 679,295 people at 09:15
+SMS_MIN = 38                      # SMS alerts went out 09:15-09:16 (more than 600,000 messages)
 AUTO_ALERT_MIN = 2                # what-if: an automatic alert two minutes after the seismic signal
 LEADTIME_PLACES = ['Rasuwagadhi', 'Timure', 'Syabrubesi', 'Betrawati', 'Trishuli Bridge']
 OSM_CACHE = 'data/osm/overpass.json'  # delete it to fetch OpenStreetMap again
@@ -660,27 +661,36 @@ def run_inventory():
             print(f'  {r["date"]}  {r["id"]}  [{r["bands"]}]')
 
 
-def grid_figure(rows, path, note, legend=None):
-    """Draft figure: each row is (title, png, title, png, ...); legend is {label: hex colour}."""
+def grid_figure(rows, path, note, legend=None, width_in=3.5):
+    """Figure one IEEE column wide, fonts at print size: each row is (title, png, title, png, ...);
+    legend is {label: hex colour}."""
+    import textwrap
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     from matplotlib.patches import Patch
 
     ncols = max(len(r) // 2 for r in rows)
-    fig, axes = plt.subplots(len(rows), ncols, figsize=(5 * ncols, 5 * len(rows)), squeeze=False)
+    panel_in = width_in / ncols
+    images = [p for r in rows for p in r[1::2] if p and os.path.exists(p)]
+    aspect = max(plt.imread(p).shape[0] / plt.imread(p).shape[1] for p in images)
+    note = textwrap.fill(note, int(width_in * 72 / 3.3))  # 6 pt text is about 3.3 pt a character
+    foot_in = (note.count('\n') + 1) * 0.11 + (0.22 if legend else 0.04)
+    height_in = len(rows) * (panel_in * aspect + 0.3) + foot_in  # 0.3 in: a two-line 7 pt title per row
+    fig, axes = plt.subplots(len(rows), ncols, figsize=(width_in, height_in), squeeze=False)
     for ax_row, row in zip(axes, rows):
         for ax, title, png in zip(ax_row, row[::2], row[1::2]):
             if png and os.path.exists(png):
                 ax.imshow(plt.imread(png))
-            ax.set_title(title)
+            ax.set_title('\n'.join(textwrap.fill(t, int(panel_in * 72 / 3.9)) for t in title.split('\n')), fontsize=7)
             ax.axis('off')
+    note_h = (note.count('\n') + 1) * 0.11 / height_in
     if legend:
-        fig.legend(handles=[Patch(color=c, label=k) for k, c in legend.items()],
-                   loc='lower center', ncol=len(legend), frameon=False, bbox_to_anchor=(0.5, 0.02))
-    fig.text(0.5, 0.005, note, ha='center', fontsize=8)
-    fig.tight_layout(rect=(0, 0.08 if legend else 0.02, 1, 1))  # keep the legend and note off the panels
-    fig.savefig(path, dpi=150)
+        fig.legend(handles=[Patch(color=c, label=k) for k, c in legend.items()], fontsize=7, handlelength=1,
+                   columnspacing=1, loc='lower center', ncol=len(legend), frameon=False, bbox_to_anchor=(0.5, note_h))
+    fig.text(0.5, 0.004, note, ha='center', va='bottom', fontsize=6)
+    fig.tight_layout(rect=(0, foot_in / height_in, 1, 1), pad=0.2, h_pad=0.4, w_pad=0.4)  # legend and note below
+    fig.savefig(path, dpi=300, bbox_inches='tight', pad_inches=0.02)  # two-line titles on aspect-locked panels can sit above the layout box
     plt.close(fig)
     print('saved', path)
 
@@ -707,7 +717,7 @@ def run_planet():
     may, aug = f'{FIG}/planet_syabrubesi_2026-05-27.png', f'{FIG}/planet_syabrubesi_2026-08-26.png'
     save_png(planet_view('2026-05-27', '2026-05-28'), PLANET_VIS, box, may)
     save_png(planet_view('2026-08-26', '2026-08-27'), PLANET_VIS, box, aug)
-    grid_figure([('Syabrubesi, 27 May 2026', may, 'Syabrubesi, 26 Aug 2026, about 2 h after the collapse', aug)],
+    grid_figure([('Syabrubesi, 27 May 2026', may, 'Syabrubesi, 26 Aug 2026\nabout 2 h after the collapse', aug)],
                 f'{FIG}/planet_draft.png', 'PlanetScope visual, 6 km box. Imagery: Planet Labs, CC BY-NC 4.0')
 
 
@@ -761,9 +771,31 @@ def run_footprint():
     padded = np.zeros((H * 3, W * 3), change.dtype)
     padded[:h, :w] = change
     block = padded.reshape(H, 3, W, 3).max(axis=(1, 3))
+    rgb[(rgb == 0).all(axis=2)] = 1  # grid edges with no Sentinel-2 data: white, not black
     for c, color in zip((1, 2, 3), COLORS):
         rgb[block == c] = matplotlib.colors.to_rgb(color)
-    plt.imsave(f'{FIG}/footprint_draft.png', rgb)
+
+    # Map one IEEE column wide: places, scale bar, north arrow and legend at print size
+    from matplotlib import patheffects
+    from matplotlib.patches import Patch
+    fig, ax = plt.subplots(figsize=(3.5, 3.5 * H / W))
+    ax.imshow(rgb)
+    ax.axis('off')
+    halo = [patheffects.withStroke(linewidth=1.5, foreground='white')]
+    for name in ('Rasuwagadhi', 'Syabrubesi', 'Betrawati', 'Bidur'):
+        px, py = to_utm(*PLACES[name])
+        col, row = (px - x0) / 60, (y1 - py) / 60  # 60 m background pixels
+        ax.plot(col, row, 'o', ms=2.5, color='black', path_effects=halo)
+        ax.text(col + 10, row, name, fontsize=7, va='center', path_effects=halo)
+    km10 = 10_000 / 60
+    ax.plot([25, 25 + km10], [60, 60], color='black', lw=2, solid_capstyle='butt', path_effects=halo)
+    ax.text(25 + km10 / 2, 50, '10 km', fontsize=7, ha='center', va='bottom', path_effects=halo)
+    ax.annotate('N', xy=(25 + km10 + 40, 30), xytext=(25 + km10 + 40, 75), fontsize=7, ha='center', va='top',
+                arrowprops={'arrowstyle': '-|>', 'color': 'black'}, path_effects=halo)  # UTM grid north
+    ax.legend(handles=[Patch(color=c, label=CLASSES[k]) for k, c in zip((1, 2, 3), COLORS)], fontsize=7,
+              loc='lower right', handlelength=1, framealpha=0.9)
+    fig.tight_layout(pad=0.1)
+    fig.savefig(f'{FIG}/footprint_draft.png', dpi=300)
     print('saved', f'{FIG}/footprint_draft.png')
 
 
@@ -822,27 +854,31 @@ def run_buildings():
         json.dump(result, f, indent=2)
     print('saved', f'{OUT}/buildings.json')
 
-    # Draft figure: two single-series bar charts, values at the bar tips
+    # Figure for one IEEE column (3.5 in, fonts at print size): two single-series bar charts, values at the bar tips
     blue = SERIES[0]
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 4))
+    fig, (a1, a2) = plt.subplots(2, 1, figsize=(3.5, 4.6))
     names, counts = order[::-1], [result['open_buildings']['by_stretch'][s] for s in order[::-1]]
     a1.barh(names, counts, color=blue, height=0.5)
     for y, (s, n) in enumerate(zip(names, counts)):
         # Open Buildings does not cover China, so the Lhende Khola (Gyirong Port) has no data, not zero buildings
-        a1.text(n, y, ' no building data (Tibet)' if s == 'Lhende Khola' else f' {n:,}', va='center', fontsize=9)
-    a1.set_title('Buildings inside the footprint, by stretch (Open Buildings)', fontsize=10)
-    shares = [result['cems_pooled'][g]['share'] * 100 for g in CEMS_GRADES]
-    a2.bar(CEMS_GRADES, shares, color=blue, width=0.5)
-    for x, (g, s) in enumerate(zip(CEMS_GRADES, shares)):
-        a2.text(x, s, f'{s:.0f}%\n({result["cems_pooled"][g]["in_footprint"]} of {result["cems_pooled"][g]["graded"]})',
-                ha='center', va='bottom', fontsize=9)
-    a2.set_ylim(0, 115)
-    a2.set_ylabel('% inside our footprint')
-    a2.set_title('Copernicus-graded buildings our footprint contains', fontsize=10)
+        a1.text(n, y, ' no building data (Tibet)' if s == 'Lhende Khola' else f' {n:,}', va='center', fontsize=7)
+    # titles right-aligned: the panels are narrower than the titles, and the space above the stretch names is empty
+    a1.set_title('Buildings inside the footprint (Open Buildings)', fontsize=8, loc='right')
+    # horizontal like the top panel: the grade names get the wide left margin, the labels the room past the bars
+    grades = CEMS_GRADES[::-1]
+    pooled = [result['cems_pooled'][g] for g in grades]
+    a2.barh(grades, [p['share'] * 100 for p in pooled], color=blue, height=0.5)
+    for y, p in enumerate(pooled):
+        a2.text(p['share'] * 100, y, f' {p["share"]:.0%}\n ({p["in_footprint"]} of {p["graded"]})', va='center', fontsize=7)
+    a2.set_xlim(0, 140)
+    a2.set_xticks([0, 50, 100])
+    a2.set_xlabel('% inside our footprint', fontsize=7)
+    a2.set_title('Copernicus-graded buildings our footprint contains', fontsize=8, loc='right')
     for ax in (a1, a2):
         ax.spines[['top', 'right']].set_visible(False)
+        ax.tick_params(labelsize=7)
     fig.tight_layout()
-    fig.savefig(f'{FIG}/buildings_draft.png', dpi=150)
+    fig.savefig(f'{FIG}/buildings_draft.png', dpi=300)
     print('saved', f'{FIG}/buildings_draft.png')
 
 
@@ -919,30 +955,31 @@ def run_infrastructure():
         json.dump(result, f, indent=2)
     print('saved', f'{OUT}/infrastructure.json')
 
-    # Draft figure: road km and bridges per stretch (stacked by type, legend present)
+    # Figure for one IEEE column: road km and bridges per stretch (stacked by type, legend present)
     names = order[::-1]
-    fig, (a1, a2) = plt.subplots(1, 2, figsize=(12, 4))
+    fig, (a1, a2) = plt.subplots(2, 1, figsize=(3.5, 4.6))
     left = [0.0] * len(names)
     for kind, color in zip(('main', 'local', 'track'), SERIES):
         vals = [road_km[s][kind] for s in names]
         a1.barh(names, vals, left=left, color=color, height=0.5, label=f'{kind} road')
         left = [a + b for a, b in zip(left, vals)]
     for y, v in enumerate(left):
-        a1.text(v, y, f' {v:.1f} km', va='center', fontsize=9)
-    a1.set_title('Road inside the footprint (OpenStreetMap)', fontsize=10)
-    a1.legend(frameon=False, fontsize=8, loc='upper right')  # the top rows are short, so this corner is empty
+        a1.text(v, y, f' {v:.1f} km', va='center', fontsize=7)
+    a1.set_title('Road inside the footprint (OpenStreetMap)', fontsize=8, loc='right')
+    a1.legend(frameon=False, fontsize=6, loc='upper right')  # the top rows are short, so this corner is empty
     road_b, foot_b = [bridges[s]['road'] for s in names], [bridges[s]['foot'] for s in names]
     a2.barh(names, road_b, color=SERIES[0], height=0.5, label='road bridge')
     a2.barh(names, foot_b, left=road_b, color=SERIES[1], height=0.5, label='footbridge')
     for y, (a, b) in enumerate(zip(road_b, foot_b)):
-        a2.text(a + b, y, f' {a + b}', va='center', fontsize=9)
-    a2.set_title('Bridges at the footprint (OpenStreetMap)', fontsize=10)
-    a2.legend(frameon=False, fontsize=8, loc='upper right')
+        a2.text(a + b, y, f' {a + b}', va='center', fontsize=7)
+    a2.set_title('Bridges at the footprint (OpenStreetMap)', fontsize=8, loc='right')
+    a2.legend(frameon=False, fontsize=6, loc='upper right')
     for ax in (a1, a2):
         ax.spines[['top', 'right']].set_visible(False)
-    fig.text(0.5, 0.01, 'The Lhende Khola stretch lies mostly in Tibet, where OpenStreetMap is sparse.', ha='center', fontsize=8)
+        ax.tick_params(labelsize=7)
+    fig.text(0.5, 0.01, 'The Lhende Khola stretch lies mostly in Tibet, where OpenStreetMap is sparse.', ha='center', fontsize=6)
     fig.tight_layout(rect=(0, 0.04, 1, 1))
-    fig.savefig(f'{FIG}/infrastructure_draft.png', dpi=150)
+    fig.savefig(f'{FIG}/infrastructure_draft.png', dpi=300)
     print('saved', f'{FIG}/infrastructure_draft.png')
 
 
@@ -1011,37 +1048,45 @@ def run_leadtime(n_draws=10_000, manning_n=0.05):
         json.dump(result, f, indent=2)
     print('saved', f'{OUT}/leadtime.json')
 
-    # Draft figure: distance down the river against minutes after the collapse (a Marey chart)
+    # Figure one IEEE column wide: distance down the river against minutes after the collapse (a Marey chart)
     grid = np.linspace(0, chain[-1], 200)
     band = np.array([np.percentile(arrival(s), [5, 50, 95]) for s in grid])
     km = grid / 1000
-    fig, ax = plt.subplots(figsize=(9, 6))
-    ax.fill_betweenx(km, band[:, 0], band[:, 2], color=SERIES[0], alpha=0.15, lw=0, label='model, 5-95 %')
+    fig, ax = plt.subplots(figsize=(3.5, 3.4))
+    ax.fill_betweenx(km, band[:, 0], band[:, 2], color=SERIES[0], alpha=0.15, lw=0, label='model 5–95 %')
     fit = grid <= s_betr
-    ax.plot(band[fit, 1], km[fit], color=SERIES[0], lw=2, label='model median')
-    ax.plot(band[~fit, 1], km[~fit], color=SERIES[0], lw=2, ls=(0, (4, 3)), label='median, beyond the last observation')
+    ax.plot(band[fit, 1], km[fit], color=SERIES[0], lw=1.2, label='model median')
+    ax.plot(band[~fit, 1], km[~fit], color=SERIES[0], lw=1.2, ls=(0, (4, 2)), label='median, extrapolated')
     obs = [(0, PORT_MIN, PORT_MIN), (s_syab, PORT_MIN + s_syab / DEBRIS_MAX_MS / 60, SYABRUBESI_LATEST_MIN),
            (s_betr, *BETRAWATI_WINDOW_MIN)]
     for i, (s, a, b) in enumerate(obs):  # a single observed time is a dot, a window a bar
-        ax.plot([a, b], [s / 1000] * 2, color=SERIES[1], lw=4, solid_capstyle='round', marker='o' if a == b else None,
-                ms=7, label='observed time or window' if i == 0 else None)
-    ax.axvline(SMS_MIN, color='#52514e', lw=1)
-    ax.text(SMS_MIN + 1, 1, 'SMS alert 09:15', fontsize=9, color='#52514e')
+        ax.plot([a, b], [s / 1000] * 2, color=SERIES[1], lw=2.5, solid_capstyle='round', marker='o' if a == b else None,
+                ms=4, label='observed time or window' if i == 0 else None)
+    ax.axvline(SMS_MIN, color='#52514e', lw=0.8)
+    ax.text(SMS_MIN + 1, 1, 'SMS alert 09:15', fontsize=6, color='#52514e', va='top')
     ax.invert_yaxis()
-    ax.set_xlim(0, max(90, band[-1, 2] + 5))
-    labelled = []
-    for name, r in rows.items():  # right edge: the curve runs top-left to bottom-right, so it stays clear
-        if all(abs(r['chainage_km'] - k) >= 1 for k in labelled):  # same site mapped twice: label it once
-            ax.text(ax.get_xlim()[1], r['chainage_km'], f'{name} ', fontsize=8, va='center', ha='right')
-            labelled.append(r['chainage_km'])
-    ax.set_xlabel('minutes after the collapse (08:37 NPT)')
-    ax.set_ylabel('km down the river from Rasuwagadhi')
-    ax.set_title('Flood-front arrival along the Bhote Koshi–Trishuli', fontsize=11)
-    ax.legend(frameon=False, fontsize=8, loc='lower left')  # below and left of the curve is empty
+    ax.set_xlim(0, max(100, band[-1, 2] + 5))
+    # right edge: the curve runs top-left to bottom-right, so it stays clear; names as in Table IV of the paper
+    short = {'Chilime Hydropower Powerhouse': 'Chilime powerhouse', 'Upper Trishuli-3B Powerhouse': 'Upper Trishuli 3B',
+             'Trishuli Hydropower Station': 'Trishuli power station', 'Trishuli Bridge': 'Trishuli Bridge, Bidur'}
+    from matplotlib import patheffects
+    halo = [patheffects.withStroke(linewidth=2, foreground='white')]
+    last = -10.0
+    for name, r in rows.items():  # sorted down the river
+        if r['chainage_km'] - last < 1:  # same site mapped twice: label it once
+            continue
+        y = max(r['chainage_km'], last + 2.6)  # 2.6 km is one 6 pt line at this size: nudge close sites apart
+        ax.text(ax.get_xlim()[1], y, f'{short.get(name, name)} ', fontsize=6, va='center', ha='right', path_effects=halo)
+        last = y
+    ax.set_xlabel('minutes after the collapse (08:37 NPT)', fontsize=7)
+    ax.set_ylabel('km down the river from Rasuwagadhi', fontsize=7)
+    ax.set_title('Flood-front arrival along the Bhote Koshi–Trishuli', fontsize=8)
+    ax.legend(fontsize=6, loc='lower left', framealpha=1, edgecolor='none')  # below and left of the curve is empty
+    ax.tick_params(labelsize=7)
     ax.spines[['top', 'right']].set_visible(False)
-    ax.grid(color='#e1e0d9', lw=0.6)
-    fig.tight_layout()
-    fig.savefig(f'{FIG}/leadtime_draft.png', dpi=150)
+    ax.grid(color='#e1e0d9', lw=0.5)
+    fig.tight_layout(pad=0.2)
+    fig.savefig(f'{FIG}/leadtime_draft.png', dpi=300)
     print('saved', f'{FIG}/leadtime_draft.png')
 
 
@@ -1055,7 +1100,7 @@ def run_validate():
     with open(f'{OUT}/validation.json', 'w') as f:
         json.dump(results, f, indent=2)
     print('saved', f'{OUT}/validation.json')
-    grid_figure([sum(((f'{label}: F1 {results[label]["any"]["f1"]}', f'{FIG}/validation_{slug(label.split()[0])}.png')
+    grid_figure([sum(((f'{label}\nF1 {results[label]["any"]["f1"]:.2f}', f'{FIG}/validation_{slug(label.split()[0])}.png')
                       for label in EMSR_PRODUCTS), ())],
                 f'{FIG}/validation_draft.png',
                 'Footprint (any method) against the Copernicus EMS EMSR927 mapped area; white line = analysed area.',
