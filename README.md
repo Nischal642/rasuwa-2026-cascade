@@ -8,7 +8,7 @@ Code and results for the paper *Downstream impacts and warning lead time of the 
 uv venv .venv && uv pip install --python .venv/bin/python -r requirements.txt
 .venv/bin/earthengine authenticate
 .venv/bin/earthengine set_project <your Earth Engine Cloud project>
-.venv/bin/python rasuwa.py --help    # one step per analysis
+.venv/bin/python -m rasuwa --help   # one step per analysis
 .venv/bin/python test_rasuwa.py      # offline checks, no Earth Engine needed
 ```
 
@@ -16,7 +16,14 @@ uv venv .venv && uv pip install --python .venv/bin/python -r requirements.txt
 
 ## Contents
 
-- `rasuwa.py` — all analysis steps; `01_first_maps.ipynb` — interactive maps on top of it
+- `rasuwa/` — the analysis package, one module per analysis; run any step with `python -m rasuwa <step>`
+  - `footprint.py` — A: the impact footprint (`export`, `footprint`)
+  - `validation.py` — A: agreement with Copernicus EMS EMSR927 and threshold tuning (`validate`, `tune`)
+  - `exposure.py` — B: buildings, roads, bridges and hydropower inside the footprint (`buildings`, `infrastructure`)
+  - `leadtime.py` — C: flood-front arrival and warning time (`leadtime`)
+  - `imagery.py` — Vantor and Planet event imagery (`inventory`, `before-after`, `planet`)
+  - `common.py` — shared settings and Earth Engine helpers; `__main__.py` — the command line
+- `01_first_maps.ipynb` — interactive maps on top of the package
 - `figures/` — draft figures
 - `outputs/` — scores, counts and arrival times (JSON, CSV)
 - `data/footprint/` — the impact footprint as GeoTIFF tiles (20 m, UTM 45N)
