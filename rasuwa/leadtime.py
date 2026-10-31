@@ -51,11 +51,10 @@ def flood_seconds(chain, slope, k, s_from, s_to):
     return float(np.sum((pace[1:] + pace[:-1]) / 2 * np.diff(s)))
 
 
-def run_leadtime(n_draws=10_000, manning_n=0.05):
-    """Analysis C: flood-front arrival times and minutes of warning along the corridor."""
-    import matplotlib
-    matplotlib.use('Agg')
-    import matplotlib.pyplot as plt
+def arrival_model(n_draws=10_000):
+    """The flood-front model, as a dict: the main-stem profile (chain, x, y), the places on it ({name: (lon, lat)}
+    and {name: (chainage m, m off the river)}), the Syabrubesi and Betrawati chainages, the speed factor k per
+    Monte Carlo draw, and arrival(s): minutes after the collapse at chainage s, one value per draw."""
     import numpy as np
 
     chain, x, y, elev = river_profile()
@@ -87,6 +86,19 @@ def run_leadtime(n_draws=10_000, manning_n=0.05):
             return PORT_MIN + (t_syab - PORT_MIN) * s / s_syab
         return t_syab + flood_seconds(chain, slope, 1.0, s_syab, s) / k / 60
 
+    return {'chain': chain, 'x': x, 'y': y, 'places': places, 'where': where, 's_syab': s_syab, 's_betr': s_betr,
+            'k': k, 'arrival': arrival}
+
+
+def run_leadtime(n_draws=10_000, manning_n=0.05):
+    """Analysis C: flood-front arrival times and minutes of warning along the corridor."""
+    import matplotlib
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    m = arrival_model(n_draws)
+    chain, where, s_syab, s_betr, k, arrival = (m[n] for n in ('chain', 'where', 's_syab', 's_betr', 'k', 'arrival'))
     clock = lambda m: f'{round(COLLAPSE_NPT_MIN + m) // 60:02d}:{round(COLLAPSE_NPT_MIN + m) % 60:02d}'  # nearest minute
     rows = {}
     for name, (s, off) in sorted(where.items(), key=lambda kv: kv[1][0]):
@@ -98,7 +110,14 @@ def run_leadtime(n_draws=10_000, manning_n=0.05):
                       'warning_with_auto_alert_min': round(med - AUTO_ALERT_MIN, 1),
                       'extrapolated': s > s_betr}
     depth = (0.6 * k * manning_n) ** 1.5  # Manning: c = 5/3 * h^(2/3) * S^(1/2) / n  =>  h from k
+    # The first five draws, for the worked example on the method page: k = (travel time at k = 1) / (observed trip)
+    t_syab, t_betr, t_ut = (arrival(s) for s in (s_syab, s_betr, where['Upper Trishuli 3A'][0]))
+    example = {'k1_seconds': {'betrawati': round(float(k[0] * (t_betr[0] - t_syab[0]) * 60)),
+                              'upper_trishuli_3a': round(float(k[0] * (t_ut[0] - t_syab[0]) * 60))},
+               'draws': [{'syabrubesi_min': round(float(a), 2), 'betrawati_min': round(float(b), 2), 'k': round(float(kk), 1),
+                          'upper_trishuli_3a_min': round(float(u), 2)} for a, b, kk, u in zip(t_syab, t_betr, k, t_ut[:5])]}
     result = {'places': rows, 'flood_speed_k': [round(float(v), 1) for v in np.percentile(k, [5, 50, 95])],
+              'worked_example': example,
               'implied_flood_depth_m': {'manning_n': manning_n,
                                         '5_50_95': [round(float(v), 1) for v in np.percentile(depth, [5, 50, 95])]},
               'observations': {'gyirong_port_min': PORT_MIN, 'syabrubesi_latest_min': SYABRUBESI_LATEST_MIN,

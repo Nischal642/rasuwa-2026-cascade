@@ -10,6 +10,7 @@ Command line (PNGs go to figures/, tables to outputs/):
     python -m rasuwa buildings      buildings inside the footprint vs the Copernicus damage grades
     python -m rasuwa infrastructure roads, bridges and hydropower inside the footprint (OpenStreetMap)
     python -m rasuwa leadtime       flood-front arrival times and minutes of warning along the corridor
+    python -m rasuwa web            map layers, river model and imagery for the website in web/
     python -m rasuwa all            all of the above
     python -m rasuwa tune           sweep footprint thresholds against EMSR927 (on demand)
 
@@ -19,13 +20,13 @@ Earth Engine project: --project ID, else EE_PROJECT, else the default set with
 import argparse
 import os
 
-from . import exposure, footprint, imagery, leadtime, validation
+from . import exposure, footprint, imagery, leadtime, validation, web
 from .common import FIG, OUT, init
 
 STEPS = {'inventory': imagery.run_inventory, 'before-after': imagery.run_before_after, 'planet': imagery.run_planet,
          'export': footprint.run_export, 'footprint': footprint.run_footprint, 'validate': validation.run_validate,
          'buildings': exposure.run_buildings, 'infrastructure': exposure.run_infrastructure,
-         'leadtime': leadtime.run_leadtime}
+         'leadtime': leadtime.run_leadtime, 'web': web.run_web}
 EXTRA = {'tune': validation.run_tune}  # run on demand only, not part of `all`
 
 

@@ -1,0 +1,429 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-31T02:12:21+00:00",
+  "title": "Design System: Rasuwa–Trishuli 2026, companion site",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Chart Paper",
+        "canonical": "#f2f5f0",
+        "tonalRamp": [
+          "oklch(15% 0.007 132)",
+          "oklch(26% 0.007 132)",
+          "oklch(38% 0.007 132)",
+          "oklch(49% 0.007 132)",
+          "oklch(61% 0.007 132)",
+          "oklch(72% 0.007 132)",
+          "oklch(84% 0.007 132)",
+          "oklch(95% 0.007 132)"
+        ]
+      },
+      "paper-2": {
+        "role": "neutral",
+        "displayName": "Paper Shade",
+        "canonical": "#e7eee6",
+        "tonalRamp": [
+          "oklch(15% 0.013 142)",
+          "oklch(26% 0.013 142)",
+          "oklch(38% 0.013 142)",
+          "oklch(49% 0.013 142)",
+          "oklch(61% 0.013 142)",
+          "oklch(72% 0.013 142)",
+          "oklch(84% 0.013 142)",
+          "oklch(95% 0.013 142)"
+        ]
+      },
+      "rule": {
+        "role": "neutral",
+        "displayName": "Faint Ruling",
+        "canonical": "#d4e2d6",
+        "tonalRamp": [
+          "oklch(15% 0.022 150)",
+          "oklch(26% 0.022 150)",
+          "oklch(38% 0.022 150)",
+          "oklch(49% 0.022 150)",
+          "oklch(61% 0.022 150)",
+          "oklch(72% 0.022 150)",
+          "oklch(84% 0.022 150)",
+          "oklch(95% 0.022 150)"
+        ]
+      },
+      "rule-2": {
+        "role": "neutral",
+        "displayName": "Major Ruling",
+        "canonical": "#afcab5",
+        "tonalRamp": [
+          "oklch(15% 0.041 152)",
+          "oklch(26% 0.041 152)",
+          "oklch(38% 0.041 152)",
+          "oklch(49% 0.041 152)",
+          "oklch(61% 0.041 152)",
+          "oklch(72% 0.041 152)",
+          "oklch(84% 0.041 152)",
+          "oklch(95% 0.041 152)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Graphite",
+        "canonical": "#17211c",
+        "tonalRamp": [
+          "oklch(15% 0.017 163)",
+          "oklch(26% 0.017 163)",
+          "oklch(38% 0.017 163)",
+          "oklch(49% 0.017 163)",
+          "oklch(61% 0.017 163)",
+          "oklch(72% 0.017 163)",
+          "oklch(84% 0.017 163)",
+          "oklch(95% 0.017 163)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Soft Graphite",
+        "canonical": "#435249",
+        "tonalRamp": [
+          "oklch(15% 0.024 159)",
+          "oklch(26% 0.024 159)",
+          "oklch(38% 0.024 159)",
+          "oklch(49% 0.024 159)",
+          "oklch(61% 0.024 159)",
+          "oklch(72% 0.024 159)",
+          "oklch(84% 0.024 159)",
+          "oklch(95% 0.024 159)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Pale Graphite",
+        "canonical": "#6a7a70",
+        "tonalRamp": [
+          "oklch(15% 0.024 158)",
+          "oklch(26% 0.024 158)",
+          "oklch(38% 0.024 158)",
+          "oklch(49% 0.024 158)",
+          "oklch(61% 0.024 158)",
+          "oklch(72% 0.024 158)",
+          "oklch(84% 0.024 158)",
+          "oklch(95% 0.024 158)"
+        ]
+      },
+      "pen": {
+        "role": "primary",
+        "displayName": "Recorder Carmine",
+        "canonical": "#c42b3a",
+        "tonalRamp": [
+          "oklch(15% 0.188 22)",
+          "oklch(26% 0.188 22)",
+          "oklch(38% 0.188 22)",
+          "oklch(49% 0.188 22)",
+          "oklch(61% 0.188 22)",
+          "oklch(72% 0.188 22)",
+          "oklch(84% 0.188 22)",
+          "oklch(95% 0.188 22)"
+        ],
+        "derived": {
+          "pen-wash": "color-mix(in oklch, var(--pen) 14%, var(--paper))"
+        }
+      },
+      "pen-2": {
+        "role": "secondary",
+        "displayName": "Recorder Blue",
+        "canonical": "#2357a8",
+        "tonalRamp": [
+          "oklch(15% 0.142 259)",
+          "oklch(26% 0.142 259)",
+          "oklch(38% 0.142 259)",
+          "oklch(49% 0.142 259)",
+          "oklch(61% 0.142 259)",
+          "oklch(72% 0.142 259)",
+          "oklch(84% 0.142 259)",
+          "oklch(95% 0.142 259)"
+        ],
+        "derived": {
+          "pen-2-wash": "color-mix(in oklch, var(--pen-2) 12%, var(--paper))"
+        }
+      },
+      "map-ground": {
+        "role": "neutral",
+        "displayName": "Inked Relief Ground",
+        "canonical": "#eaf0e8",
+        "tonalRamp": [
+          "oklch(15% 0.012 138)",
+          "oklch(26% 0.012 138)",
+          "oklch(38% 0.012 138)",
+          "oklch(49% 0.012 138)",
+          "oklch(61% 0.012 138)",
+          "oklch(72% 0.012 138)",
+          "oklch(84% 0.012 138)",
+          "oklch(95% 0.012 138)"
+        ]
+      },
+      "relief-highlight": {
+        "role": "neutral",
+        "displayName": "Relief Highlight",
+        "canonical": "#fbfdf9",
+        "tonalRamp": [
+          "oklch(15% 0.006 129)",
+          "oklch(26% 0.006 129)",
+          "oklch(38% 0.006 129)",
+          "oklch(49% 0.006 129)",
+          "oklch(61% 0.006 129)",
+          "oklch(72% 0.006 129)",
+          "oklch(84% 0.006 129)",
+          "oklch(95% 0.006 129)"
+        ]
+      },
+      "relief-shadow": {
+        "role": "neutral",
+        "displayName": "Relief Shadow",
+        "canonical": "#5f8069",
+        "tonalRamp": [
+          "oklch(15% 0.052 154)",
+          "oklch(26% 0.052 154)",
+          "oklch(38% 0.052 154)",
+          "oklch(49% 0.052 154)",
+          "oklch(61% 0.052 154)",
+          "oklch(72% 0.052 154)",
+          "oklch(84% 0.052 154)",
+          "oklch(95% 0.052 154)"
+        ]
+      },
+      "relief-accent": {
+        "role": "neutral",
+        "displayName": "Relief Accent",
+        "canonical": "#3f5a48",
+        "tonalRamp": [
+          "oklch(15% 0.044 155)",
+          "oklch(26% 0.044 155)",
+          "oklch(38% 0.044 155)",
+          "oklch(49% 0.044 155)",
+          "oklch(61% 0.044 155)",
+          "oklch(72% 0.044 155)",
+          "oklch(84% 0.044 155)",
+          "oklch(95% 0.044 155)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "numeral": {
+        "displayName": "Numeral",
+        "purpose": "Margin figure only, one per viewport, carmine."
+      },
+      "display": {
+        "displayName": "Display",
+        "purpose": "Page title only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Station headers under a 3px graphite rule."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Sub-heads inside a station."
+      },
+      "lede": {
+        "displayName": "Lede",
+        "purpose": "Opening paragraph of a station."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running prose at 66ch."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Figure captions, led by a caps figure tag."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Plates, table heads, rail, switches, recorder strip, map markers; uppercase."
+      },
+      "reading": {
+        "displayName": "Reading",
+        "purpose": "Live clock readout under the trace; tabular figures."
+      }
+    },
+    "shadows": [
+      {
+        "name": "floating-tip",
+        "value": "0 4px 14px rgb(23 33 28 / 0.25)",
+        "purpose": "Chart and map tooltips."
+      },
+      {
+        "name": "held-control",
+        "value": "0 1px 3px rgb(23 33 28 / 0.35)",
+        "purpose": "The pen nib on the scrubber."
+      },
+      {
+        "name": "knob",
+        "value": "0 2px 10px rgb(23 33 28 / 0.35)",
+        "purpose": "Before/after drag knob over imagery."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-pen",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Pen drawing the median on load (2.4s) and the rail tick (0.4s)."
+      },
+      {
+        "name": "pen-draw",
+        "value": "2.4s",
+        "purpose": "Trace median draw-on; off under prefers-reduced-motion."
+      },
+      {
+        "name": "play-rate",
+        "value": "10 min/s",
+        "purpose": "Play runs the pen through the record at ten minutes a second."
+      },
+      {
+        "name": "highlight-fade",
+        "value": "0.15s opacity",
+        "purpose": "Chart hover highlights."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "narrow",
+        "value": "640px"
+      },
+      {
+        "name": "stacked",
+        "value": "1100px"
+      }
+    ],
+    "ruling": {
+      "value": "linear-gradient(var(--rule-2) 1px, transparent 1px), linear-gradient(90deg, var(--rule-2) 1px, transparent 1px), linear-gradient(var(--rule) 1px, transparent 1px), linear-gradient(90deg, var(--rule) 1px, transparent 1px)",
+      "size": "var(--major) var(--major), var(--major) var(--major), var(--minor) var(--minor), var(--minor) var(--minor)",
+      "purpose": "Frame (rail column) and chart plates without a numeric axis; never behind running text."
+    },
+    "hatches": {
+      "optical": "pen at 45° on pen-wash, 8px cell, 1.5px stroke",
+      "radar": "pen-2 at -45° on pen-2-wash",
+      "both": "both strokes crossed on paper"
+    }
+  },
+  "components": [
+    {
+      "name": "Name Plate",
+      "kind": "chip",
+      "refersTo": "plate",
+      "description": "Boxed caps label that names the object it is attached to.",
+      "html": "<span class=\"ds-plate\">Trace · flood front</span>",
+      "css": ".ds-plate{display:inline-flex;align-items:baseline;gap:.5em;font-family:var(--label);font-weight:600;font-size:.8125rem;letter-spacing:.08em;text-transform:uppercase;line-height:1;padding:.35em .55em .3em;border:1px solid var(--ink);background:var(--paper);color:var(--ink);white-space:nowrap}"
+    },
+    {
+      "name": "Name Plate, solid",
+      "kind": "chip",
+      "refersTo": "plate-solid",
+      "description": "Inverted plate: analysis letter on station heads, figure plates.",
+      "html": "<span class=\"ds-plate ds-plate-solid\">A</span>",
+      "css": ".ds-plate{display:inline-flex;align-items:baseline;gap:.5em;font-family:var(--label);font-weight:600;font-size:.8125rem;letter-spacing:.08em;text-transform:uppercase;line-height:1;padding:.35em .55em .3em;border:1px solid var(--ink);background:var(--paper);color:var(--ink);white-space:nowrap}.ds-plate-solid{background:var(--ink);color:var(--paper)}"
+    },
+    {
+      "name": "Segmented Switch",
+      "kind": "button",
+      "refersTo": "switch-button",
+      "description": "Caps segmented control for method or place; pressed cell inverts to graphite.",
+      "html": "<div class=\"ds-switch\" role=\"group\"><button aria-pressed=\"true\">Optical</button><button aria-pressed=\"false\">Radar</button><button aria-pressed=\"false\">Both</button></div>",
+      "css": ".ds-switch{display:inline-flex;border:1px solid var(--ink);background:var(--paper)}.ds-switch button{font-family:var(--label);font-weight:600;font-size:.9rem;letter-spacing:.06em;text-transform:uppercase;padding:.45rem .7rem .4rem;border:0;border-right:1px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer}.ds-switch button:last-child{border-right:0}.ds-switch button:hover{background:var(--paper-2)}.ds-switch button[aria-pressed=\"true\"]{background:var(--ink);color:var(--paper)}.ds-switch button:focus-visible{outline:2px solid var(--pen);outline-offset:3px}"
+    },
+    {
+      "name": "Pen Scrubber",
+      "kind": "input",
+      "refersTo": "pen-nib",
+      "description": "Whole-minute range input whose thumb is a carmine pen nib, with a caps Play button.",
+      "html": "<div class=\"ds-pen\"><button type=\"button\">Play</button><input type=\"range\" min=\"0\" max=\"100\" step=\"1\" value=\"12\" aria-label=\"Minutes after the collapse\"><span>10:17</span></div>",
+      "css": ".ds-pen{display:grid;grid-template-columns:auto 1fr auto;gap:.75rem;align-items:center;font-family:var(--label);font-size:.95rem;color:var(--ink-2)}.ds-pen input{width:100%;margin:0;height:2.25rem;background:transparent;appearance:none;-webkit-appearance:none;cursor:ew-resize}.ds-pen input::-webkit-slider-runnable-track{height:2px;background:var(--ink)}.ds-pen input::-moz-range-track{height:2px;background:var(--ink)}.ds-pen input::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:30px;margin-top:-14px;border-radius:7px 7px 2px 2px;background:var(--pen);border:2px solid var(--paper);box-shadow:0 1px 3px rgb(23 33 28 / .35)}.ds-pen input::-moz-range-thumb{width:12px;height:28px;border-radius:7px 7px 2px 2px;background:var(--pen);border:2px solid var(--paper);box-shadow:0 1px 3px rgb(23 33 28 / .35)}.ds-pen input:focus-visible{outline:2px solid var(--pen);outline-offset:3px}.ds-pen button{font:inherit;font-weight:600;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--ink);background:var(--paper);color:var(--ink);padding:.35rem .6rem;cursor:pointer}.ds-pen button:hover{background:var(--ink);color:var(--paper)}"
+    },
+    {
+      "name": "Contents Rail",
+      "kind": "nav",
+      "description": "Sticky caps station list on a graphite left rule; current entry carmine with a drawn tick.",
+      "html": "<nav class=\"ds-rail\"><ol><li><a href=\"#\">The event</a></li><li><a href=\"#\" aria-current=\"true\"><span>A</span>Footprint</a></li><li><a href=\"#\"><span>B</span>Exposure</a></li></ol></nav>",
+      "css": ".ds-rail ol{list-style:none;margin:0;padding:0;border-left:1px solid var(--ink);background:var(--paper)}.ds-rail a{display:block;position:relative;padding:.4rem 0 .4rem .9rem;font-family:var(--label);font-weight:600;font-size:.95rem;letter-spacing:.07em;text-transform:uppercase;text-decoration:none;color:var(--ink-2)}.ds-rail a span{display:inline-block;width:1.1rem;color:var(--ink)}.ds-rail a::before{content:\"\";position:absolute;left:-1px;top:50%;width:.6rem;height:2px;background:var(--pen);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.16,1,.3,1)}.ds-rail a:hover{color:var(--ink)}.ds-rail a[aria-current=\"true\"]{color:var(--pen)}.ds-rail a[aria-current=\"true\"]::before{transform:scaleX(1)}.ds-rail a:focus-visible{outline:2px solid var(--pen);outline-offset:3px}"
+    },
+    {
+      "name": "Data Table",
+      "kind": "custom",
+      "description": "Caps caption, 2px graphite top rule, ruled rows, tabular figures.",
+      "html": "<table class=\"ds-table\"><caption>Validation (Table III)</caption><thead><tr><th>Area</th><th class=\"r\">F1</th></tr></thead><tbody><tr><th>Syabrubesi</th><td class=\"r\">0.71</td></tr><tr><th>Bidur</th><td class=\"r\">0.64</td></tr></tbody></table>",
+      "css": ".ds-table{border-collapse:collapse;width:100%;font-family:var(--text);font-variant-numeric:tabular-nums lining-nums;font-size:1rem;color:var(--ink)}.ds-table caption{text-align:left;font-family:var(--label);font-weight:600;letter-spacing:.08em;text-transform:uppercase;font-size:.9rem;padding-bottom:.5rem}.ds-table thead th{font-family:var(--label);font-weight:600;font-size:.9rem;letter-spacing:.05em;text-transform:uppercase;text-align:left;padding:.5rem .75rem .45rem 0;border-top:2px solid var(--ink);border-bottom:1px solid var(--ink)}.ds-table tbody td,.ds-table tbody th{padding:.5rem .75rem .45rem 0;border-bottom:1px solid var(--rule-2);text-align:left}.ds-table tbody th{font-weight:600}.ds-table .r{text-align:right}"
+    },
+    {
+      "name": "Chart Plate with Exposure Hatches",
+      "kind": "card",
+      "description": "Ruled chart plate (no numeric axis) showing optical 45, radar -45 and crossed hatches.",
+      "html": "<div class=\"ds-chart\"><svg width=\"300\" height=\"60\" viewBox=\"0 0 300 60\"><defs><pattern id=\"ds-h1\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><rect width=\"8\" height=\"8\" fill=\"var(--pen-wash)\"/><path d=\"M-2,2L2,-2M0,8L8,0M6,10L10,6\" stroke=\"var(--pen)\" stroke-width=\"1.5\"/></pattern><pattern id=\"ds-h2\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><rect width=\"8\" height=\"8\" fill=\"var(--pen-2-wash)\"/><path d=\"M-2,6L2,10M0,0L8,8M6,-2L10,2\" stroke=\"var(--pen-2)\" stroke-width=\"1.5\"/></pattern><pattern id=\"ds-h3\" width=\"8\" height=\"8\" patternUnits=\"userSpaceOnUse\"><rect width=\"8\" height=\"8\" fill=\"var(--paper)\"/><path d=\"M-2,6L2,10M0,0L8,8M6,-2L10,2\" stroke=\"var(--pen-2)\" stroke-width=\"1.5\"/><path d=\"M-2,2L2,-2M0,8L8,0M6,10L10,6\" stroke=\"var(--pen)\" stroke-width=\"1.5\"/></pattern></defs><rect x=\"10\" y=\"14\" width=\"150\" height=\"32\" fill=\"url(#ds-h1)\"/><rect x=\"162\" y=\"14\" width=\"80\" height=\"32\" fill=\"url(#ds-h3)\"/><rect x=\"244\" y=\"14\" width=\"46\" height=\"32\" fill=\"url(#ds-h2)\"/></svg></div>",
+      "css": ".ds-chart{display:inline-block;padding:.75rem .85rem .5rem;border:1px solid var(--ink);background-color:var(--paper);background-image:var(--ruling);background-size:var(--major) var(--major),var(--major) var(--major),var(--minor) var(--minor),var(--minor) var(--minor);background-position:-1px -1px}"
+    },
+    {
+      "name": "Tooltip",
+      "kind": "custom",
+      "refersTo": "tooltip",
+      "description": "Graphite tip floating over charts and maps; the only lifted surface.",
+      "html": "<div class=\"ds-tip\">Destroyed · inside footprint</div>",
+      "css": ".ds-tip{display:inline-block;background:var(--ink);color:var(--paper);font-family:var(--label);font-size:.95rem;line-height:1.3;padding:.4rem .55rem;box-shadow:0 4px 14px rgb(23 33 28 / .25);white-space:nowrap}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Stage Record",
+    "overview": "The site is a river-stage recorder sheet: pale green ruled chart paper, graphite ink, and two recorder pens. Pen 1 (carmine) draws the flood front against the clock; pen 2 (recorder blue) marks what was actually observed. Everything else is graphite on paper. The reading is that of an instrument record, not a story map: hairline frames, boxed caps name plates bolted onto the thing they name, tabular figures for every reading, and a serif column for the argument.\n\nDensity is that of a well-set scientific report: generous reading measure, figures that sit as framed plates in the column, a sticky contents rail down the ruled left margin. Ground is always light (read at desks and on phones in daylight). Depth comes from rules and frames, not from shadow or tone; the only colour that shouts is the carmine pen, and it shouts about one thing.\n\nThe world rejects the dark satellite story map with stat cards. The map itself is a hillshade inked in the paper's own greens; satellite imagery is an opt-in layer, not the ground.",
+    "keyCharacteristics": [
+      "Ruled chart paper (8px minor, 40px major) in the frame and on chart plates, never behind running text.",
+      "One committed spot colour (carmine pen) for the front, our footprint and the cursor; recorder blue only for observations and Copernicus.",
+      "Optical, radar and both as 45°, −45° and crossed hatches.",
+      "Condensed grotesk caps for plates, station heads and readings; a serif reading face for prose.",
+      "Square corners and 1px graphite frames throughout; 3px graphite top rules open every major band."
+    ],
+    "rules": [
+      {
+        "name": "The Two Pens Rule",
+        "body": "Carmine means the front, our footprint, or the cursor. Blue means observed, or Copernicus. Nothing else gets a pen: alerts, warning minutes, open-data counts and every structural mark are graphite.",
+        "section": "colors"
+      },
+      {
+        "name": "The Exposure Hatch Rule",
+        "body": "Optical change is a carmine 45° hatch on carmine wash; radar change is a blue −45° hatch on blue wash; \"both\" is the two hatches crossed. A legend swatch carries the same hatch as the mark it explains.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Reading Rule",
+        "body": "Every number a reader might compare (tables, readouts, axis values, bar ends) is set with tabular lining figures.",
+        "section": "typography"
+      },
+      {
+        "name": "The Two Voices Rule",
+        "body": "The serif never sets a label, and the condensed grotesk never sets a paragraph.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ruled Frame Rule",
+        "body": "The chart-paper ruling belongs to the frame (the rail column) and to chart plates without a numeric axis. A chart with a numeric axis (the trace, flat charts, the warning-minute bars) turns the CSS ruling off and draws its own ruling on its data scale inside the SVG, so every line means a unit. Running text never sits on ruling.",
+        "section": "layout"
+      },
+      {
+        "name": "The Frame, Not Float Rule",
+        "body": "Plates, charts, maps, tables and controls never lift. If it is part of the record it is framed, not shadowed.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep carmine for the front, our footprint and the cursor, and blue for observations and Copernicus; set everything else in graphite.",
+      "Do draw ruling on the data scale inside any chart with a numeric axis, and switch the CSS ruling off for it.",
+      "Do encode optical, radar and both as 45°, −45° and crossed hatches, with matching legend swatches.",
+      "Do frame plates, charts, maps and tables with 1px graphite and open bands with a 2–3px graphite rule.",
+      "Do set every compared number in tabular lining figures.",
+      "Do keep ink-3 to strokes and large text."
+    ],
+    "donts": [
+      "Don't put chart-paper ruling behind running text.",
+      "Don't use a pen colour for alerts, warning minutes or any structural mark.",
+      "Don't introduce a dark ground or a satellite basemap as the default map ground.",
+      "Don't round corners on plates, controls, charts, maps or tooltips.",
+      "Don't lift record surfaces with shadows; shadows are for floating tips and held controls only.",
+      "Don't set paragraphs in the condensed face or labels in the serif."
+    ]
+  }
+}

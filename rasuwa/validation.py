@@ -13,6 +13,16 @@ from .footprint import PARAMS, footprint, layers
 CONTROL_BOX = [85.40, 28.14, 85.56, 28.24]
 MAX_CONTROL_FLAGGED = 0.02
 
+# Values swept by `tune` for each footprint threshold (keys as in footprint.PARAMS; None switches CVA off):
+# 4 x 7 x 3 x 4 x 3 = 1,008 settings
+TUNE_GRID = {
+    'ndvi_drop': (-0.05, -0.1, -0.15, -0.2),
+    'cva_min': (None, 0.02, 0.03, 0.04, 0.06, 0.08, 0.10),
+    'ndvi_after_max': (0.35, 0.45, 0.55),
+    'vh_db': (3, 4, 5, 6),
+    'hand_max_m': (60, 100, 150),
+}
+
 # Which footprint classes count as "flagged" for each method being scored
 METHODS = {'any': {1, 2, 3}, 'optical': {1, 3}, 'radar': {2, 3}, 'both': {3}}
 AGREE_COLORS = {'Both flag it': '#1baf7a', 'Only our footprint': '#eb6834', 'Only Copernicus': '#2a78d6'}
@@ -150,13 +160,7 @@ def run_tune():
     import statistics
 
     data, control = tune_inputs()
-    keys = list(PARAMS)
-    grid = [dict(zip(keys, v)) for v in itertools.product(
-        (-0.05, -0.1, -0.15, -0.2),                   # ndvi_drop
-        (None, 0.02, 0.03, 0.04, 0.06, 0.08, 0.10),   # cva_min
-        (0.35, 0.45, 0.55),                           # ndvi_after_max
-        (3, 4, 5, 6),                                 # vh_db
-        (60, 100, 150))]                              # hand_max_m
+    grid = [dict(zip(TUNE_GRID, v)) for v in itertools.product(*TUNE_GRID.values())]
     f1 = [{a: float(scores_np(d, p)['f1']) for a, d in data.items()} for p in grid]
     false_alarm = [control_flagged(control, p) for p in grid]
     ok = [i for i in range(len(grid)) if false_alarm[i] <= MAX_CONTROL_FLAGGED]
