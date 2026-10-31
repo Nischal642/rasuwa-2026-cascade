@@ -136,6 +136,44 @@
     118.3,
     139.2
   ],
+  "worked_example": {
+    "k1_seconds": {
+      "betrawati": 218517,
+      "upper_trishuli_3a": 165537
+    },
+    "draws": [
+      {
+        "syabrubesi_min": 12.51,
+        "betrawati_min": 43.68,
+        "k": 116.8,
+        "upper_trishuli_3a_min": 36.12
+      },
+      {
+        "syabrubesi_min": 12.0,
+        "betrawati_min": 47.62,
+        "k": 102.2,
+        "upper_trishuli_3a_min": 38.99
+      },
+      {
+        "syabrubesi_min": 11.69,
+        "betrawati_min": 45.66,
+        "k": 107.2,
+        "upper_trishuli_3a_min": 37.43
+      },
+      {
+        "syabrubesi_min": 11.66,
+        "betrawati_min": 46.33,
+        "k": 105.0,
+        "upper_trishuli_3a_min": 37.92
+      },
+      {
+        "syabrubesi_min": 12.75,
+        "betrawati_min": 43.69,
+        "k": 117.7,
+        "upper_trishuli_3a_min": 36.19
+      }
+    ]
+  },
   "implied_flood_depth_m": {
     "manning_n": 0.05,
     "5_50_95": [

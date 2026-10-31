@@ -18,6 +18,10 @@ Code and results for the paper *Downstream impacts and warning lead time of the 
 | Roads and bridges | 87% of the 56.8 km of destroyed road inside; all 30 destroyed bridges within 40 m |
 | Lead time | Front at Syabrubesi at 08:49 NPT, 26 min before the 09:15 SMS alert; an automatic alert at the collapse would have given 34–41 min at Upper Trishuli 3A and 3B and Betrawati |
 
+## Website
+
+`web/` holds the companion site: the event, the method and the results, with the flood front animated along the river and the footprint, the Copernicus comparison and the exposed assets on interactive maps. It reads its numbers from `outputs/` when it is built. `cd web && pnpm install && pnpm dev` runs it; [web/README.md](web/README.md) has the details.
+
 ## Layout
 
 - `rasuwa/` — the analysis package, one module per analysis
@@ -27,6 +31,8 @@ Code and results for the paper *Downstream impacts and warning lead time of the 
   - `leadtime.py` — C: flood-front arrival and warning time (`leadtime`)
   - `imagery.py` — Vantor and Planet event imagery (`inventory`, `before-after`, `planet`)
   - `common.py` — shared settings and Earth Engine helpers; `__main__.py` — the command line
+  - `web.py` — map layers, river model and imagery for the website (`web`)
+- `web/` — the companion website (Next.js, static export); see [web/README.md](web/README.md)
 - `test_rasuwa.py` — offline checks of the scoring, the footprint rule, the point and line tests and the flood routing
 - `01_first_maps.ipynb` — interactive maps on top of the package
 - `figures/` — figures, drawn one IEEE column wide (3.5 in, 300 dpi)
@@ -55,6 +61,7 @@ Then run the steps in order (`python -m rasuwa --help` lists them):
 .venv/bin/python -m rasuwa buildings
 .venv/bin/python -m rasuwa infrastructure
 .venv/bin/python -m rasuwa leadtime
+.venv/bin/python -m rasuwa web               # layers and imagery for the website in web/
 .venv/bin/python -m rasuwa all             # every step above, plus inventory, before-after and planet
 .venv/bin/python -m rasuwa tune            # threshold sweep, on demand only
 ```
@@ -74,6 +81,7 @@ Pass `--project ID` to use a different Earth Engine project for one run.
 | `leadtime` | `outputs/leadtime.json`, `figures/leadtime_draft.png` | Fig. 7, Table IV |
 | `tune` | `outputs/tuning.json` | Section IV-B |
 | `inventory` | `outputs/inventory_vantor.csv`, `outputs/inventory_planet.csv` | — |
+| `web` | `web/public/data/*.geojson`, `web/src/data/*.json`, `web/public/img/*.webp` | the website |
 
 ## Data
 
