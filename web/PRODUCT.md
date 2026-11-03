@@ -17,7 +17,7 @@ Next.js (App Router), fully static export (`output: 'export'`), English only. Li
 
 ## Product Purpose
 
-The companion site to the paper *Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data* (N. Acharya, in preparation). It explains what the paper asks, how it was done, what it found and how each finding was reached, with interactive charts and maps of the real outputs. Success: a reader leaves knowing the three findings (where the ground changed, what was exposed, how much warning there was or could have been) and trusting how they were derived.
+The companion site to the paper *Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data* (N. Acharya and S. Pathak, in preparation). It explains what the paper asks, how it was done, what it found and how each finding was reached, with interactive charts and maps of the real outputs. Success: a reader leaves knowing the three findings (where the ground changed, what was exposed, how much warning there was or could have been) and trusting how they were derived.
 
 ## Positioning
 

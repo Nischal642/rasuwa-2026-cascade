@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 export const REPO = "https://github.com/Nischal642/rasuwa-2026-cascade";
+export const DOI = "https://doi.org/10.5281/zenodo.23887627";
 
 const read = (name: string) => JSON.parse(readFileSync(join(process.cwd(), "..", "outputs", name), "utf8"));
 
