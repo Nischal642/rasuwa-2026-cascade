@@ -3,11 +3,9 @@
 // readout only repeats it closer to the pointer.
 import { useState } from "react";
 import type { Method, Place, Score } from "@/lib/results";
-import { pct } from "@/lib/format";
+import { AREA, pct } from "@/lib/format";
 import { useWidth } from "@/lib/useWidth";
 import { SHORT } from "./Trace";
-
-const AREA = (a: string) => a.split(" ")[0];
 
 type Tip = { x: number; y: number; value: string; label: string } | null;
 
@@ -27,6 +25,7 @@ function useTip() {
     },
     onBlur: () => setTip(null),
     tabIndex: 0,
+    style: { outline: "none" },
   });
   const el = tip && <div className="tip" style={{ left: tip.x, top: tip.y }}><b>{tip.value}</b> {tip.label}</div>;
   return { on, el };
@@ -63,7 +62,7 @@ export function FootprintStack({ areas }: { areas: Record<string, number> }) {
   const W = Math.max(cw, 280);
   let x = 0;
   return (
-    <div className="chart" style={{ position: "relative" }}>
+    <div className="chart">
       <div className="chart-body" ref={box}>
         <svg viewBox={`0 0 ${W} 134`} role="img" aria-label={`Footprint ${total.toFixed(1)} km²: ${parts.map((p) => `${p.name.toLowerCase()} ${p.v} km²`).join(", ")}.`}>
           {parts.map((p, i) => {
@@ -73,7 +72,7 @@ export function FootprintStack({ areas }: { areas: Record<string, number> }) {
               ? <g key="l"><text x={x0} y={104} className="lbl">{p.name.toUpperCase()}</text><text x={x0} y={122} className="val">{p.v} km²</text></g>
               : <g key="l"><line x1={x0 + w / 2} x2={x0 + w / 2} y1={8} y2={30} stroke="var(--ink-3)" /><text x={x0 - 6} y={14} textAnchor="end" className="lbl">{p.name.toUpperCase()} <tspan className="val">{p.v} km²</tspan></text></g>;
             return (
-              <g key={p.name} {...on(`${p.v} km²`, p.name.toLowerCase())} style={{ outline: "none" }}>
+              <g key={p.name} {...on(`${p.v} km²`, p.name.toLowerCase())}>
                 <rect x={x0} y={30} width={w} height={50} fill={`url(#hatch-${p.hatch})`} stroke={p.pen} strokeWidth={1.25} />
                 {label}
               </g>
@@ -141,7 +140,7 @@ export function F1Change({ first, final, heldOut }: { first: Record<string, numb
   const W = Math.max(cw, 280), H = 60 + areas.length * 62, l = W < 420 ? 92 : 120, r = 24;
   const x = (v: number) => l + ((v - 0.5) / 0.5) * (W - l - r);
   return (
-    <div className="chart flat" style={{ position: "relative" }}>
+    <div className="chart flat">
       <div className="chart-body" ref={box}>
         <ul className="legend" style={{ marginBottom: "0.5rem" }}>
           <li><svg width="14" height="14" aria-hidden="true"><circle cx="7" cy="7" r="5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="1.8" /></svg>First rule, no change vector</li>
@@ -158,7 +157,7 @@ export function F1Change({ first, final, heldOut }: { first: Record<string, numb
           {areas.map((a, i) => {
             const y = 40 + i * 62;
             return (
-              <g key={a} {...on(`F1 ${first[a].toFixed(2)} → ${final[a].toFixed(2)}`, `${AREA(a)}, held out ${heldOut[a].toFixed(2)}`)} style={{ outline: "none" }}>
+              <g key={a} {...on(`F1 ${first[a].toFixed(2)} → ${final[a].toFixed(2)}`, `${AREA(a)}, held out ${heldOut[a].toFixed(2)}`)}>
                 <rect x={0} y={y - 28} width={W} height={56} className="hit" />
                 <text x={0} y={y} dy="0.33em" className="lbl">{AREA(a).toUpperCase()}</text>
                 <line x1={x(first[a])} x2={x(final[a])} y1={y} y2={y} stroke="var(--ink)" strokeWidth={2} />
@@ -196,7 +195,7 @@ export function BuildingsChart({ pooled, byArea }: { pooled: Counts; byArea: Rec
           {["All", ...Object.keys(byArea)].map((a) => <button key={a} type="button" aria-pressed={area === a} onClick={() => setArea(a)}>{a === "All" ? "All three areas" : AREA(a)}</button>)}
         </div>
       </div>
-      <div className="chart" style={{ position: "relative" }}>
+      <div className="chart">
         <div className="chart-body" ref={box}>
           <ul className="legend" style={{ marginBottom: "0.5rem" }}>
             <li><svg width="22" height="14" aria-hidden="true"><rect x="1" y="1" width="20" height="12" fill="var(--paper)" stroke="var(--pen-2)" strokeWidth="1.5" /></svg>Graded by Copernicus</li>
@@ -208,7 +207,7 @@ export function BuildingsChart({ pooled, byArea }: { pooled: Counts; byArea: Rec
               const y = 8 + i * rowH, w = (data[g].graded / max) * (W - l - r), wi = (data[g].in_footprint / max) * (W - l - r);
               const share = data[g].graded ? data[g].in_footprint / data[g].graded : 0;
               return (
-                <g key={g} {...on(`${pct(share)}`, `${data[g].in_footprint.toLocaleString("en")} of ${data[g].graded.toLocaleString("en")} ${g.toLowerCase()} inside`)} style={{ outline: "none" }}>
+                <g key={g} {...on(`${pct(share)}`, `${data[g].in_footprint.toLocaleString("en")} of ${data[g].graded.toLocaleString("en")} ${g.toLowerCase()} inside`)}>
                   <rect x={0} y={y - 4} width={W} height={rowH - 6} className="hit" />
                   <text x={l - 12} y={y + 18} textAnchor="end" className="lbl">{(W < 480 && g === "Possibly damaged" ? "Possibly" : g).toUpperCase()}</text>
                   <rect x={l} y={y} width={Math.max(w, 1)} height={34} fill="var(--paper)" stroke="var(--pen-2)" strokeWidth={1.5} />
@@ -235,7 +234,7 @@ export function UndercountChart({ cems, open }: { cems: Record<string, number>; 
   const [box, cw] = useWidth<HTMLDivElement>(520);
   const W = Math.max(cw, 280), l = 96, r = 56, rowH = 66;
   return (
-    <div className="chart" style={{ position: "relative" }}>
+    <div className="chart">
       <div className="chart-body" ref={box}>
         <ul className="legend" style={{ marginBottom: "0.5rem" }}>
           <li><svg width="22" height="14" aria-hidden="true"><rect width="22" height="14" fill="var(--pen-2)" /></svg>Copernicus, graded destroyed</li>
@@ -246,7 +245,7 @@ export function UndercountChart({ cems, open }: { cems: Record<string, number>; 
           {areas.map((a, i) => {
             const y = 6 + i * rowH, s = (v: number) => (v / max) * (W - l - r);
             return (
-              <g key={a} {...on(`${open[a].toLocaleString("en")} against ${cems[a].toLocaleString("en")}`, `${AREA(a)}: Open Buildings against Copernicus`)} style={{ outline: "none" }}>
+              <g key={a} {...on(`${open[a].toLocaleString("en")} against ${cems[a].toLocaleString("en")}`, `${AREA(a)}: Open Buildings against Copernicus`)}>
                 <rect x={0} y={y - 4} width={W} height={rowH - 4} className="hit" />
                 <text x={l - 12} y={y + 22} textAnchor="end" className="lbl">{AREA(a).toUpperCase()}</text>
                 <rect x={l} y={y} width={s(cems[a])} height={22} fill="var(--pen-2)" />
@@ -267,7 +266,7 @@ export function UndercountChart({ cems, open }: { cems: Record<string, number>; 
 
 export function WarningTable({ places }: { places: Record<string, Place> }) {
   const [alert, setAlert] = useState<"sms" | "auto">("sms");
-  const rows = Object.entries(places).filter(([n]) => n !== "Upper Trishuli 3A Powerhouse");
+  const rows = Object.entries(places);
   const lo = -35, hi = 60, toX = (v: number) => ((v - lo) / (hi - lo)) * 100;
   return (
     <div>

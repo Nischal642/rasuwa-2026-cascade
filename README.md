@@ -36,7 +36,7 @@ Code and results for the paper *Downstream impacts and warning lead time of the 
 - `test_rasuwa.py` — offline checks of the scoring, the footprint rule, the point and line tests and the flood routing
 - `01_first_maps.ipynb` — interactive maps on top of the package
 - `figures/` — figures, drawn one IEEE column wide (3.5 in, 300 dpi)
-- `outputs/` — scores, counts and arrival times (JSON, CSV); files ending `_v0`, `_v1` or `_v2` are earlier method versions kept for the record
+- `outputs/` — scores, counts and arrival times (JSON, CSV); files ending `_v1` hold the first, hand-set rule, which the website's Method page compares against
 - `data/footprint/` — the impact footprint as GeoTIFF tiles (20 m, UTM 45N; opens in QGIS)
 
 ## Run

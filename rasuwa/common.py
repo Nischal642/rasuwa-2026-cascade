@@ -1,4 +1,6 @@
 """Settings and Earth Engine helpers shared by every analysis."""
+import glob
+import json
 import os
 import urllib.request
 
@@ -66,16 +68,20 @@ def retry(fn, what, tries=3):
     raise RuntimeError(f'{what} failed {tries} times')
 
 
-def fetch(url):
-    def get():
-        with urllib.request.urlopen(url, timeout=300) as r:
-            return r.read()
-    return retry(get, 'download')
+def emsr_features(product, kind):
+    """GeoJSON features of one EMSR927 layer (observedEventA, builtUpP, ...); [] if the product has none.
+    A few Copernicus features carry no geometry: they are left out."""
+    files = glob.glob(f'{EMSR}/{product}/*_{kind}_v*.json')
+    if not files:
+        return []
+    with open(files[0]) as f:
+        return [g for g in json.load(f)['features'] if g['geometry']]
 
 
 def save_png(img, vis, region, path, size=1024):
+    url = img.getThumbURL({**vis, 'region': region, 'dimensions': size, 'format': 'png'})
     with open(path, 'wb') as f:
-        f.write(fetch(img.getThumbURL({**vis, 'region': region, 'dimensions': size, 'format': 'png'})))
+        f.write(retry(lambda: urllib.request.urlopen(url, timeout=300).read(), 'download'))
     print('saved', path, flush=True)
 
 

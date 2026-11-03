@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { F1Change, ValidationTable } from "@/components/Charts";
 import Rail from "@/components/Rail";
-import method from "@/data/method.json";
-import { pct } from "@/lib/format";
-import { buildings, firstGuess, firstRule, footprint, infrastructure, leadtime, tuning, validation, type Params } from "@/lib/results";
+import { AREA, pct } from "@/lib/format";
+import { clock } from "@/lib/front";
+import { buildings, f1ByArea, firstGuess, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation, type Params } from "@/lib/results";
 
 export const metadata: Metadata = {
   title: "Method, step by step · Rasuwa–Trishuli cascade, 26 August 2026",
@@ -32,8 +32,6 @@ const SETTINGS: { key: keyof Params; plain: string; tech: string; unit?: string;
   { key: "vh_db", plain: "How much the radar echo must change", tech: "|ΔVH| above", unit: " dB", fmt: (v) => String(v) },
   { key: "hand_max_m", plain: "How high above the river a change may be", tech: "height above nearest drainage below", unit: " m", fmt: (v) => String(v) },
 ];
-
-const AREA = (a: string) => a.split(" ")[0];
 
 /** The three pieces of overlap, in km²: both maps, only ours, only Copernicus (both = precision × ours). */
 function pieces(s: { precision: number; ours_km2: number; copernicus_km2: number }) {
@@ -94,7 +92,7 @@ function Stop({ href, step, title, line, inputs = [], outputs = [] }: {
 }
 
 export default function MethodPage() {
-  const grid = method.tune_grid as Record<keyof Params, (number | null)[]>;
+  const grid = tuning.tune_grid;
   const combos = Object.values(grid).reduce((n, v) => n * v.length, 1);
   const chosen = tuning.final.params;
   const total = Object.values(footprint.areas_km2).reduce((a, b) => a + b, 0);
@@ -103,13 +101,12 @@ export default function MethodPage() {
   const [f1First, f1Final] = [f1(firstRule), f1(validation)];
   const range = (v: number[]) => `${Math.min(...v).toFixed(2)}–${Math.max(...v).toFixed(2)}`;
   const precisions = Object.values(validation).map((v) => v.any.precision);
-  const heldOut = Object.values(tuning.leave_one_area_out).map((v) => v.test_scores.f1);
+  const heldOut = Object.values(heldOutF1);
   const syab = leadtime.places["Syabrubesi"];
   const auto = ["Upper Trishuli 3A", "Betrawati"].map((k) => Math.round(leadtime.places[k].warning_with_auto_alert_min));
   const at = (n: string) => leadtime.places[n].arrival_npt;
   const ut3a = leadtime.places["Upper Trishuli 3A"];
   const ex1 = leadtime.worked_example.k1_seconds;
-  const clock = (m: number) => { const t = Math.round(8 * 60 + 37 + m); return `${String(Math.floor(t / 60)).padStart(2, "0")}:${String(t % 60).padStart(2, "0")}`; };
   const timeline: [string, string, string | null][] = [
     ["08:37", "The mountainside collapses", "its seismic signal"],
     [at("Rasuwagadhi"), "The front reaches the border", "video at Gyirong Port"],
@@ -119,11 +116,9 @@ export default function MethodPage() {
     [at("Upper Trishuli-3B Powerhouse"), "Upper Trishuli 3B", null],
     [at("Betrawati"), "Betrawati", "its gauge, silent around 09:20"],
   ];
-  const maxControl = pct(method.max_control_flagged);
+  const maxControl = pct(tuning.max_control_flagged);
   const recalls = Object.values(validation).map((v) => v.any.recall);
   const radar = Object.values(validation).map((v) => v.radar.recall);
-  const byArea = (s: typeof validation) => Object.fromEntries(Object.entries(s).map(([a, v]) => [a, v.any.f1]));
-  const heldOutByArea = Object.fromEntries(Object.entries(tuning.leave_one_area_out).map(([a, v]) => [a, v.test_scores.f1]));
   const [exArea, exScore] = Object.entries(validation)[0];
   const ex = { area: AREA(exArea), s: exScore.any, ...pieces(exScore.any) };
 
@@ -444,7 +439,7 @@ export default function MethodPage() {
             <h3 className="sub">Did it hold up on ground it had never seen?</h3>
             <div className="two-up">
               <figure className="figure" style={{ marginTop: 0 }}>
-                <F1Change first={byArea(firstRule)} final={byArea(validation)} heldOut={heldOutByArea} />
+                <F1Change first={f1ByArea(firstRule)} final={f1ByArea(validation)} heldOut={heldOutF1} />
                 <figcaption className="caption"><b>F1, by area</b>The axis starts at 0.5, so the gaps look larger than on a full scale.</figcaption>
               </figure>
               <ol className="findings">

@@ -47,7 +47,7 @@ def vantor_rgb(im, max_cloud=20):
     return ee.Image(rgb.copyProperties(im, ['system:time_start']))
 
 
-def before_after(name, half_width_m=750, save=True):
+def before_after(name, save=True):
     """Vantor before/after for one place: images, display settings and scene dates.
 
     Before: the newest clear pre-event view, gaps filled from older scenes.
@@ -61,7 +61,7 @@ def before_after(name, half_width_m=750, save=True):
     d = {'name': name, 'center': (lat, lon), 'dates_before': dates(pre), 'dates_after': dates(post)}
     if not d['dates_before'] or not d['dates_after']:
         return d
-    box = pt.buffer(half_width_m).bounds()
+    box = pt.buffer(750).bounds()  # 1.5 km box
     d['before'] = pre.sort('system:time_start').mosaic()  # mosaic puts the last image on top
     d['after'] = post.sort('system:time_start', False).mosaic()
     d['vis_before'] = stretch(d['before'], box, 2)

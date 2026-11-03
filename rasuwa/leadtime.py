@@ -18,6 +18,8 @@ DEBRIS_MAX_MS = 52                # collapse to Gyirong Port speed; the debris f
 SMS_MIN = 38                      # SMS alerts went out 09:15-09:16 (more than 600,000 messages)
 AUTO_ALERT_MIN = 2                # what-if: an automatic alert two minutes after the seismic signal
 LEADTIME_PLACES = ['Rasuwagadhi', 'Timure', 'Syabrubesi', 'Betrawati', 'Trishuli Bridge']
+N_DRAWS = 10_000                  # Monte Carlo draws over the observation windows
+MANNING_N = 0.05                  # roughness for the implied flood depth only; not used in the fit
 
 
 def river_profile():
@@ -51,7 +53,7 @@ def flood_seconds(chain, slope, k, s_from, s_to):
     return float(np.sum((pace[1:] + pace[:-1]) / 2 * np.diff(s)))
 
 
-def arrival_model(n_draws=10_000):
+def arrival_model():
     """The flood-front model, as a dict: the main-stem profile (chain, x, y), the places on it ({name: (lon, lat)}
     and {name: (chainage m, m off the river)}), the Syabrubesi and Betrawati chainages, the speed factor k per
     Monte Carlo draw, and arrival(s): minutes after the collapse at chainage s, one value per draw."""
@@ -71,14 +73,16 @@ def arrival_model(n_draws=10_000):
     for name, (lon, lat) in places.items():
         px, py = to_utm(lon, lat)
         d = np.hypot(x - px, y - py)
-        if d.min() < 1000:  # on the main stem, not a tributary
-            where[name] = (float(chain[d.argmin()]), float(d.min()))
+        s = float(chain[d.argmin()])
+        # on the main stem, not a tributary; and not a site already placed (OSM maps some plants twice)
+        if d.min() < 1000 and all(abs(s - s0) >= 1000 for s0, _ in where.values()):
+            where[name] = (s, float(d.min()))
     s_syab, s_betr = where['Syabrubesi'][0], where['Betrawati'][0]
 
     # Monte Carlo over the observation windows
     rng = np.random.default_rng(0)
-    t_syab = rng.uniform(PORT_MIN + s_syab / DEBRIS_MAX_MS / 60, SYABRUBESI_LATEST_MIN, n_draws)
-    t_betr = rng.uniform(*BETRAWATI_WINDOW_MIN, n_draws)
+    t_syab = rng.uniform(PORT_MIN + s_syab / DEBRIS_MAX_MS / 60, SYABRUBESI_LATEST_MIN, N_DRAWS)
+    t_betr = rng.uniform(*BETRAWATI_WINDOW_MIN, N_DRAWS)
     k = flood_seconds(chain, slope, 1.0, s_syab, s_betr) / ((t_betr - t_syab) * 60)
 
     def arrival(s):  # minutes after the collapse, one value per draw
@@ -90,14 +94,14 @@ def arrival_model(n_draws=10_000):
             'k': k, 'arrival': arrival}
 
 
-def run_leadtime(n_draws=10_000, manning_n=0.05):
+def run_leadtime():
     """Analysis C: flood-front arrival times and minutes of warning along the corridor."""
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     import numpy as np
 
-    m = arrival_model(n_draws)
+    m = arrival_model()
     chain, where, s_syab, s_betr, k, arrival = (m[n] for n in ('chain', 'where', 's_syab', 's_betr', 'k', 'arrival'))
     clock = lambda m: f'{round(COLLAPSE_NPT_MIN + m) // 60:02d}:{round(COLLAPSE_NPT_MIN + m) % 60:02d}'  # nearest minute
     rows = {}
@@ -109,7 +113,7 @@ def run_leadtime(n_draws=10_000, manning_n=0.05):
                       'arrival_npt': clock(med), 'after_sms_min': round(med - SMS_MIN, 1),
                       'warning_with_auto_alert_min': round(med - AUTO_ALERT_MIN, 1),
                       'extrapolated': s > s_betr}
-    depth = (0.6 * k * manning_n) ** 1.5  # Manning: c = 5/3 * h^(2/3) * S^(1/2) / n  =>  h from k
+    depth = (0.6 * k * MANNING_N) ** 1.5  # Manning: c = 5/3 * h^(2/3) * S^(1/2) / n  =>  h from k
     # The first five draws, for the worked example on the method page: k = (travel time at k = 1) / (observed trip)
     t_syab, t_betr, t_ut = (arrival(s) for s in (s_syab, s_betr, where['Upper Trishuli 3A'][0]))
     example = {'k1_seconds': {'betrawati': round(float(k[0] * (t_betr[0] - t_syab[0]) * 60)),
@@ -118,7 +122,7 @@ def run_leadtime(n_draws=10_000, manning_n=0.05):
                           'upper_trishuli_3a_min': round(float(u), 2)} for a, b, kk, u in zip(t_syab, t_betr, k, t_ut[:5])]}
     result = {'places': rows, 'flood_speed_k': [round(float(v), 1) for v in np.percentile(k, [5, 50, 95])],
               'worked_example': example,
-              'implied_flood_depth_m': {'manning_n': manning_n,
+              'implied_flood_depth_m': {'manning_n': MANNING_N,
                                         '5_50_95': [round(float(v), 1) for v in np.percentile(depth, [5, 50, 95])]},
               'observations': {'gyirong_port_min': PORT_MIN, 'syabrubesi_latest_min': SYABRUBESI_LATEST_MIN,
                                'betrawati_window_min': BETRAWATI_WINDOW_MIN, 'sms_min': SMS_MIN}}
@@ -160,8 +164,6 @@ def run_leadtime(n_draws=10_000, manning_n=0.05):
     halo = [patheffects.withStroke(linewidth=2, foreground='white')]
     last = -10.0
     for name, r in rows.items():  # sorted down the river
-        if r['chainage_km'] - last < 1:  # same site mapped twice: label it once
-            continue
         y = max(r['chainage_km'], last + 2.6)  # 2.6 km is one 6 pt line at this size: nudge close sites apart
         ax.text(ax.get_xlim()[1], y, f'{short.get(name, name)} ', fontsize=6, va='center', ha='right', path_effects=halo)
         last = y

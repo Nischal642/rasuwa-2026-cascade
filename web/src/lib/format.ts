@@ -1,3 +1,6 @@
+/** "Syabrubesi (AOI01)" -> "Syabrubesi" */
+export const AREA = (a: string) => a.split(" ")[0];
+
 /** A share as a whole percent, rounded as the paper's Python does: to 3 decimals, then half to even (0.925 -> 92 %). */
 export function pct(v: number) {
   const pm = Math.round(v * 1000), q = Math.floor(pm / 10), r = pm % 10;

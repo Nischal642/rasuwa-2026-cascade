@@ -4,8 +4,9 @@
 import { useEffect, useRef, useState } from "react";
 import type { Feature, FeatureCollection } from "geojson";
 import type { GeoJSONSource, LngLatBoundsLike, Map as MLMap, Marker, StyleSpecification } from "maplibre-gl";
+import { AREA } from "@/lib/format";
 import { INK, PAPER, PEN, PEN_2, clock, line, lineBetween, lineTo, places } from "@/lib/front";
-import { SHORT, frontAt } from "./Trace";
+import { HERO_STATIONS, SHORT, frontAt } from "./Trace";
 import { useTime } from "./Time";
 
 type View = "front" | "footprint" | "exposure";
@@ -15,7 +16,6 @@ const RELIEF_PAPER = "#eaf0e8";
 const CORRIDOR: LngLatBoundsLike = [[85.075, 27.845], [85.54, 28.37]];
 const AREAS: Record<string, LngLatBoundsLike> = {}; // filled from copernicus.geojson
 const LEFT = ["Timure", "Chilime Hydropower Powerhouse", "Upper Trishuli 3A", "Trishuli Hydropower Station"];
-const NARROW_PLACES = ["Rasuwagadhi", "Syabrubesi", "Upper Trishuli 3A", "Betrawati", "Trishuli Bridge"]; // room for these on a phone
 const PLATE: Record<View, string> = { front: "Map · the front", footprint: "Map · footprint", exposure: "Map · graded assets" };
 const HYDRO = ["Chilime Hydropower Powerhouse", "Upper Trishuli 3A", "Upper Trishuli-3B Powerhouse", "Trishuli Hydropower Station"];
 
@@ -174,24 +174,20 @@ export default function CorridorMap({ view, arrivals }: { view: View; arrivals?:
         m.on("load", async () => {
           const mm = m!;
           const narrow = el.clientWidth < 600;
+          await addFootprint(mm, view !== "footprint");
           if (view === "front") {
-            await addFootprint(mm, true);
             mm.addSource("river", { type: "geojson", data: lineFeature(line.map(([a, b]) => [a, b])) });
             mm.addSource("unc", { type: "geojson", data: lineFeature([]) });
             mm.addSource("front", { type: "geojson", data: lineFeature([]) });
             mm.addLayer({ id: "river", type: "line", source: "river", paint: { "line-color": INK, "line-width": 1.5, "line-opacity": 0.7 } });
             mm.addLayer({ id: "unc", type: "line", source: "unc", layout: { "line-cap": "round" }, paint: { "line-color": PEN, "line-width": 14, "line-opacity": 0.28 } });
             mm.addLayer({ id: "front", type: "line", source: "front", layout: { "line-cap": "round" }, paint: { "line-color": PEN, "line-width": 4.5 } });
-            markers.current = placeMarkers(ml, mm, Object.keys(places).filter((n) => n !== "Upper Trishuli 3A Powerhouse" && (!narrow || NARROW_PLACES.includes(n))), arrivals ?? null, narrow);
+            markers.current = placeMarkers(ml, mm, Object.keys(places).filter((n) => !narrow || HERO_STATIONS.includes(n)), arrivals ?? null, narrow);
           } else {
             await addCopernicus(mm);
-            if (view === "footprint") {
-              await addFootprint(mm, false);
-              mm.addLayer({ id: "cems-event", type: "line", source: "cems", filter: ["==", ["get", "kind"], "event"], paint: { "line-color": INK, "line-width": 1.6 } });
-              mm.addLayer({ id: "cems-area", type: "line", source: "cems", filter: ["==", ["get", "kind"], "area"], paint: { "line-color": INK, "line-width": 1.2, "line-dasharray": [4, 3] } });
-            } else {
-              await addFootprint(mm, true);
-              mm.addLayer({ id: "cems-area", type: "line", source: "cems", filter: ["==", ["get", "kind"], "area"], paint: { "line-color": INK, "line-width": 1.2, "line-dasharray": [4, 3] } });
+            if (view === "footprint") mm.addLayer({ id: "cems-event", type: "line", source: "cems", filter: ["==", ["get", "kind"], "event"], paint: { "line-color": INK, "line-width": 1.6 } });
+            mm.addLayer({ id: "cems-area", type: "line", source: "cems", filter: ["==", ["get", "kind"], "area"], paint: { "line-color": INK, "line-width": 1.2, "line-dasharray": [4, 3] } });
+            if (view === "exposure") {
               const exposed = await fetch("/data/exposure.geojson").then((r) => r.json());
               mm.addSource("exposed", { type: "geojson", data: exposed, attribution: "Copernicus EMS EMSR927 © European Union" });
               const r = ["interpolate", ["linear"], ["zoom"], 10, 2.2, 14, 4.5, 16, 7] as const;
@@ -271,7 +267,7 @@ export default function CorridorMap({ view, arrivals }: { view: View; arrivals?:
             <div className="switch" role="group" aria-label="Zoom to">
               <button type="button" onClick={() => go(CORRIDOR)} disabled={!ready}>Corridor</button>
               {["Syabrubesi (AOI01)", "Timure (AOI02)", "Bidur (AOI03)"].map((a) => (
-                <button key={a} type="button" onClick={() => AREAS[a] && go(AREAS[a])} disabled={!ready}>{a.split(" ")[0]}</button>
+                <button key={a} type="button" onClick={() => AREAS[a] && go(AREAS[a])} disabled={!ready}>{AREA(a)}</button>
               ))}
             </div>
           )}
