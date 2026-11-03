@@ -16,7 +16,7 @@ const SECTIONS = [
 ];
 import Trace, { TraceLegend } from "@/components/Trace";
 import { pct } from "@/lib/format";
-import { REPO, buildings, firstRule, footprint, infrastructure, leadtime, tuning, validation } from "@/lib/results";
+import { DOI, REPO, buildings, firstRule, footprint, infrastructure, leadtime, tuning, validation } from "@/lib/results";
 
 const n = (v: number) => v.toLocaleString("en");
 
@@ -77,7 +77,7 @@ export default function Page() {
           </ol>
           <p className="byline" style={{ marginTop: "1.25rem" }}>
             Companion to <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal,
-            from open multi-sensor data</i>, by Nischal Acharya (in preparation).
+            from open multi-sensor data</i>, by Nischal Acharya and Sagar Pathak (in preparation).
           </p>
         </div>
       </section>
@@ -456,8 +456,8 @@ export default function Page() {
               <p>
                 Every number on this page is read from the <a href={REPO}>rasuwa</a> package&rsquo;s outputs when the site is built.
                 The package has one module per analysis and a command-line step for each. The footprint is released as 20 m
-                GeoTIFF tiles (UTM 45N) with the scores and counts as JSON, and will be archived on Zenodo with a DOI before
-                submission.
+                GeoTIFF tiles (UTM 45N) with the scores and counts as JSON. Code, footprint and results are archived on Zenodo
+                at <a href={DOI}>{DOI.replace("https://", "")}</a>.
               </p>
             </div>
             <pre>{`python -m rasuwa export          # footprint into data/footprint/, tile by tile
@@ -469,8 +469,8 @@ python -m rasuwa leadtime
 python -m rasuwa web             # map layers and imagery for this site`}</pre>
             <div className="cite">
               <p style={{ margin: 0 }}>
-                Acharya, N. <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade,
-                Nepal, from open multi-sensor data.</i> In preparation, 2026. Code: {REPO.replace("https://", "")}
+                Acharya, N., and Pathak, S. <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade,
+                Nepal, from open multi-sensor data.</i> In preparation, 2026. Code: {REPO.replace("https://", "")}. Data: {DOI.replace("https://", "")}
               </p>
             </div>
           </section>

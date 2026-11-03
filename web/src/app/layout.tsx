@@ -35,7 +35,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <footer className="foot">
           <div>
             <h2>Rasuwa–Trishuli 2026</h2>
-            <p>Nischal Acharya, Nepalgunj, Nepal. Code MIT licensed.</p>
+            <p>Nischal Acharya and Sagar Pathak. Code MIT licensed.</p>
           </div>
           <div>
             <h2>Data and licences</h2>
