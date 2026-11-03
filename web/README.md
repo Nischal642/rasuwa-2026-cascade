@@ -17,7 +17,6 @@ It writes:
 - `public/data/exposure.geojson`: Copernicus-graded buildings, roads and bridges, each marked inside or outside the footprint
 - `src/data/river.json`: the main stem and the 5/50/95 % arrival band
 - `src/data/imagery.json` and `public/img/*.webp`: the before/after imagery
-- `src/data/method.json`: the threshold values the tuning sweep tried, for the Method page
 
 These outputs are committed, because the step needs Earth Engine and the Copernicus products in `data/emsr927/`, which are not in the repository. Run it again whenever the analysis changes.
 

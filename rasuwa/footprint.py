@@ -104,12 +104,12 @@ def layers():
             'dndvi': ndvi_after.subtract(s2_before.normalizedDifference(['B8', 'B4'])), 'cva': cva,
             'vh_change': vh_change, 'hand': ee.Image('MERIT/Hydro/v1_0_1').select('hnd'),
             'bright': bright(s2_before).Or(bright(s2_after)),
-            'orbits': orbits, 'orbit': orbit}
+            'orbit': orbit}
 
 
-def footprint(params=None):
+def footprint():
     """Candidate change on the valley floor: 1 optical only, 2 radar only, 3 both."""
-    p = {**PARAMS, **(params or {})}
+    p = PARAMS
     L = layers()
     spectral = L['dndvi'].lt(p['ndvi_drop'])
     if p['cva_min'] is not None:
@@ -124,7 +124,7 @@ def footprint(params=None):
     patches = (change.gt(0).reproject(ee.Projection('EPSG:32645').atScale(20))
                .connectedPixelCount(MIN_PATCH_PX, True))
     change = change.updateMask(patches.gte(MIN_PATCH_PX)).selfMask().clip(aoi()).rename('change')
-    return {**L, 'change': change, 'params': p}
+    return {**L, 'change': change}
 
 
 def footprint_map(fp):

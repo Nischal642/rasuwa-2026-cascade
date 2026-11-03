@@ -12,8 +12,8 @@ export const SHORT: Record<string, string> = {
   "Trishuli Hydropower Station": "Trishuli power station",
   "Trishuli Bridge": "Trishuli Bridge, Bidur",
 };
-const HERO_STATIONS = ["Rasuwagadhi", "Syabrubesi", "Upper Trishuli 3A", "Betrawati", "Trishuli Bridge"];
-const SKIP = ["Upper Trishuli 3A Powerhouse"]; // same kilometre as Upper Trishuli 3A
+/** The places the hero trace and the map on a phone have room for. */
+export const HERO_STATIONS = ["Rasuwagadhi", "Syabrubesi", "Upper Trishuli 3A", "Betrawati", "Trishuli Bridge"];
 const NARROW: Record<string, string> = {
   "Chilime Hydropower Powerhouse": "Chilime PH", "Upper Trishuli 3A": "U. Trishuli 3A", "Upper Trishuli-3B Powerhouse": "U. Trishuli 3B",
   "Trishuli Hydropower Station": "Trishuli PS", "Trishuli Bridge": "Bidur",
@@ -24,11 +24,11 @@ export function frontAt(t: number) {
   const km = kmAt(t, 2);
   const lo = kmAt(t, 3) ?? 0;
   const hi = kmAt(t, 1);
-  const passed = Object.entries(places).filter(([n, p]) => km !== null && p.km <= km && !SKIP.includes(n)).at(-1)?.[0];
-  return { km, lo, hi, passed, extrapolated: km !== null && km > FIT_END_KM, end: km !== null && km >= band.at(-1)![0] };
+  const passed = Object.entries(places).filter(([, p]) => km !== null && p.km <= km).at(-1)?.[0];
+  return { km, lo, hi, passed, extrapolated: km !== null && km > FIT_END_KM };
 }
 
-export function describe(t: number) {
+function describe(t: number) {
   const f = frontAt(t);
   if (f.km === null) return `${clock(t)} NPT, ${t} min after the collapse: debris flow in the Lhende Khola, not yet at Rasuwagadhi`;
   return `${clock(t)} NPT, ${t} min after the collapse: front at km ${f.km.toFixed(0)} below Rasuwagadhi (5–95 %: ${f.lo.toFixed(0)}–${(f.hi ?? f.km).toFixed(0)})${f.passed ? `, past ${SHORT[f.passed] ?? f.passed}` : ""}`;
@@ -78,7 +78,7 @@ export default function Trace({ full = false }: { full?: boolean }) {
   // Station labels down the left edge, nudged apart where places sit close together
   let lastY = -99;
   const stations = Object.entries(places)
-    .filter(([n]) => !SKIP.includes(n) && (full || HERO_STATIONS.includes(n)))
+    .filter(([n]) => full || HERO_STATIONS.includes(n))
     .map(([n, p]) => {
       const ly = Math.max(y(p.km), lastY + 17);
       lastY = ly;

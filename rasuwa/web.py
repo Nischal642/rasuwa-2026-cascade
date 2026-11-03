@@ -3,17 +3,15 @@
 The site reads the numbers straight from outputs/; this step writes what it cannot read there: map layers as
 GeoJSON in web/public/data/, the river and the arrival band in web/src/data/, and the imagery as WebP.
 """
-import glob
 import json
 import os
 
-from .common import EMSR, EMSR_PRODUCTS, FIG, slug
+from .common import EMSR_PRODUCTS, FIG, emsr_features, slug
 from .exposure import cems_buildings, cems_lines, footprint_class_at, line_inside_m, line_length_m
 from .footprint import CLASSES, load_footprint
 from .imagery import BEFORE_AFTER_PLACES, before_after
-from .leadtime import AUTO_ALERT_MIN, BETRAWATI_WINDOW_MIN, DEBRIS_MAX_MS, PORT_MIN, SMS_MIN, SYABRUBESI_LATEST_MIN
-from .leadtime import arrival_model
-from .validation import CONTROL_BOX, MAX_CONTROL_FLAGGED, TUNE_GRID
+from .leadtime import (AUTO_ALERT_MIN, BETRAWATI_WINDOW_MIN, DEBRIS_MAX_MS, PORT_MIN, SMS_MIN, SYABRUBESI_LATEST_MIN,
+                       arrival_model)
 
 WEB = 'web'
 SIMPLIFY_M = 10  # footprint outline tolerance: half a 20 m pixel
@@ -60,21 +58,8 @@ def footprint_polygons(change, x0, y1):
     return out
 
 
-def copernicus_layer(product, kind):
-    files = glob.glob(f'{EMSR}/{product}/*_{kind}_v*.json')
-    return [f for f in (json.load(open(files[0]))['features'] if files else []) if f['geometry']]
-
-
-def method_settings():
-    """The threshold sweep as the method page shows it: values tried, the false-alarm limit and the control valley."""
-    save(f'{WEB}/src/data/method.json', {'tune_grid': TUNE_GRID, 'max_control_flagged': MAX_CONTROL_FLAGGED,
-                                          'control_box': CONTROL_BOX})
-
-
 def run_web():
     import numpy as np
-
-    method_settings()
     from PIL import Image
     from shapely.geometry import shape
 
@@ -89,9 +74,9 @@ def run_web():
     # each marked with whether it lies inside our footprint (the same tests as `buildings` and `infrastructure`)
     areas, exposed = [], []
     for label, product in EMSR_PRODUCTS.items():
-        for f in copernicus_layer(product, 'areaOfInterestA'):
+        for f in emsr_features(product, 'areaOfInterestA'):
             areas.append(feature(f['geometry'], kind='area', area=label))
-        for f in copernicus_layer(product, 'observedEventA'):
+        for f in emsr_features(product, 'observedEventA'):
             areas.append(feature(shape(f['geometry']).simplify(0.00005), kind='event', area=label))
         lon, lat, grade = cems_buildings(product)
         inside = footprint_class_at(lon, lat, change, x0, y1) > 0
@@ -102,7 +87,7 @@ def run_web():
                 share = line_inside_m(lo, la, change, x0, y1) / max(line_length_m(lo, la), 1)
                 exposed.append(feature({'type': 'LineString', 'coordinates': list(zip(lo, la))}, kind='road',
                                        grade=g, inside=bool(share >= 0.5), area=label))
-        for f in copernicus_layer(product, 'transportationP'):
+        for f in emsr_features(product, 'transportationP'):
             if f['properties']['damage_gra'] == 'Destroyed':
                 a, b = f['geometry']['coordinates'][:2]
                 inside = footprint_class_at([a], [b], change, x0, y1, tol_m=40)[0] > 0

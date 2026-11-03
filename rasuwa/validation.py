@@ -1,10 +1,9 @@
 """Analysis A, part 2: the footprint scored against Copernicus EMS EMSR927, and its thresholds tuned."""
-import glob
 import json
 
 import ee
 
-from .common import EMSR, EMSR_PRODUCTS, FIG, OUT, S2_VIS, grid_figure, grid_pixels, save_png, slug
+from .common import EMSR_PRODUCTS, FIG, OUT, S2_VIS, emsr_features, grid_figure, grid_pixels, save_png, slug
 from .footprint import PARAMS, footprint, layers
 
 
@@ -30,11 +29,7 @@ AGREE_COLORS = {'Both flag it': '#1baf7a', 'Only our footprint': '#eb6834', 'Onl
 
 def emsr_layer(product, kind):
     """One EMSR927 layer (observedEventA, notAnalysedA, ...) as a FeatureCollection; empty if absent."""
-    files = glob.glob(f'{EMSR}/{product}/*_{kind}_v*.json')
-    if not files:
-        return ee.FeatureCollection([])
-    with open(files[0]) as f:
-        return ee.FeatureCollection(json.load(f))
+    return ee.FeatureCollection({'type': 'FeatureCollection', 'features': emsr_features(product, kind)})
 
 
 def analysed_region(product):
@@ -105,7 +100,7 @@ def score(km2, flagged):
             'ours_km2': round(tp + fp, 3), 'copernicus_km2': round(tp + fn, 3)}
 
 
-def validate(fp, save=True):
+def validate(fp):
     """Score the footprint against the Copernicus EMS mapped area in each EMSR927 area."""
     results, maps = {}, []
     ours = fp['change'].unmask(0)
@@ -118,8 +113,6 @@ def validate(fp, save=True):
         km2 = {int(g['code']): g['sum'] for g in res['groups']}
         results[label] = {m: score(km2, flagged) for m, flagged in METHODS.items()}
         maps.append((label, region, ref))
-    if not save:
-        return results
     # Maps come after all scores, and a slow map is reported rather than losing the numbers.
     palette = [c.lstrip('#') for c in AGREE_COLORS.values()]
     hit = ours.gt(0)
@@ -175,14 +168,15 @@ def run_tune():
         held_out[test] = {'params': grid[best], 'train_f1': round(mean(best, train), 3),
                           'control_flagged': false_alarm[best], 'test_scores': scores_np(data[test], grid[best])}
     final = max(ok, key=lambda i: mean(i, areas_))
+    best = max(range(len(grid)), key=lambda i: mean(i, areas_))
     result = {
+        'tune_grid': TUNE_GRID, 'max_control_flagged': MAX_CONTROL_FLAGGED,  # shown on the website's Method page
         'baseline': {'params': PARAMS, 'control_flagged': control_flagged(control, PARAMS),
                      'scores': {a: scores_np(d, PARAMS) for a, d in data.items()}},
         'leave_one_area_out': held_out,
         'final': {'params': grid[final], 'control_flagged': false_alarm[final],
                   'scores': {a: scores_np(d, grid[final]) for a, d in data.items()}},
-        'unconstrained_best': {'params': grid[max(range(len(grid)), key=lambda i: mean(i, areas_))],
-                               'control_flagged': false_alarm[max(range(len(grid)), key=lambda i: mean(i, areas_))]},
+        'unconstrained_best': {'params': grid[best], 'control_flagged': false_alarm[best]},
         'note': 'Scores here skip the 20 px patch filter; `validate` gives the exact numbers.',
     }
     print('baseline F1:', {a: float(s['f1']) for a, s in result['baseline']['scores'].items()},

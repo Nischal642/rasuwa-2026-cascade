@@ -65,19 +65,6 @@
       "warning_with_auto_alert_min": 33.6,
       "extrapolated": false
     },
-    "Upper Trishuli 3A Powerhouse": {
-      "chainage_km": 40.0,
-      "off_river_m": 348,
-      "arrival_min": 35.6,
-      "arrival_5_95_min": [
-        32.2,
-        39.0
-      ],
-      "arrival_npt": "09:13",
-      "after_sms_min": -2.4,
-      "warning_with_auto_alert_min": 33.6,
-      "extrapolated": false
-    },
     "Upper Trishuli-3B Powerhouse": {
       "chainage_km": 44.0,
       "off_river_m": 86,

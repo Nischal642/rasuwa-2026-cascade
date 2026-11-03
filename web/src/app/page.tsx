@@ -15,8 +15,8 @@ const SECTIONS = [
   { id: "code", key: "", name: "Code and citation" },
 ];
 import Trace, { TraceLegend } from "@/components/Trace";
-import { pct } from "@/lib/format";
-import { DOI, REPO, buildings, firstRule, footprint, infrastructure, leadtime, tuning, validation } from "@/lib/results";
+import { AREA, pct } from "@/lib/format";
+import { DOI, REPO, buildings, f1ByArea, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation } from "@/lib/results";
 
 const n = (v: number) => v.toLocaleString("en");
 
@@ -29,12 +29,10 @@ export default function Page() {
   const roads = infrastructure.cems_pooled;
   const ob = buildings.open_buildings;
   const depth = leadtime.implied_flood_depth_m["5_50_95"];
-  const f1 = (s: typeof validation) => Object.fromEntries(Object.entries(s).map(([a, v]) => [a, v.any.f1]));
-  const heldOut = Object.fromEntries(Object.entries(tuning.leave_one_area_out).map(([a, v]) => [a, v.test_scores.f1]));
-  const f1s = Object.values(f1(validation));
+  const f1s = Object.values(f1ByArea(validation));
   const precisions = Object.values(validation).map((v) => v.any.precision);
   const recalls = Object.values(validation).map((v) => v.any.recall);
-  const radarRecall = Object.fromEntries(Object.entries(validation).map(([a, v]) => [a.split(" ")[0], v.radar.recall]));
+  const radarRecall = Object.fromEntries(Object.entries(validation).map(([a, v]) => [AREA(a), v.radar.recall]));
   const osmRoadKm = Object.values(infrastructure.osm.road_km_in_footprint).reduce((s, r) => s + r.main + r.local + r.track, 0);
   const osmBridges = Object.values(infrastructure.osm.bridges_in_footprint).reduce((s, b) => ({ road: s.road + b.road, foot: s.foot + b.foot }), { road: 0, foot: 0 });
   const arrivals = Object.fromEntries(Object.entries(lt).map(([k, v]) => [k, v.arrival_npt]));
@@ -279,13 +277,13 @@ export default function Page() {
             </figure>
             <div className="two-up">
               <figure className="figure" style={{ marginTop: 0 }}>
-                <F1Change first={f1(firstRule)} final={f1(validation)} heldOut={heldOut} />
+                <F1Change first={f1ByArea(firstRule)} final={f1ByArea(validation)} heldOut={heldOutF1} />
                 <figcaption className="caption"><b>F1, by area</b>From a hand-set first rule without change vector analysis to the chosen rule, and the score when that area was held out of tuning.</figcaption>
               </figure>
               <div className="prose">
                 <p>
                   Adding change vector analysis raised F1 most at Timure, because much of its debris buried ground that was already
-                  bare. Held-out scores were {Object.values(heldOut).map((v) => v.toFixed(2)).join(", ")}, close to the in-sample
+                  bare. Held-out scores were {Object.values(heldOutF1).map((v) => v.toFixed(2)).join(", ")}, close to the in-sample
                   values, and all three folds chose nearly the same thresholds.
                 </p>
                 <p>

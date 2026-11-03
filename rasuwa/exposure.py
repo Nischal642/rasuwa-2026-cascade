@@ -1,5 +1,4 @@
 """Analysis B: buildings, roads, bridges and hydropower inside the footprint."""
-import glob
 import json
 import os
 import urllib.parse
@@ -7,7 +6,7 @@ import urllib.request
 
 import ee
 
-from .common import AOI_BOX, EMSR, EMSR_PRODUCTS, FIG, LHENDE_BOX, OUT, SERIES, aoi, retry, to_utm
+from .common import AOI_BOX, EMSR_PRODUCTS, FIG, LHENDE_BOX, OUT, SERIES, aoi, emsr_features, retry, to_utm
 from .footprint import layers, load_footprint
 
 
@@ -124,12 +123,9 @@ def osm_points(el):
 
 def cems_lines(product, kind):
     """(lon list, lat list, grade) for each line part of a Copernicus line layer."""
-    files = glob.glob(f'{EMSR}/{product}/*_{kind}_v*.json')
     out = []
-    for feat in (json.load(open(files[0]))['features'] if files else []):
+    for feat in emsr_features(product, kind):
         geom = feat['geometry']
-        if not geom:  # a few Copernicus features carry no geometry
-            continue
         parts = [geom['coordinates']] if geom['type'] == 'LineString' else geom['coordinates']
         out += [([c[0] for c in p], [c[1] for c in p], feat['properties']['damage_gra']) for p in parts]
     return out
@@ -137,8 +133,7 @@ def cems_lines(product, kind):
 
 def cems_buildings(product):
     """Copernicus graded building points: lon, lat and damage grade lists."""
-    with open(glob.glob(f'{EMSR}/{product}/*_builtUpP_v*.json')[0]) as f:
-        feats = json.load(f)['features']
+    feats = emsr_features(product, 'builtUpP')
     return ([g['geometry']['coordinates'][0] for g in feats], [g['geometry']['coordinates'][1] for g in feats],
             [g['properties']['damage_gra'] for g in feats])
 
@@ -166,8 +161,7 @@ def run_buildings():
             result['cems'][label][g] = {'graded': int(sel.sum()), 'in_footprint': int((hit & sel).sum())}
             pooled[g][0] += int(sel.sum())
             pooled[g][1] += int((hit & sel).sum())
-        with open(glob.glob(f'{EMSR}/{product}/*_areaOfInterestA_v*.json')[0]) as f:
-            geom = json.load(f)['features'][0]['geometry']
+        geom = emsr_features(product, 'areaOfInterestA')[0]['geometry']
         aoi_paths[label] = Path((geom['coordinates'] if geom['type'] == 'Polygon' else geom['coordinates'][0])[0])
     result['cems_pooled'] = {g: {'graded': n, 'in_footprint': k, 'share': round(k / n, 3) if n else 0.0}
                              for g, (n, k) in pooled.items()}
@@ -242,9 +236,8 @@ def run_infrastructure():
         destroyed = [(lo, la) for lo, la, g in cems_lines(product, 'transportationL') if g == 'Destroyed']
         total = sum(line_length_m(lo, la) for lo, la in destroyed)
         inside = sum(line_inside_m(lo, la, change, x0, y1) for lo, la in destroyed)
-        with open(glob.glob(f'{EMSR}/{product}/*_transportationP_v*.json')[0]) as f:
-            pts = [ft['geometry']['coordinates'] for ft in json.load(f)['features']
-                   if ft['properties']['damage_gra'] == 'Destroyed']
+        pts = [ft['geometry']['coordinates'] for ft in emsr_features(product, 'transportationP')
+               if ft['properties']['damage_gra'] == 'Destroyed']
         hit = (footprint_class_at([p[0] for p in pts], [p[1] for p in pts], change, x0, y1, tol_m=40) > 0
                if pts else [])
         result['cems'][label] = {'destroyed_road_km': round(total / 1000, 2), 'in_footprint_km': round(inside / 1000, 2),

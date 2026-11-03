@@ -57,7 +57,7 @@ sub, sup { line-height: 0; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 /* Chart paper: 1 and 5 division ruling, used in the frame and on plates, never behind running text */
-.ruled, .chart, .rail-col {
+.chart, .rail-col {
   background-color: var(--paper);
   background-image: var(--ruling);
   background-size: var(--major) var(--major), var(--major) var(--major), var(--minor) var(--minor), var(--minor) var(--minor);
@@ -83,7 +83,6 @@ sub, sup { line-height: 0; }
 }
 .plate b { font-weight: 700; }
 .plate.solid { background: var(--ink); color: var(--paper); }
-.plate.pen { border-color: var(--pen); color: var(--pen); }
 
 /* ---------- Recorder header strip ---------- */
 
@@ -242,12 +241,7 @@ main { min-width: 0; padding-bottom: 4rem; }
 .caption b { font-family: var(--label); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); margin-right: 0.35em; }
 .two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
 
-/* Formula and rule blocks: set like a hydrological manual's worked rule */
-.rule-block { margin: 1.75rem 0; border: 1px solid var(--ink); max-width: 46rem; }
-.rule-block > div { display: grid; grid-template-columns: 7.5rem 1fr; border-bottom: 1px solid var(--rule-2); }
-.rule-block > div:last-child { border-bottom: 0; }
-.rule-block dt { font-family: var(--label); font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; font-size: 0.9rem; padding: 0.7rem 0.75rem; background: var(--paper-2); border-right: 1px solid var(--rule-2); }
-.rule-block dd { margin: 0; padding: 0.6rem 0.9rem; font-size: 1.05rem; }
+/* Formulas: set like a hydrological manual's worked rule */
 .eq { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; margin: 1.5rem 0; padding: 0.9rem 1.1rem; max-width: 40rem; border-top: 1px solid var(--ink); border-bottom: 1px solid var(--ink); font-size: 1.2rem; }
 .eq i { font-style: italic; }
 .eq .eq-n { font-family: var(--label); color: var(--ink-2); font-size: 1rem; }
@@ -285,7 +279,7 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
 .controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
 
 /* Small SVG charts */
-.chart { border: 1px solid var(--ink); }
+.chart { position: relative; border: 1px solid var(--ink); }
 .chart.flat { background-image: none; } /* charts with a numeric axis draw their own ruling on that axis */
 .chart text { paint-order: stroke; stroke: var(--paper); stroke-width: 3px; stroke-linejoin: round; }
 .chart-body > svg { display: block; width: 100%; height: auto; }
@@ -295,8 +289,6 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
 .chart .val { font-size: 14px; fill: var(--ink); }
 .chart .mut { font-size: 13px; fill: var(--ink-2); }
 .chart .hit { fill: transparent; cursor: default; }
-.chart .hit:hover + .hl, .chart .hl.on { opacity: 1; }
-.chart .hl { opacity: 0; transition: opacity 0.15s; }
 .chart-body { padding: 0.75rem 0.85rem 0.5rem; }
 .tip {
   position: absolute;
@@ -343,10 +335,6 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
 .ba .corner { position: absolute; top: 0.75rem; pointer-events: none; }
 .ba .corner.l { left: 0.75rem; }
 .ba .corner.r { right: 0.75rem; }
-
-/* Stacked bar of the footprint classes */
-.stack { display: flex; height: 3.25rem; border: 1px solid var(--ink); background: var(--paper); gap: 2px; padding: 0; }
-.stack > div { position: relative; }
 
 /* Code and citation */
 pre { margin: 1.25rem 0; padding: 1rem 1.1rem; overflow-x: auto; background: var(--ink); color: var(--paper); font: 0.9rem/1.6 ui-monospace, "SF Mono", Menlo, Consolas, monospace; }
@@ -399,8 +387,6 @@ pre::selection, pre *::selection { background: var(--pen); }
   .stations a { grid-template-columns: 1.5rem 1fr; }
   .st-lead { display: none; }
   .st-val { grid-column: 2; text-align: left; color: var(--ink-2); }
-  .rule-block > div { grid-template-columns: minmax(0, 1fr); }
-  .rule-block dt { border-right: 0; border-bottom: 1px solid var(--rule-2); }
   .station-head { gap: 0.6rem; align-items: flex-start; }
   .station-head .plate { margin-top: 0.3rem; }
   .map { height: 64vh; }

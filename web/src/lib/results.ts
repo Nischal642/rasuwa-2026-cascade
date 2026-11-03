@@ -24,10 +24,15 @@ export const validation: Record<string, Record<Method, Score>> = read("validatio
 export const firstRule: Record<string, Record<Method, Score>> = read("validation_v1.json"); // hand-set rule, no CVA
 export type Params = { ndvi_drop: number; cva_min: number | null; ndvi_after_max: number; vh_db: number; hand_max_m: number };
 export const tuning: {
+  tune_grid: Record<keyof Params, (number | null)[]>;
+  max_control_flagged: number;
   leave_one_area_out: Record<string, { params: Params; train_f1: number; control_flagged: number; test_scores: Score }>;
   final: { params: Params; control_flagged: number };
   unconstrained_best: { params: Params; control_flagged: number };
 } = read("tuning.json");
+/** F1 of the whole footprint, per Copernicus area; and per area when it was held out of tuning. */
+export const f1ByArea = (s: typeof validation) => Object.fromEntries(Object.entries(s).map(([a, v]) => [a, v.any.f1]));
+export const heldOutF1 = Object.fromEntries(Object.entries(tuning.leave_one_area_out).map(([a, v]) => [a, v.test_scores.f1]));
 // The hand-set first rule, as recorded with its footprint (no change-vector test yet)
 const v1 = read("footprint_areas_v1.json");
 export const firstGuess: { params: Params; areas_km2: Record<string, number> } = {
