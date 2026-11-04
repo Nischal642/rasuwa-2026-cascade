@@ -41,7 +41,7 @@ export default function Trace({ full = false }: { full?: boolean }) {
   const [box, W] = useWidth<HTMLDivElement>(full ? 1100 : 760);
   const narrow = W < 560;
   const H = Math.round(full ? Math.min(Math.max(W * 0.56, 470), 640) : Math.min(Math.max(W * 0.72, 420), 560));
-  const m = { l: narrow ? 114 : full ? 168 : 150, r: narrow ? 10 : 18, t: 50, b: 58 };
+  const m = { l: narrow ? 114 : full ? 168 : 150, r: narrow ? 16 : 18, t: 50, b: 58 };
   const name = (n: string) => (narrow ? NARROW[n] : SHORT[n]) ?? n;
   const tick = narrow ? 20 : 10;
   const x = (min: number) => m.l + (min / T_MAX) * (W - m.l - m.r);
@@ -127,8 +127,8 @@ export default function Trace({ full = false }: { full?: boolean }) {
         {/* axes */}
         {Array.from({ length: T_MAX / tick + 1 }, (_, i) => i * tick).map((v) => (
           <g key={v}>
-            <text x={x(v)} y={H - m.b + 18} textAnchor={v === T_MAX ? "end" : "middle"} className="ax">+{v}</text>
-            <text x={x(v)} y={H - m.b + 34} textAnchor={v === T_MAX ? "end" : "middle"} className="ax" opacity={0.85}>{clock(v)}</text>
+            <text x={x(v)} y={H - m.b + 18} textAnchor="middle" className="ax">+{v}</text>
+            <text x={x(v)} y={H - m.b + 34} textAnchor="middle" className="ax" opacity={0.85}>{clock(v)}</text>
           </g>
         ))}
         <text x={W - m.r} y={H - 6} textAnchor="end" className="ax-title">{narrow ? "MIN AFTER COLLAPSE · NPT" : "MINUTES AFTER THE COLLAPSE · NPT"}</text>
@@ -203,11 +203,11 @@ export default function Trace({ full = false }: { full?: boolean }) {
 export function TraceLegend({ full = false }: { full?: boolean }) {
   return (
     <ul className="legend">
-      <li><svg width="26" height="12"><rect y="1" width="26" height="10" fill="var(--pen)" opacity="0.15" /><line y1="6" y2="6" x2="26" stroke="var(--pen)" strokeWidth="2.5" /></svg>Model median, 5–95 %</li>
-      <li><svg width="26" height="12"><line y1="6" y2="6" x2="26" stroke="var(--pen)" strokeWidth="2.5" strokeDasharray="6 4" /></svg>Extrapolated below Betrawati</li>
-      <li><svg width="26" height="12"><line x1="4" x2="22" y1="6" y2="6" stroke="var(--pen-2)" strokeWidth="6" strokeLinecap="round" /></svg>Observed time or window</li>
-      <li><svg width="14" height="14"><line x1="7" x2="7" y2="14" stroke="var(--ink)" strokeWidth="2" /></svg>SMS alert</li>
-      {full && <li><svg width="14" height="14"><line x1="7" x2="7" y2="14" stroke="var(--ink)" strokeWidth="1.5" strokeDasharray="4 3" /></svg>Automatic alert (what-if)</li>}
+      <li><svg width="26" height="12" aria-hidden="true"><rect y="1" width="26" height="10" fill="var(--pen)" opacity="0.15" /><line y1="6" y2="6" x2="26" stroke="var(--pen)" strokeWidth="2.5" /></svg>Model median, 5–95 %</li>
+      <li><svg width="26" height="12" aria-hidden="true"><line y1="6" y2="6" x2="26" stroke="var(--pen)" strokeWidth="2.5" strokeDasharray="6 4" /></svg>Extrapolated below Betrawati</li>
+      <li><svg width="26" height="12" aria-hidden="true"><line x1="4" x2="22" y1="6" y2="6" stroke="var(--pen-2)" strokeWidth="6" strokeLinecap="round" /></svg>Observed time or window</li>
+      <li><svg width="14" height="14" aria-hidden="true"><line x1="7" x2="7" y2="14" stroke="var(--ink)" strokeWidth="2" /></svg>SMS alert</li>
+      {full && <li><svg width="14" height="14" aria-hidden="true"><line x1="7" x2="7" y2="14" stroke="var(--ink)" strokeWidth="1.5" strokeDasharray="4 3" /></svg>Automatic alert (what-if)</li>}
     </ul>
   );
 }

@@ -25,7 +25,6 @@ function useTip() {
     },
     onBlur: () => setTip(null),
     tabIndex: 0,
-    style: { outline: "none" },
   });
   const el = tip && <div className="tip" style={{ left: tip.x, top: tip.y }}><b>{tip.value}</b> {tip.label}</div>;
   return { on, el };
@@ -101,7 +100,7 @@ export function ValidationTable({ scores }: { scores: Record<string, Record<Meth
           {METHODS.map((m) => <button key={m.key} type="button" aria-pressed={method === m.key} onClick={() => setMethod(m.key)}>{m.label}</button>)}
         </div>
       </div>
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0}>
         <table>
           <caption>Agreement with Copernicus EMS EMSR927 · {METHODS.find((m) => m.key === method)!.label === "Footprint" ? "whole footprint" : `${method} pixels only`}</caption>
           <thead>
@@ -280,7 +279,7 @@ export function WarningTable({ places }: { places: Record<string, Place> }) {
           <li><svg width="22" height="14" aria-hidden="true"><rect width="22" height="14" fill="var(--ink)" /></svg>Minutes of warning</li>
         </ul>
       </div>
-      <div className="table-wrap">
+      <div className="table-wrap" tabIndex={0}>
         <table>
           <caption>Flood-front arrival and warning time (Table IV)</caption>
           <thead>

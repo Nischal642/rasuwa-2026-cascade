@@ -223,7 +223,7 @@ sub, sup { line-height: 0; }
 .rail a:hover { color: var(--ink); }
 .rail a[aria-current="true"] { color: var(--pen); }
 .rail a[aria-current="true"]::before { transform: scaleX(1); }
-.rail .rail-key { display: inline-block; width: 1.1rem; color: var(--ink); }
+.rail-key { display: inline-block; width: 1.1rem; color: var(--ink); }
 .rail-mobile { display: none; }
 
 main { min-width: 0; padding-bottom: 4rem; }
@@ -259,7 +259,7 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
 .src { font-size: 0.85rem; color: var(--ink-2); }
 
 /* Segmented switch */
-.switch { display: inline-flex; border: 1px solid var(--ink); background: var(--paper); }
+.switch { display: inline-flex; flex-wrap: wrap; gap: 1px; max-width: 100%; border: 1px solid var(--ink); background: var(--ink); } /* gaps on the ink ground are the dividers, so wrapped rows stay ruled */
 .switch button {
   font-family: var(--label);
   font-weight: 600;
@@ -267,13 +267,12 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 0.45rem 0.7rem 0.4rem;
+  flex: 1 0 auto;
   border: 0;
-  border-right: 1px solid var(--ink);
-  background: transparent;
+  background: var(--paper);
   color: var(--ink);
   cursor: pointer;
 }
-.switch button:last-child { border-right: 0; }
 .switch button:hover { background: var(--paper-2); }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
@@ -289,6 +288,7 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
 .chart .val { font-size: 14px; fill: var(--ink); }
 .chart .mut { font-size: 13px; fill: var(--ink-2); }
 .chart .hit { fill: transparent; cursor: default; }
+.chart [tabindex]:focus-visible { outline: 2px solid var(--pen); outline-offset: 2px; }
 .chart-body { padding: 0.75rem 0.85rem 0.5rem; }
 .tip {
   position: absolute;
@@ -382,6 +382,8 @@ pre::selection, pre *::selection { background: var(--pen); }
   body { font-size: 1.0625rem; }
   .record > div { padding: 0.45rem 0.75rem; }
   .record dd { font-size: 0.95rem; }
+  .record > div:first-child { border-right: 0; }
+  .eq { font-size: 1.05rem; padding-inline: 0.25rem; }
   .hide-sm, .record > .hide-sm { display: none; }
   .margin-figure { grid-template-columns: minmax(0, 1fr); gap: 0.5rem; }
   .stations a { grid-template-columns: 1.5rem 1fr; }
@@ -390,11 +392,24 @@ pre::selection, pre *::selection { background: var(--pen); }
   .station-head { gap: 0.6rem; align-items: flex-start; }
   .station-head .plate { margin-top: 0.3rem; }
   .map { height: 64vh; }
+  .pieces thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+  .pieces tbody { border-top: 2px solid var(--ink); }
+  .pieces tr { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; column-gap: 0.75rem; border-bottom: 1px solid var(--rule-2); }
+  .pieces tbody th, .pieces tbody td { border-bottom: 0; padding-right: 0; }
+  .pieces .what { grid-column: 1 / -1; grid-row: 2; padding-top: 0; font-size: 0.95rem; color: var(--ink-2); }
+}
+
+/* Touch screens: controls at least a fingertip tall */
+@media (pointer: coarse) {
+  .switch button, .pen-range button { min-height: 2.75rem; }
+  .page-links a { display: inline-flex; align-items: center; min-height: 2.5rem; }
 }
 
 @media (forced-colors: active) {
   .plate, .switch, .trace-plate, .chart, .map-plate, .page-links a { border-color: CanvasText; }
   .page-links a[aria-current="page"] { border-width: 2px; }
+  .switch button { border: 1px solid ButtonText; }
+  .switch button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }
 }
 
 .tip-pop .maplibregl-popup-content { background: var(--ink); color: var(--paper); border-radius: 0; font-family: var(--label); font-size: 0.95rem; line-height: 1.3; padding: 0.4rem 0.55rem; box-shadow: 0 4px 14px rgb(23 33 28 / 0.25); }
@@ -439,7 +454,7 @@ pre::selection, pre *::selection { background: var(--pen); }
 .stop:first-child .stop-spine::before { top: 1.05rem; }
 .stop:last-child .stop-spine::before { bottom: auto; height: 1.5rem; }
 .stop-step { padding: 0.75rem 0 1.25rem; border-bottom: 1px solid var(--rule-2); }
-.stop-step a { display: block; font-family: var(--label); font-weight: 600; font-size: 1.3rem; line-height: 1.15; text-decoration: none; }
+.stop-step a { display: block; font-family: var(--label); font-weight: 600; font-size: 1.3rem; line-height: 1.2; text-decoration: none; }
 .stop-step a:hover { color: var(--pen); }
 .stop-n { display: inline-block; min-width: 1.4rem; color: var(--ink-2); }
 .stop-step p { margin: 0.3rem 0 0; font-size: 0.98rem; color: var(--ink-2); line-height: 1.45; }
