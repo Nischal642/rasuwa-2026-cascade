@@ -207,7 +207,7 @@ export default function MethodPage() {
             <div className="prose">
               <p className="lede">Nothing is decided yet. Each square just gets five numbers, and the rule in the next steps sets a limit on each.</p>
             </div>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table>
                 <thead><tr><th>Measurement</th><th>The question it answers</th><th>Exactly</th></tr></thead>
                 <tbody>
@@ -257,7 +257,7 @@ export default function MethodPage() {
                 {Object.values(grid).map((v) => v.length).join(" × ")} = <strong>{combos.toLocaleString("en")} versions of the rule</strong>.
               </p>
             </div>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table className="dials">
                 <thead><tr><th>Setting</th><th>Values tried</th><th className="r">Chosen</th></tr></thead>
                 <tbody>
@@ -273,7 +273,7 @@ export default function MethodPage() {
                           ))}
                         </span>
                       </td>
-                      <td className="num r"><strong>{s.fmt(chosen[s.key])}{chosen[s.key] === null ? "" : s.unit ?? ""}</strong></td>
+                      <td className="num r" style={{ whiteSpace: "nowrap" }}><strong>{s.fmt(chosen[s.key])}{chosen[s.key] === null ? "" : s.unit ?? ""}</strong></td>
                     </tr>
                   ))}
                 </tbody>
@@ -341,7 +341,7 @@ export default function MethodPage() {
               <li><span className="k">d</span><span><strong>Check that it holds.</strong> The three tests chose nearly the same settings, and the unseen-area scores ({heldOut.map((v) => v.toFixed(2)).join(", ")}) match the normal ones. The rule works on ground it was not tuned on.
                 <span className="tech">Two of the three folds chose exactly the final settings; the Bidur fold differed only in ΔNDVI and NDVI after.</span></span></li>
             </ol>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table>
                 <caption>The three tests (leave one area out)</caption>
                 <thead><tr><th>Area held out</th><th>Settings chosen on the other two</th><th className="r">F1 on the other two</th><th className="r">F1 on the unseen area</th><th className="r hide-sm">Control valley marked</th></tr></thead>
@@ -533,7 +533,7 @@ export default function MethodPage() {
                 </p>
               </aside>
             </div>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table>
                 <caption>The morning of 26 August</caption>
                 <thead><tr><th>NPT</th><th>What happened</th><th>How we know</th></tr></thead>
@@ -595,7 +595,7 @@ export default function MethodPage() {
                 </p>
               </aside>
             </div>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table>
                 <caption><i>k</i> = {ex1.betrawati.toLocaleString("en")} ÷ trip in seconds</caption>
                 <thead><tr><th>Try</th><th className="r">Syabrubesi</th><th className="r">Betrawati</th><th className="r">Trip</th><th className="r"><i>k</i></th><th className="r">Upper Trishuli 3A</th></tr></thead>
@@ -607,7 +607,7 @@ export default function MethodPage() {
                         <td className="num">{i + 1}</td>
                         <td className="num r">{a}</td>
                         <td className="num r">{b}</td>
-                        <td className="num r">{(+b - +a).toFixed(1)} min</td>
+                        <td className="num r" style={{ whiteSpace: "nowrap" }}>{(+b - +a).toFixed(1)} min</td>
                         <td className="num r"><strong>{Math.round(d.k)}</strong></td>
                         <td className="num r">{clock(d.upper_trishuli_3a_min)}</td>
                       </tr>
@@ -636,7 +636,7 @@ export default function MethodPage() {
                 automatic alert two minutes after the collapse. Every place is in the <Link href="/#leadtime">lead-time results</Link>.
               </p>
             </div>
-            <pre>{`python -m rasuwa export      # 1, 6  the footprint, tile by tile
+            <pre tabIndex={0} role="region" aria-label="Commands that reproduce each step">{`python -m rasuwa export      # 1, 6  the footprint, tile by tile
 python -m rasuwa tune        # 4, 5  the ${combos.toLocaleString("en")}-version sweep and the fair choice
 python -m rasuwa validate    # 7     the check against Copernicus
 python -m rasuwa buildings   # 8

@@ -109,7 +109,7 @@ export default function Page() {
               <figcaption className="caption"><b>The corridor</b>The flood front as modelled in section C, over the impact footprint of section A. Modelled arrival times are medians; below Betrawati they are extrapolated past the last observation.</figcaption>
             </figure>
 
-            <div className="table-wrap" style={{ maxWidth: "38rem" }}>
+            <div className="table-wrap" tabIndex={0} style={{ maxWidth: "38rem" }}>
               <table>
                 <caption>Reported impact in Nepal, as of early October 2026 (Table I)</caption>
                 <thead><tr><th>Impact</th><th className="r">Value</th><th>Source</th></tr></thead>
@@ -148,7 +148,7 @@ export default function Page() {
               <li><span className="k">B</span><span>Which buildings, roads, bridges and hydropower sites lay inside the footprint, and how complete are the open datasets that list them?</span></li>
               <li><span className="k">C</span><span>When did the flood front reach each settlement, and how much warning was, or could have been, given?</span></li>
             </ol>
-            <div className="table-wrap">
+            <div className="table-wrap" tabIndex={0}>
               <table>
                 <caption>Data used (Table II) · all open, processed in Google Earth Engine and Python</caption>
                 <thead><tr><th>Dataset</th><th>Used for</th><th>Detail</th></tr></thead>
@@ -193,7 +193,7 @@ export default function Page() {
                 <span className="tech">Valley floor: less than 150 m above the nearest river (height above nearest drainage, MERIT Hydro). Snow, ice and cloud: snow index NDSI above 0.4, or very bright blue (reflectance above 0.25), in either picture. Corridor: the main river where more than 2,500 km² of land drains into it, plus 1 km either side and the Lhende Khola valley; this leaves out the river above the border in Tibet (2,141 km²) and the Tadi (551 km²) and Langtang (519 km²) side rivers. Specks: patches under 20 pixels (0.8 ha, about one football pitch) are dropped.</span></span></li>
             </ol>
             <div className="eq" role="math" aria-label="d equals the square root of the sum over bands b of the squared change in reflectance">
-              <span><i>d</i> = √ Σ<sub><i>b</i></sub> (<i>ρ</i><sub><i>b</i>,after</sub> − <i>ρ</i><sub><i>b</i>,before</sub>)²,&ensp; <i>b</i> ∈ {"{"}B2, B3, B4, B8, B11, B12{"}"}</span>
+              <span><i>d</i> = √ Σ<sub><i>b</i></sub> (<i>ρ</i><sub><i>b</i>,after</sub> − <i>ρ</i><sub><i>b</i>,before</sub>)²,&ensp; <i>b</i>&nbsp;∈&nbsp;{"{"}B2, B3, B4, B8, B11, B12{"}"}</span>
               <span className="eq-n">(1)</span>
             </div>
             <div className="two-up">
@@ -218,12 +218,12 @@ export default function Page() {
             </div>
             <figure className="figure">
               <FootprintStack areas={areas} />
-              <div className="table-wrap" style={{ marginTop: "1rem" }}>
-                <table>
-                  <thead>
-                    <tr><th>Piece</th><th>What it means</th><th className="r">Area</th><th className="r">Share</th></tr>
+              <div className="table-wrap" tabIndex={0} style={{ marginTop: "1rem" }}>
+                <table className="pieces" role="table">
+                  <thead role="rowgroup">
+                    <tr role="row"><th role="columnheader">Piece</th><th role="columnheader">What it means</th><th role="columnheader" className="r">Area</th><th role="columnheader" className="r">Share</th></tr>
                   </thead>
-                  <tbody>
+                  <tbody role="rowgroup">
                     {[
                       { cls: 1, name: "Optical only", stripes: "Red stripes", v: areas["Optical only"], pen: "var(--pen)",
                         text: "Found in the satellite pictures (steps 1 and 2); radar saw no clear change there." },
@@ -232,16 +232,16 @@ export default function Page() {
                       { cls: 2, name: "Radar only", stripes: "Blue stripes", v: areas["Radar only"], pen: "var(--pen-2)",
                         text: "Only radar saw a change: most likely where cloud hid the ground in the pictures, or where the change showed in the radar echo but not in the colour." },
                     ].map((r) => (
-                      <tr key={r.cls}>
-                        <th scope="row" style={{ whiteSpace: "nowrap" }}>
+                      <tr key={r.cls} role="row">
+                        <th scope="row" role="rowheader" style={{ whiteSpace: "nowrap" }}>
                           <svg width="22" height="14" aria-hidden="true" style={{ verticalAlign: "-2px", marginRight: "0.5rem" }}>
                             <rect x="0.5" y="0.5" width="21" height="13" fill={`url(#hatch-${r.cls})`} stroke={r.pen} />
                           </svg>
                           {r.name}<span className="sr-only"> ({r.stripes.toLowerCase()})</span>
                         </th>
-                        <td>{r.text}</td>
-                        <td className="num r" style={{ whiteSpace: "nowrap" }}>{r.v.toFixed(2)} km²</td>
-                        <td className="num r">{pct(r.v / total)}</td>
+                        <td role="cell" className="what">{r.text}</td>
+                        <td role="cell" className="num r" style={{ whiteSpace: "nowrap" }}>{r.v.toFixed(2)} km²</td>
+                        <td role="cell" className="num r">{pct(r.v / total)}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -458,7 +458,7 @@ export default function Page() {
                 at <a href={DOI}>{DOI.replace("https://", "")}</a>.
               </p>
             </div>
-            <pre>{`python -m rasuwa export          # footprint into data/footprint/, tile by tile
+            <pre tabIndex={0} role="region" aria-label="Commands that reproduce the analysis">{`python -m rasuwa export          # footprint into data/footprint/, tile by tile
 python -m rasuwa footprint       # areas and map
 python -m rasuwa validate        # scores against Copernicus EMSR927
 python -m rasuwa buildings
