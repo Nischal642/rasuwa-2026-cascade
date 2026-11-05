@@ -4,6 +4,7 @@ import { join } from "node:path";
 
 export const REPO = "https://github.com/Nischal642/rasuwa-2026-cascade";
 export const DOI = "https://doi.org/10.5281/zenodo.23887627";
+export const SITE = "https://rasuwaflood.nischalacharya642.com.np";
 
 const read = (name: string) => JSON.parse(readFileSync(join(process.cwd(), "..", "outputs", name), "utf8"));
 
@@ -63,3 +64,14 @@ export const leadtime: {
     draws: { syabrubesi_min: number; betrawati_min: number; k: number; upper_trishuli_3a_min: number }[];
   };
 } = read("leadtime.json");
+
+// Minutes between the front passing Syabrubesi and the 09:15 SMS alert.
+export const SMS_LEAD = Math.round(-leadtime.places["Syabrubesi"].after_sms_min);
+
+// Link-preview card, also offered as the press figure. Rendered once from the site's own type and colours.
+export const OG_IMAGE = {
+  url: "/press/rasuwa-flood-2026.png",
+  width: 2400,
+  height: 1260,
+  alt: `The flood outran the warning: the front of the 26 August 2026 Rasuwa flood passed Syabrubesi ${SMS_LEAD} minutes before the 09:15 SMS alert.`,
+};

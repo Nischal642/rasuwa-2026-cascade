@@ -4,11 +4,36 @@ import { F1Change, ValidationTable } from "@/components/Charts";
 import Rail from "@/components/Rail";
 import { AREA, pct } from "@/lib/format";
 import { clock } from "@/lib/front";
-import { buildings, f1ByArea, firstGuess, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation, type Params } from "@/lib/results";
+import JsonLd from "@/components/JsonLd";
+import { OG_IMAGE, SITE, buildings, f1ByArea, firstGuess, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation, type Params } from "@/lib/results";
+
+const f1Range = Object.values(f1ByArea(validation));
+const title = "Mapping and timing the 2026 Rasuwa flood: method, step by step";
+const description = `Step by step: how the 2026 Rasuwa flood was mapped from Sentinel-1/2, checked against Copernicus EMSR927 (F1 ${Math.min(...f1Range).toFixed(2)}–${Math.max(...f1Range).toFixed(2)}) and its front timed to each town.`;
 
 export const metadata: Metadata = {
-  title: "Method, step by step · Rasuwa–Trishuli cascade, 26 August 2026",
-  description: "How the footprint, the checks against Copernicus, the exposure counts and the flood-front timing were made, in order.",
+  title,
+  description,
+  alternates: { canonical: "/method/" },
+  openGraph: { type: "article", siteName: "Rasuwa flood 2026", url: "/method/", title, description, images: [OG_IMAGE] },
+};
+
+// Points at the home page's graph (#website, #paper) by @id.
+const LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage", "@id": `${SITE}/method/#webpage`, url: `${SITE}/method/`, name: title, description, inLanguage: "en",
+      isPartOf: { "@id": `${SITE}/#website` }, about: { "@id": `${SITE}/#paper` }, breadcrumb: { "@id": `${SITE}/method/#breadcrumb` },
+    },
+    {
+      "@type": "BreadcrumbList", "@id": `${SITE}/method/#breadcrumb`,
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Rasuwa flood 2026", item: `${SITE}/` },
+        { "@type": "ListItem", position: 2, name: "Method", item: `${SITE}/method/` },
+      ],
+    },
+  ],
 };
 
 const SECTIONS = [
@@ -123,7 +148,8 @@ export default function MethodPage() {
   const ex = { area: AREA(exArea), s: exScore.any, ...pieces(exScore.any) };
 
   return (
-    <>
+    <main>
+      <JsonLd data={LD} />
       <section className="method-head" aria-labelledby="title">
         <h1 id="title">How it was done, step by step</h1>
         <p className="standfirst">
@@ -139,7 +165,7 @@ export default function MethodPage() {
 
       <div className="body">
         <aside className="rail-col"><Rail sections={SECTIONS} /></aside>
-        <main>
+        <div className="main-col">
           {/* ---------------- The route ---------------- */}
           <section id="flow" className="station" aria-labelledby="h-flow">
             <div className="station-head"><h2 id="h-flow">The whole chain at a glance</h2></div>
@@ -643,8 +669,8 @@ python -m rasuwa buildings   # 8
 python -m rasuwa infrastructure
 python -m rasuwa leadtime    # 9`}</pre>
           </section>
-        </main>
+        </div>
       </div>
-    </>
+    </main>
   );
 }

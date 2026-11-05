@@ -30,8 +30,8 @@ export default function BeforeAfter() {
         </div>
       </div>
       <div className="ba" style={{ "--split": `${split}%` } as React.CSSProperties}>
-        <img src={view.before} alt={`${view.label}, ${view.left}`} width={1024} height={909} />
-        <img src={view.after} alt={`${view.label}, ${view.right}`} className="after" width={1024} height={909} />
+        <img src={view.before} alt={`${view.label}, ${view.left}`} width={1024} height={909} loading="lazy" decoding="async" />
+        <img src={view.after} alt={`${view.label}, ${view.right}`} className="after" width={1024} height={909} loading="lazy" decoding="async" />
         <input type="range" min={0} max={100} step={0.5} value={split} onChange={(e) => setSplit(Number(e.target.value))}
           aria-label="Move the split between before and after" aria-valuetext={`${Math.round(split)} % before`} />
         <div className="divider">

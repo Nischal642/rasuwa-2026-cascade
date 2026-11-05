@@ -16,9 +16,50 @@ const SECTIONS = [
 ];
 import Trace, { TraceLegend } from "@/components/Trace";
 import { AREA, pct } from "@/lib/format";
-import { DOI, REPO, buildings, f1ByArea, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation } from "@/lib/results";
+import JsonLd from "@/components/JsonLd";
+import { DOI, REPO, SITE, SMS_LEAD, buildings, f1ByArea, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation } from "@/lib/results";
 
 const n = (v: number) => v.toLocaleString("en");
+
+const PAPER = "Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data";
+const AUTHORS = [{ "@id": `${SITE}/#nischal` }, { "@id": `${SITE}/#sagar` }];
+const person = (id: string, name: string, orcid: string) => ({
+  "@type": "Person", "@id": `${SITE}/#${id}`, name, jobTitle: "Geomatics Engineer", sameAs: `https://orcid.org/${orcid}`,
+});
+// The paper is under review: no datePublished, journal or article DOI until it is accepted.
+const LD = {
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: "Rasuwa flood 2026", inLanguage: "en", publisher: AUTHORS[0] },
+    {
+      "@type": "WebPage", "@id": `${SITE}/#webpage`, url: `${SITE}/`, name: "Rasuwa (Bhotekoshi) flood 2026: the flood outran the warning", inLanguage: "en",
+      isPartOf: { "@id": `${SITE}/#website` }, about: { "@id": `${SITE}/#event` }, mainEntity: { "@id": `${SITE}/#paper` },
+    },
+    {
+      "@type": "ScholarlyArticle", "@id": `${SITE}/#paper`, headline: PAPER, creativeWorkStatus: "Under peer review", inLanguage: "en",
+      author: AUTHORS, about: { "@id": `${SITE}/#event` }, isBasedOn: [{ "@id": DOI }, { "@id": REPO }],
+    },
+    person("nischal", "Nischal Acharya", "0009-0000-6113-2128"),
+    person("sagar", "Sagar Pathak", "0000-0001-9354-5605"),
+    {
+      "@type": "Event", "@id": `${SITE}/#event`, name: "Rasuwa (Bhotekoshi) flood, 26 August 2026",
+      alternateName: ["Bhote Koshi–Trishuli cascade", "Rasuwa flood", "Bhotekoshi flood"],
+      description: "A rock-ice avalanche on the Langtang Lirung massif became a debris flow and flood along the Lhende Khola, Bhote Koshi and Trishuli rivers.",
+      startDate: "2026-08-26T08:37:00+05:45",
+      location: { "@type": "Place", name: "Rasuwa District, Nepal", address: { "@type": "PostalAddress", addressRegion: "Rasuwa", addressCountry: "NP" } },
+    },
+    {
+      "@type": "Dataset", "@id": DOI, url: DOI, identifier: DOI, name: "rasuwa-2026-cascade: code and results",
+      description: `Code, flood footprint (20 m GeoTIFF tiles), scores and exposure counts for "${PAPER}".`,
+      creator: AUTHORS, license: "https://opensource.org/licenses/MIT",
+      spatialCoverage: { "@type": "Place", name: "Rasuwa District, Nepal" }, temporalCoverage: "2026-08-26",
+    },
+    {
+      "@type": "SoftwareSourceCode", "@id": REPO, name: "rasuwa-2026-cascade", codeRepository: REPO, url: REPO,
+      programmingLanguage: "Python", license: "https://opensource.org/licenses/MIT", author: AUTHORS,
+    },
+  ],
+};
 
 export default function Page() {
   const areas = footprint.areas_km2;
@@ -36,12 +77,13 @@ export default function Page() {
   const osmRoadKm = Object.values(infrastructure.osm.road_km_in_footprint).reduce((s, r) => s + r.main + r.local + r.track, 0);
   const osmBridges = Object.values(infrastructure.osm.bridges_in_footprint).reduce((s, b) => ({ road: s.road + b.road, foot: s.foot + b.foot }), { road: 0, foot: 0 });
   const arrivals = Object.fromEntries(Object.entries(lt).map(([k, v]) => [k, v.arrival_npt]));
-  const smsLead = Math.round(-syab.after_sms_min);
+  const smsLead = SMS_LEAD;
   const cemsDestroyedIn = Object.fromEntries(Object.entries(buildings.cems).map(([a, v]) => [a, v["Destroyed"].in_footprint]));
   const autoMid = ["Upper Trishuli 3A", "Upper Trishuli-3B Powerhouse", "Betrawati"].map((k) => Math.round(lt[k].warning_with_auto_alert_min));
 
   return (
-    <>
+    <main>
+      <JsonLd data={LD} />
 
       <section className="hero" aria-labelledby="title">
         <div className="hero-head">
@@ -75,14 +117,14 @@ export default function Page() {
           </ol>
           <p className="byline" style={{ marginTop: "1.25rem" }}>
             Companion to <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal,
-            from open multi-sensor data</i>, by Nischal Acharya and Sagar Pathak (in preparation).
+            from open multi-sensor data</i>, by Nischal Acharya and Sagar Pathak (manuscript under review).
           </p>
         </div>
       </section>
 
       <div className="body">
         <aside className="rail-col"><Rail sections={SECTIONS} /></aside>
-        <main>
+        <div className="main-col">
           {/* ---------------- The event ---------------- */}
           <section id="event" className="station" aria-labelledby="h-event">
             <div className="station-head"><h2 id="h-event">Eighty kilometres in about an hour</h2></div>
@@ -468,13 +510,13 @@ python -m rasuwa web             # map layers and imagery for this site`}</pre>
             <div className="cite">
               <p style={{ margin: 0 }}>
                 Acharya, N., and Pathak, S. <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade,
-                Nepal, from open multi-sensor data.</i> In preparation, 2026. Code: {REPO.replace("https://", "")}. Data: {DOI.replace("https://", "")}
+                Nepal, from open multi-sensor data.</i> Manuscript under review, 2026. Code: {REPO.replace("https://", "")}. Data: {DOI.replace("https://", "")}
               </p>
             </div>
           </section>
-        </main>
+        </div>
       </div>
 
-    </>
+    </main>
   );
 }

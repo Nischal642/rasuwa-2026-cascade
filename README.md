@@ -6,7 +6,7 @@ On 26 August 2026 a rock-ice avalanche on the Langtang Lirung massif became a de
 - **B. Exposure:** which buildings, roads, bridges and hydropower sites lay inside the footprint, and how complete the open datasets are.
 - **C. Warning lead time:** when the flood front reached each place, and how much warning was or could have been given.
 
-Code and results for the paper *Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data* (N. Acharya and S. Pathak, in preparation).
+Code and results for the paper *Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data* (N. Acharya and S. Pathak, manuscript under review).
 
 ## Key results
 
