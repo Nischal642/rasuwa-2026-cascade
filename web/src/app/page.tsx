@@ -2,6 +2,7 @@ import Link from "next/link";
 import BeforeAfter from "@/components/BeforeAfter";
 import { BuildingsChart, F1Change, FootprintStack, UndercountChart, ValidationTable, WarningTable } from "@/components/Charts";
 import CorridorMap from "@/components/CorridorMap";
+import Nepali from "@/components/Nepali";
 import Rail from "@/components/Rail";
 
 const SECTIONS = [
@@ -12,6 +13,7 @@ const SECTIONS = [
   { id: "exposure", key: "B", name: "Exposure" },
   { id: "leadtime", key: "C", name: "Lead time" },
   { id: "meaning", key: "", name: "What it means" },
+  { id: "nepali", key: "", name: "नेपाली" },
   { id: "code", key: "", name: "Code and citation" },
 ];
 import Trace, { TraceLegend } from "@/components/Trace";
@@ -114,6 +116,7 @@ export default function Page() {
             <li><a href="#leadtime"><span className="st-key">C</span>{" "}<span className="st-name">Lead time</span>{" "}<span className="st-lead" />{" "}<span className="st-val num">{autoMid[0]}–{autoMid[2]} min an automatic alert could give</span></a></li>
           </ol>
           <Byline style={{ marginTop: "1.25rem" }} />
+          <p className="byline" lang="ne"><a href="#nepali">नेपालीमा सारांश पढ्नुहोस्</a></p>
         </div>
       </section>
 
@@ -492,6 +495,8 @@ export default function Page() {
               </p>
             </div>
           </section>
+
+          <Nepali total={total} destroyedShare={destroyed.share} autoRange={[autoMid[0], autoMid[2]]} />
 
           {/* ---------------- Code and citation ---------------- */}
           <section id="code" className="station" aria-labelledby="h-code">

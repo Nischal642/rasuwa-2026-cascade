@@ -18,3 +18,6 @@ export const SHORT: Record<string, string> = {
   "Trishuli Hydropower Station": "Trishuli power station",
   "Trishuli Bridge": "Trishuli Bridge, Bidur",
 };
+
+/** Devanagari digits for the Nepali summary: "08:49" -> "०८:४९" */
+export const ne = (v: string | number) => String(v).replace(/\d/g, (d) => "०१२३४५६७८९"[+d]);
