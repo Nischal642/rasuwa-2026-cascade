@@ -28,7 +28,7 @@ pnpm dev        # http://localhost:3000
 pnpm build      # static site in out/
 ```
 
-Live at https://rasuwaflood.nischalacharya642.com.np (Cloudflare Pages project `rasuwa`, also at rasuwa.pages.dev). Every push to `main` rebuilds it: root directory `web`, build command `pnpm build`, output `out`, with `PNPM_VERSION=11.20.0` and `NODE_VERSION=22`. The bare domain and `www` redirect to it (302, a Cloudflare redirect rule).
+Live at https://rasuwaflood.nischalacharya642.com.np (Cloudflare Pages project `rasuwa`). Every push to `main` rebuilds it: root directory `web`, build command `pnpm build`, output `out`, with `PNPM_VERSION=11.20.0` and `NODE_VERSION=22`. Everything else redirects to it with a 301, keeping the path: the bare domain and `www` through a single redirect rule on the zone, and `rasuwa.pages.dev` through an account bulk redirect (list `pages_dev_redirects`). Branch previews such as `<branch>.rasuwa.pages.dev` are not redirected.
 
 `out/` also works on any other static host. If it is served from a sub-path such as `user.github.io/repo`, set `basePath` in `next.config.ts`.
 

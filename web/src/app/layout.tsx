@@ -4,15 +4,22 @@ import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 import { HatchDefs } from "@/components/Charts";
 import PageLinks from "@/components/PageLinks";
-import { REPO } from "@/lib/results";
+import { OG_IMAGE, REPO, SITE, SMS_LEAD } from "@/lib/results";
 
 const label = Barlow_Condensed({ variable: "--font-label", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 const text = Source_Serif_4({ variable: "--font-text", subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"] });
 
+// The home page's metadata; /method/ overrides title, description, canonical and openGraph.
+const title = "Rasuwa (Bhotekoshi) flood 2026: the flood outran the warning";
+const description = `The 26 Aug 2026 Bhote Koshi–Trishuli flood in Rasuwa, Nepal, mapped from open satellite data. Its front passed Syabrubesi ${SMS_LEAD} minutes before the SMS warning.`;
+
 export const metadata: Metadata = {
-  title: "The flood outran the warning · Rasuwa–Trishuli cascade, 26 August 2026",
-  description:
-    "Companion to the paper on the 26 August 2026 Bhote Koshi–Trishuli cascade in Nepal: where the ground changed, what lay in its path, and how much warning there was, from open satellite data.",
+  metadataBase: new URL(SITE),
+  title,
+  description,
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", siteName: "Rasuwa flood 2026", url: "/", title, description, images: [OG_IMAGE] },
+  twitter: { card: "summary_large_image" },
 };
 
 export const viewport: Viewport = { themeColor: "#f2f5f0" };
