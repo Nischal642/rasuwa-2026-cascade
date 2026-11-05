@@ -17,6 +17,9 @@ const VIEWS = [
   },
 ];
 
+const WIDE = "(min-width: 1200px)";
+const wide = (src: string) => src.replace(/\.webp$/, "_1600.webp");
+
 export default function BeforeAfter() {
   const [view, setView] = useState(VIEWS[0]);
   const [split, setSplit] = useState(50);
@@ -30,8 +33,15 @@ export default function BeforeAfter() {
         </div>
       </div>
       <div className="ba" style={{ "--split": `${split}%` } as React.CSSProperties}>
-        <img src={view.before} alt={`${view.label}, ${view.left}`} width={1024} height={909} loading="lazy" decoding="async" />
-        <img src={view.after} alt={`${view.label}, ${view.right}`} className="after" width={1024} height={909} loading="lazy" decoding="async" />
+        {/* 1,600 px only where the figure is that wide; a phone keeps the 1,024 px files whatever its pixel density */}
+        <picture>
+          <source media={WIDE} srcSet={wide(view.before)} />
+          <img src={view.before} alt={`${view.label}, ${view.left}`} width={1024} height={909} loading="lazy" decoding="async" />
+        </picture>
+        <picture>
+          <source media={WIDE} srcSet={wide(view.after)} />
+          <img src={view.after} alt={`${view.label}, ${view.right}`} className="after" width={1024} height={909} loading="lazy" decoding="async" />
+        </picture>
         <input type="range" min={0} max={100} step={0.5} value={split} onChange={(e) => setSplit(Number(e.target.value))}
           aria-label="Move the split between before and after" aria-valuetext={`${Math.round(split)} % before`} />
         <div className="divider">

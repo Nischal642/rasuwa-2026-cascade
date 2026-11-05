@@ -404,7 +404,8 @@ pre::selection, pre *::selection { background: var(--pen); }
 /* Touch screens: controls at least a fingertip tall */
 @media (pointer: coarse) {
   .switch button, .pen-range button, .actions a { min-height: 2.75rem; }
-  .page-links a { display: inline-flex; align-items: center; min-height: 2.5rem; }
+  .page-links a { display: inline-flex; align-items: center; min-height: 2.75rem; }
+  .rail a, .rail-mobile a, .stop-step a { display: flex; align-items: center; min-height: 2.75rem; }
 }
 
 @media (forced-colors: active) {

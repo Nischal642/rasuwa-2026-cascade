@@ -61,7 +61,7 @@ def before_after(name, save=True):
     d = {'name': name, 'center': (lat, lon), 'dates_before': dates(pre), 'dates_after': dates(post)}
     if not d['dates_before'] or not d['dates_after']:
         return d
-    box = pt.buffer(750).bounds()  # 1.5 km box
+    box = d['box'] = pt.buffer(750).bounds()  # 1.5 km box
     d['before'] = pre.sort('system:time_start').mosaic()  # mosaic puts the last image on top
     d['after'] = post.sort('system:time_start', False).mosaic()
     d['vis_before'] = stretch(d['before'], box, 2)
@@ -73,6 +73,12 @@ def before_after(name, save=True):
 
 
 PLANET_VIS = {'bands': RGB, 'min': 0, 'max': 255}  # the visual product is already display-ready
+
+
+def planet_box():
+    """The 6 km box around the Syabrubesi confluence, the clear gap in the 26 Aug Planet scenes."""
+    lon, lat = PLACES['Syabrubesi']
+    return ee.Geometry.Point([lon, lat]).buffer(3000).bounds()
 
 
 def planet_view(start, end):
@@ -137,8 +143,7 @@ def run_before_after():
 
 def run_planet():
     # On 26 Aug the corridor is mostly under cloud; the clear gap is the Syabrubesi confluence.
-    lon, lat = PLACES['Syabrubesi']
-    box = ee.Geometry.Point([lon, lat]).buffer(3000).bounds()
+    box = planet_box()
     may, aug = f'{FIG}/planet_syabrubesi_2026-05-27.png', f'{FIG}/planet_syabrubesi_2026-08-26.png'
     save_png(planet_view('2026-05-27', '2026-05-28'), PLANET_VIS, box, may)
     save_png(planet_view('2026-08-26', '2026-08-27'), PLANET_VIS, box, aug)

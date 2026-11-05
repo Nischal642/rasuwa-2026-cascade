@@ -10,3 +10,11 @@ export function pct(v: number) {
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /** 2023-09-17 -> 17 Sep 2023 */
 export const day = (iso: string) => { const [y, m, d] = iso.split("-").map(Number); return `${d} ${MONTHS[m - 1]} ${y}`; };
+
+/** Place names as the charts, map and trace label them. Here, not in Trace.tsx, so the tables don't pull in the river data. */
+export const SHORT: Record<string, string> = {
+  "Chilime Hydropower Powerhouse": "Chilime powerhouse",
+  "Upper Trishuli-3B Powerhouse": "Upper Trishuli 3B",
+  "Trishuli Hydropower Station": "Trishuli power station",
+  "Trishuli Bridge": "Trishuli Bridge, Bidur",
+};
