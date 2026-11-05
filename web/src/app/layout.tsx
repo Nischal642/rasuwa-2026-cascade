@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Barlow_Condensed, Source_Serif_4 } from "next/font/google";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
-import { HatchDefs } from "@/components/Charts";
+import HatchDefs from "@/components/HatchDefs";
 import PageLinks from "@/components/PageLinks";
 import { OG_IMAGE, REPO, SITE, SMS_LEAD } from "@/lib/results";
 

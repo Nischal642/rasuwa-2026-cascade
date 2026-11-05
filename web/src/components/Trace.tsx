@@ -3,15 +3,10 @@
 // with the pen as a time cursor shared by every view on the page.
 import { useEffect, useRef, useState } from "react";
 import { FIT_END_KM, KM_MAX, T_MAX, band, clock, kmAt, obs, places } from "@/lib/front";
+import { SHORT } from "@/lib/format";
 import { useWidth } from "@/lib/useWidth";
 import { useTime } from "./Time";
 
-export const SHORT: Record<string, string> = {
-  "Chilime Hydropower Powerhouse": "Chilime powerhouse",
-  "Upper Trishuli-3B Powerhouse": "Upper Trishuli 3B",
-  "Trishuli Hydropower Station": "Trishuli power station",
-  "Trishuli Bridge": "Trishuli Bridge, Bidur",
-};
 /** The places the hero trace and the map on a phone have room for. */
 export const HERO_STATIONS = ["Rasuwagadhi", "Syabrubesi", "Upper Trishuli 3A", "Betrawati", "Trishuli Bridge"];
 const NARROW: Record<string, string> = {

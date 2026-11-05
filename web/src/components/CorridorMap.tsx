@@ -6,7 +6,8 @@ import type { Feature, FeatureCollection } from "geojson";
 import type { GeoJSONSource, LngLatBoundsLike, Map as MLMap, Marker, StyleSpecification } from "maplibre-gl";
 import { AREA } from "@/lib/format";
 import { INK, PAPER, PEN, PEN_2, clock, line, lineBetween, lineTo, places } from "@/lib/front";
-import { HERO_STATIONS, SHORT, frontAt } from "./Trace";
+import { SHORT } from "@/lib/format";
+import { HERO_STATIONS, frontAt } from "./Trace";
 import { useTime } from "./Time";
 
 type View = "front" | "footprint" | "exposure";

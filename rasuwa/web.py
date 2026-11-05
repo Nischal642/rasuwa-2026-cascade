@@ -3,18 +3,21 @@
 The site reads the numbers straight from outputs/; this step writes what it cannot read there: map layers as
 GeoJSON in web/public/data/, the river and the arrival band in web/src/data/, and the imagery as WebP.
 """
+import datetime as dt
 import json
 import os
 
-from .common import EMSR_PRODUCTS, FIG, emsr_features, slug
+from .common import EMSR_PRODUCTS, FIG, emsr_features, save_png, slug
 from .exposure import cems_buildings, cems_lines, footprint_class_at, line_inside_m, line_length_m
 from .footprint import CLASSES, load_footprint
-from .imagery import BEFORE_AFTER_PLACES, before_after
+from .imagery import BEFORE_AFTER_PLACES, PLANET_VIS, before_after, planet_box, planet_view
 from .leadtime import (AUTO_ALERT_MIN, BETRAWATI_WINDOW_MIN, DEBRIS_MAX_MS, PORT_MIN, SMS_MIN, SYABRUBESI_LATEST_MIN,
                        arrival_model)
 
 WEB = 'web'
 SIMPLIFY_M = 10  # footprint outline tolerance: half a 20 m pixel
+WIDE_PX = 1600  # the before/after figure reaches about 1,600 px on a desktop; figures/ keeps 1,024 px for the paper
+PLANET_DAYS = ['2026-05-27', '2026-08-26']
 
 
 def rounded(c, nd=5):
@@ -60,7 +63,6 @@ def footprint_polygons(change, x0, y1):
 
 def run_web():
     import numpy as np
-    from PIL import Image
     from shapely.geometry import shape
 
     # 1. Footprint polygons
@@ -116,15 +118,36 @@ def run_web():
                          'betrawati_km': round(m['s_betr'] / 1000, 1), 'sms_min': SMS_MIN, 'auto_alert_min': AUTO_ALERT_MIN},
     })
 
-    # 4. Imagery as WebP, with the scene dates the before/after figure prints
+    # 4. Imagery
+    run_web_imagery()
+
+
+def run_web_imagery():
+    """The before/after imagery as WebP, with the scene dates the figure prints.
+
+    The paper's 1,024 px PNGs in figures/ are converted as they are. For wide screens the same views, with the same
+    display settings, are fetched again from Earth Engine at 1,600 px into a temporary folder, so figures/ stays as
+    the paper uses it.
+    """
+    import tempfile
+
+    from PIL import Image
+
     os.makedirs(f'{WEB}/public/img', exist_ok=True)
-    scenes = {}
+    scenes, wide = {}, []
     for name in BEFORE_AFTER_PLACES:
         d = before_after(name, save=False)
-        scenes[name] = {'slug': slug(name), 'before': d['dates_before'][-1], 'after': d['dates_after'][0],
+        s = slug(name)
+        scenes[name] = {'slug': s, 'before': d['dates_before'][-1], 'after': d['dates_after'][0],
                         'lon': d['center'][1], 'lat': d['center'][0]}
-    pngs = [f'{FIG}/{s["slug"]}_{t}.png' for s in scenes.values() for t in ('before', 'after')]
-    pngs += [f'{FIG}/planet_syabrubesi_2026-05-27.png', f'{FIG}/planet_syabrubesi_2026-08-26.png']
-    for png in pngs:
-        Image.open(png).convert('RGB').save(f'{WEB}/public/img/{os.path.basename(png)[:-4]}.webp', quality=82)
+        wide += [(d[t], d[f'vis_{t}'], d['box'], f'{s}_{t}') for t in ('before', 'after')]
+    for day in PLANET_DAYS:
+        nxt = (dt.date.fromisoformat(day) + dt.timedelta(days=1)).isoformat()
+        wide.append((planet_view(day, nxt), PLANET_VIS, planet_box(), f'planet_syabrubesi_{day}'))
+    for _, _, _, stem in wide:
+        Image.open(f'{FIG}/{stem}.png').convert('RGB').save(f'{WEB}/public/img/{stem}.webp', quality=82)
+    with tempfile.TemporaryDirectory() as tmp:
+        for img, vis, box, stem in wide:
+            save_png(img, vis, box, f'{tmp}/{stem}.png', size=WIDE_PX)
+            Image.open(f'{tmp}/{stem}.png').convert('RGB').save(f'{WEB}/public/img/{stem}_{WIDE_PX}.webp', quality=82)
     save(f'{WEB}/src/data/imagery.json', scenes)
