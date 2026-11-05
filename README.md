@@ -20,6 +20,8 @@ Code and results for the paper *Downstream impacts and warning lead time of the 
 
 ## Website
 
+Live at **https://rasuwaflood.nischalacharya642.com.np**.
+
 `web/` holds the companion site: the event, the method and the results, with the flood front animated along the river and the footprint, the Copernicus comparison and the exposed assets on interactive maps. It reads its numbers from `outputs/` when it is built. `cd web && pnpm install && pnpm dev` runs it; [web/README.md](web/README.md) has the details.
 
 ## Layout

@@ -28,6 +28,8 @@ pnpm dev        # http://localhost:3000
 pnpm build      # static site in out/
 ```
 
-`out/` can go on any static host (Vercel, Netlify, GitHub Pages). If it is served from a sub-path such as `user.github.io/repo`, set `basePath` in `next.config.ts`.
+Live at https://rasuwaflood.nischalacharya642.com.np (Cloudflare Pages project `rasuwa`, also at rasuwa.pages.dev). Every push to `main` rebuilds it: root directory `web`, build command `pnpm build`, output `out`, with `PNPM_VERSION=11.20.0` and `NODE_VERSION=22`. The bare domain and `www` redirect to it (302, a Cloudflare redirect rule).
+
+`out/` also works on any other static host. If it is served from a sub-path such as `user.github.io/repo`, set `basePath` in `next.config.ts`.
 
 Basemaps need no keys: relief from AWS Terrain Tiles, and Sentinel-2 cloudless 2024 by EOX (CC BY-NC-SA 4.0) for the satellite view.
