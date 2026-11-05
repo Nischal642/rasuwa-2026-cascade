@@ -238,7 +238,7 @@ sub, sup { line-height: 0; }
 .figure { margin: 2.25rem 0 2.5rem; }
 .figure-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.6rem 1rem; margin-bottom: 0.6rem; }
 .caption { font-size: 0.95rem; line-height: 1.5; color: var(--ink-2); margin-top: 0.7rem; max-width: 72ch; }
-.caption b { font-family: var(--label); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); margin-right: 0.35em; }
+.caption b { font-family: var(--label); font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink); margin-right: 0.1em; } /* plus the space after it in the markup */
 .two-up { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
 
 /* Formulas: set like a hydrological manual's worked rule */
@@ -259,8 +259,8 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
 .src { font-size: 0.85rem; color: var(--ink-2); }
 
 /* Segmented switch */
-.switch { display: inline-flex; flex-wrap: wrap; gap: 1px; max-width: 100%; border: 1px solid var(--ink); background: var(--ink); } /* gaps on the ink ground are the dividers, so wrapped rows stay ruled */
-.switch button {
+.switch, .actions { display: inline-flex; flex-wrap: wrap; gap: 1px; max-width: 100%; border: 1px solid var(--ink); background: var(--ink); } /* gaps on the ink ground are the dividers, so wrapped rows stay ruled */
+.switch button, .actions a {
   font-family: var(--label);
   font-weight: 600;
   font-size: 0.9rem;
@@ -273,7 +273,9 @@ tfoot td { padding-top: 0.5rem; font-size: 0.9rem; color: var(--ink-2); }
   color: var(--ink);
   cursor: pointer;
 }
-.switch button:hover { background: var(--paper-2); }
+.switch button:hover, .actions a:hover { background: var(--paper-2); }
+.actions { margin-top: 1rem; }
+.actions a { display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
 .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
 .controls { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
 
@@ -401,12 +403,13 @@ pre::selection, pre *::selection { background: var(--pen); }
 
 /* Touch screens: controls at least a fingertip tall */
 @media (pointer: coarse) {
-  .switch button, .pen-range button { min-height: 2.75rem; }
+  .switch button, .pen-range button, .actions a { min-height: 2.75rem; }
   .page-links a { display: inline-flex; align-items: center; min-height: 2.5rem; }
 }
 
 @media (forced-colors: active) {
-  .plate, .switch, .trace-plate, .chart, .map-plate, .page-links a { border-color: CanvasText; }
+  .plate, .switch, .actions, .trace-plate, .chart, .map-plate, .page-links a { border-color: CanvasText; }
+  .actions a { border: 1px solid LinkText; }
   .page-links a[aria-current="page"] { border-width: 2px; }
   .switch button { border: 1px solid ButtonText; }
   .switch button[aria-pressed="true"] { forced-color-adjust: none; background: Highlight; color: HighlightText; }

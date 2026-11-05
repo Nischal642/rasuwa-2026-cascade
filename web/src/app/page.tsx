@@ -17,15 +17,12 @@ const SECTIONS = [
 import Trace, { TraceLegend } from "@/components/Trace";
 import { AREA, pct } from "@/lib/format";
 import JsonLd from "@/components/JsonLd";
-import { DOI, REPO, SITE, SMS_LEAD, buildings, f1ByArea, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation } from "@/lib/results";
+import { Byline, Cite, SeeAlso } from "@/components/Paper";
+import { AUTHORS as PEOPLE, DOI, PAPER, PUBLISHED, REPO, SITE, SMS_LEAD, SRC, UPDATED, buildings, f1ByArea, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation } from "@/lib/results";
 
 const n = (v: number) => v.toLocaleString("en");
 
-const PAPER = "Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data";
-const AUTHORS = [{ "@id": `${SITE}/#nischal` }, { "@id": `${SITE}/#sagar` }];
-const person = (id: string, name: string, orcid: string) => ({
-  "@type": "Person", "@id": `${SITE}/#${id}`, name, jobTitle: "Geomatics Engineer", sameAs: `https://orcid.org/${orcid}`,
-});
+const AUTHORS = PEOPLE.map((a) => ({ "@id": `${SITE}/#${a.id}` }));
 // The paper is under review: no datePublished, journal or article DOI until it is accepted.
 const LD = {
   "@context": "https://schema.org",
@@ -33,14 +30,14 @@ const LD = {
     { "@type": "WebSite", "@id": `${SITE}/#website`, url: `${SITE}/`, name: "Rasuwa flood 2026", inLanguage: "en", publisher: AUTHORS[0] },
     {
       "@type": "WebPage", "@id": `${SITE}/#webpage`, url: `${SITE}/`, name: "Rasuwa (Bhotekoshi) flood 2026: the flood outran the warning", inLanguage: "en",
+      datePublished: PUBLISHED, dateModified: UPDATED,
       isPartOf: { "@id": `${SITE}/#website` }, about: { "@id": `${SITE}/#event` }, mainEntity: { "@id": `${SITE}/#paper` },
     },
     {
       "@type": "ScholarlyArticle", "@id": `${SITE}/#paper`, headline: PAPER, creativeWorkStatus: "Under peer review", inLanguage: "en",
       author: AUTHORS, about: { "@id": `${SITE}/#event` }, isBasedOn: [{ "@id": DOI }, { "@id": REPO }],
     },
-    person("nischal", "Nischal Acharya", "0009-0000-6113-2128"),
-    person("sagar", "Sagar Pathak", "0000-0001-9354-5605"),
+    ...PEOPLE.map((a) => ({ "@type": "Person", "@id": `${SITE}/#${a.id}`, name: a.name, jobTitle: "Geomatics Engineer", sameAs: `https://orcid.org/${a.orcid}` })),
     {
       "@type": "Event", "@id": `${SITE}/#event`, name: "Rasuwa (Bhotekoshi) flood, 26 August 2026",
       alternateName: ["Bhote Koshi–Trishuli cascade", "Rasuwa flood", "Bhotekoshi flood"],
@@ -89,9 +86,10 @@ export default function Page() {
         <div className="hero-head">
           <h1 id="title">The flood outran the warning.</h1>
           <p className="standfirst">
-            On 26 August 2026 a rock-ice avalanche on the Langtang Lirung massif became a debris flow and flood that ran
-            some 80 km down the Lhende Khola, Bhote Koshi and Trishuli rivers. From open satellite data only, this study maps
-            where it changed the ground, what lay in its path, and when its front reached each place.
+            On 26 August 2026 a rock-ice avalanche on the Langtang Lirung massif became a debris flow and flood, reported as
+            the Rasuwa or Bhotekoshi flood, that ran some 80 km down the Lhende Khola, Bhote Koshi and Trishuli rivers. Its
+            front passed Syabrubesi {smsLead} minutes before the national SMS alert went out. From open satellite data only,
+            this study maps where it changed the ground, what lay in its path, and when its front reached each place.
           </p>
         </div>
         <figure className="trace-plate hero-trace" style={{ margin: 0 }}>
@@ -111,14 +109,11 @@ export default function Page() {
             </p>
           </div>
           <ol className="stations" aria-label="The three findings">
-            <li><a href="#footprint"><span className="st-key">A</span><span className="st-name">Footprint</span><span className="st-lead" /><span className="st-val num">{total.toFixed(1)} km² of changed ground</span></a></li>
-            <li><a href="#exposure"><span className="st-key">B</span><span className="st-name">Exposure</span><span className="st-lead" /><span className="st-val num">{pct(destroyed.share)} of destroyed buildings inside</span></a></li>
-            <li><a href="#leadtime"><span className="st-key">C</span><span className="st-name">Lead time</span><span className="st-lead" /><span className="st-val num">{autoMid[0]}–{autoMid[2]} min an automatic alert could give</span></a></li>
+            <li><a href="#footprint"><span className="st-key">A</span>{" "}<span className="st-name">Footprint</span>{" "}<span className="st-lead" />{" "}<span className="st-val num">{total.toFixed(1)} km² of changed ground</span></a></li>
+            <li><a href="#exposure"><span className="st-key">B</span>{" "}<span className="st-name">Exposure</span>{" "}<span className="st-lead" />{" "}<span className="st-val num">{pct(destroyed.share)} of destroyed buildings inside</span></a></li>
+            <li><a href="#leadtime"><span className="st-key">C</span>{" "}<span className="st-name">Lead time</span>{" "}<span className="st-lead" />{" "}<span className="st-val num">{autoMid[0]}–{autoMid[2]} min an automatic alert could give</span></a></li>
           </ol>
-          <p className="byline" style={{ marginTop: "1.25rem" }}>
-            Companion to <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal,
-            from open multi-sensor data</i>, by Nischal Acharya and Sagar Pathak (manuscript under review).
-          </p>
+          <Byline style={{ marginTop: "1.25rem" }} />
         </div>
       </section>
 
@@ -131,12 +126,13 @@ export default function Page() {
             <div className="prose">
               <p className="lede">
                 The collapse began at 5,200 to 5,400 m on the north side of the Langtang Lirung massif at 08:37 Nepal time
-                (02:52 UTC). The US Geological Survey recorded its seismic signal as event us7000tbwb; ICIMOD put its volume at
-                100 to 200 million m³.
+                (02:52 UTC). The US Geological Survey recorded its seismic signal as event{" "}
+                <a href={SRC.usgs}>us7000tbwb</a>; ICIMOD put its volume at 100 to 200 million m³, as reported by{" "}
+                <a href={SRC.kpTrigger}>The Kathmandu Post</a>.
               </p>
               <p>
                 The debris came down the Lhende Khola and reached Gyirong Port, on the border at Rasuwagadhi, about seven minutes
-                later. It followed the Bhote Koshi past Timure to Syabrubesi, where the river becomes the Trishuli, and on past
+                later (<a href={SRC.xinhua}>Xinhua</a>). It followed the Bhote Koshi past Timure to Syabrubesi, where the river becomes the Trishuli, and on past
                 Betrawati to Bidur (Trishuli Bazar) in Nuwakot. It is Nepal&rsquo;s deadliest natural disaster since the 2015
                 Gorkha earthquake.
               </p>
@@ -148,7 +144,7 @@ export default function Page() {
 
             <figure className="figure">
               <CorridorMap view="front" arrivals={arrivals} />
-              <figcaption className="caption"><b>The corridor</b>The flood front as modelled in section C, over the impact footprint of section A. Modelled arrival times are medians; below Betrawati they are extrapolated past the last observation.</figcaption>
+              <figcaption className="caption"><b>The corridor</b> The flood front as modelled in section C, over the impact footprint of section A. Modelled arrival times are medians; below Betrawati they are extrapolated past the last observation.</figcaption>
             </figure>
 
             <div className="table-wrap" tabIndex={0} style={{ maxWidth: "38rem" }}>
@@ -166,8 +162,9 @@ export default function Page() {
               </table>
             </div>
             <p className="src" style={{ maxWidth: "var(--measure)" }}>
-              Figures as reported in the paper: USGS event page us7000tbwb, and the government rapid assessment reported by The
-              Kathmandu Post, 10 September 2026. They are not results of this study.
+              Figures as reported in the paper: <a href={SRC.usgs}>USGS event page us7000tbwb</a>, and the government rapid
+              assessment reported by <a href={SRC.kpAssessment}>The Kathmandu Post, 10 September 2026</a>. They are not results
+              of this study.
             </p>
 
             <h3 className="sub">Before and after</h3>
@@ -180,15 +177,15 @@ export default function Page() {
             <div className="station-head"><h2 id="h-method">Open data, three questions</h2></div>
             <div className="prose">
               <p className="lede">
-                Rapid-mapping services such as Copernicus EMS map damage in selected areas within days, but not the whole
+                Rapid-mapping services such as <a href={SRC.emsr927}>Copernicus EMS</a> map damage in selected areas within days, but not the whole
                 corridor. Open satellite archives, open building and road data and public timing records now make a
                 corridor-wide, validated reconstruction possible without commercial data.
               </p>
             </div>
             <ol className="findings">
-              <li><span className="k">A</span><span>What area did the event affect along the corridor, and how closely does an open-data footprint reproduce official damage mapping?</span></li>
-              <li><span className="k">B</span><span>Which buildings, roads, bridges and hydropower sites lay inside the footprint, and how complete are the open datasets that list them?</span></li>
-              <li><span className="k">C</span><span>When did the flood front reach each settlement, and how much warning was, or could have been, given?</span></li>
+              <li><span className="k">A</span>{" "}<span>What area did the event affect along the corridor, and how closely does an open-data footprint reproduce official damage mapping?</span></li>
+              <li><span className="k">B</span>{" "}<span>Which buildings, roads, bridges and hydropower sites lay inside the footprint, and how complete are the open datasets that list them?</span></li>
+              <li><span className="k">C</span>{" "}<span>When did the flood front reach each settlement, and how much warning was, or could have been, given?</span></li>
             </ol>
             <div className="table-wrap" tabIndex={0}>
               <table>
@@ -225,14 +222,14 @@ export default function Page() {
               </p>
             </div>
             <ol className="findings two-by-two">
-              <li><span className="k">1</span><span><strong>Green that disappeared.</strong> Forest, fields or grass that were there before the flood and gone after it, scraped away or buried.
-                <span className="tech">NDVI (a satellite measure of how green and leafy the ground is) fell by more than 0.1 between the before and after pictures: Sentinel-2 averages of 27 Aug to 28 Oct, 2025 and 2026, with clouds removed by Cloud Score+.</span></span></li>
-              <li><span className="k">2</span><span><strong>Bare ground covered by new debris.</strong> Riverbeds, river banks, roads and roofs had no plants to lose, so step 1 cannot see them. Here we look for a strong change of colour instead, such as grey river sand buried under brown mud and boulders.
-                <span className="tech">Change-vector magnitude <i>d</i> (how far a spot&rsquo;s colour moved across six colour bands, equation 1) above 0.08. In steps 1 and 2 alike, the spot must look like bare mud, rock or water after the flood: NDVI after below 0.35.</span></span></li>
-              <li><span className="k">3</span><span><strong>A second, independent check by radar.</strong> Clouds can hide the ground in the pictures of steps 1 and 2. Radar satellites see through cloud, so we ask them too. Where the radar also saw a change, we are more sure.
-                <span className="tech">Sentinel-1 radar echo (VH backscatter) changed by more than 4 dB, about 2.5 times stronger or weaker. Before and after are compared from the same satellite path (relative orbit 85), so the viewing angle is identical, and the grainy noise of radar (speckle) is smoothed over 50 m. Places found by both pictures and radar form the higher-confidence class.</span></span></li>
-              <li><span className="k">4</span><span><strong>Only the flood&rsquo;s path.</strong> Not every change in the valley was this flood. We keep only the valley floor along the river it ran down, and drop snow, cloud, high slopes, other rivers and tiny specks.
-                <span className="tech">Valley floor: less than 150 m above the nearest river (height above nearest drainage, MERIT Hydro). Snow, ice and cloud: snow index NDSI above 0.4, or very bright blue (reflectance above 0.25), in either picture. Corridor: the main river where more than 2,500 km² of land drains into it, plus 1 km either side and the Lhende Khola valley; this leaves out the river above the border in Tibet (2,141 km²) and the Tadi (551 km²) and Langtang (519 km²) side rivers. Specks: patches under 20 pixels (0.8 ha, about one football pitch) are dropped.</span></span></li>
+              <li><span className="k">1</span>{" "}<span><strong>Green that disappeared.</strong> Forest, fields or grass that were there before the flood and gone after it, scraped away or buried.
+                <span className="tech">{" "}NDVI (a satellite measure of how green and leafy the ground is) fell by more than 0.1 between the before and after pictures: Sentinel-2 averages of 27 Aug to 28 Oct, 2025 and 2026, with clouds removed by Cloud Score+.</span></span></li>
+              <li><span className="k">2</span>{" "}<span><strong>Bare ground covered by new debris.</strong> Riverbeds, river banks, roads and roofs had no plants to lose, so step 1 cannot see them. Here we look for a strong change of colour instead, such as grey river sand buried under brown mud and boulders.
+                <span className="tech">{" "}Change-vector magnitude <i>d</i> (how far a spot&rsquo;s colour moved across six colour bands, equation 1) above 0.08. In steps 1 and 2 alike, the spot must look like bare mud, rock or water after the flood: NDVI after below 0.35.</span></span></li>
+              <li><span className="k">3</span>{" "}<span><strong>A second, independent check by radar.</strong> Clouds can hide the ground in the pictures of steps 1 and 2. Radar satellites see through cloud, so we ask them too. Where the radar also saw a change, we are more sure.
+                <span className="tech">{" "}Sentinel-1 radar echo (VH backscatter) changed by more than 4 dB, about 2.5 times stronger or weaker. Before and after are compared from the same satellite path (relative orbit 85), so the viewing angle is identical, and the grainy noise of radar (speckle) is smoothed over 50 m. Places found by both pictures and radar form the higher-confidence class.</span></span></li>
+              <li><span className="k">4</span>{" "}<span><strong>Only the flood&rsquo;s path.</strong> Not every change in the valley was this flood. We keep only the valley floor along the river it ran down, and drop snow, cloud, high slopes, other rivers and tiny specks.
+                <span className="tech">{" "}Valley floor: less than 150 m above the nearest river (height above nearest drainage, MERIT Hydro). Snow, ice and cloud: snow index NDSI above 0.4, or very bright blue (reflectance above 0.25), in either picture. Corridor: the main river where more than 2,500 km² of land drains into it, plus 1 km either side and the Lhende Khola valley; this leaves out the river above the border in Tibet (2,141 km²) and the Tadi (551 km²) and Langtang (519 km²) side rivers. Specks: patches under 20 pixels (0.8 ha, about one football pitch) are dropped.</span></span></li>
             </ol>
             <div className="eq" role="math" aria-label="d equals the square root of the sum over bands b of the squared change in reflectance">
               <span><i>d</i> = √ Σ<sub><i>b</i></sub> (<i>ρ</i><sub><i>b</i>,after</sub> − <i>ρ</i><sub><i>b</i>,before</sub>)²,&ensp; <i>b</i>&nbsp;∈&nbsp;{"{"}B2, B3, B4, B8, B11, B12{"}"}</span>
@@ -289,12 +286,13 @@ export default function Page() {
                   </tbody>
                 </table>
               </div>
-              <figcaption className="caption"><b>Who found it</b>The changed ground split by which satellite found it, in km².</figcaption>
+              <figcaption className="caption"><b>Who found it</b> The changed ground split by which satellite found it, in km².</figcaption>
             </figure>
             <figure className="figure">
               <CorridorMap view="footprint" />
-              <figcaption className="caption"><b>Fig. 3–4</b>Striped: our footprint, mapped by this study from the satellite images. Black outline: the damage Copernicus EMS experts drew by hand (EMSR927), only inside the three areas they covered, whose edges are dashed. Zoom into an area to compare the two.</figcaption>
+              <figcaption className="caption"><b>Fig. 3–4</b> Striped: our footprint, mapped by this study from the satellite images. Black outline: the damage Copernicus EMS experts drew by hand (EMSR927), only inside the three areas they covered, whose edges are dashed. Zoom into an area to compare the two.</figcaption>
             </figure>
+            <SeeAlso href="/method/#measure" label="Method, steps 2 to 6">how each measure was made and every threshold chosen.</SeeAlso>
           </section>
 
           {/* ---------------- A. Validation ---------------- */}
@@ -302,7 +300,8 @@ export default function Page() {
             <div className="station-head"><span className="plate solid">A</span><h2 id="h-validation">Checked against Copernicus</h2></div>
             <div className="prose">
               <p className="lede">
-                Against the Copernicus EMS rapid mapping of the event, the footprint reaches F1 scores of{" "}
+                Against the Copernicus EMS rapid mapping (EMSR927) of the 26 August 2026 Rasuwa flood, the open-data footprint
+                reaches F1 scores of{" "}
                 {Math.min(...f1s).toFixed(2)} to {Math.max(...f1s).toFixed(2)}, with precision of {Math.min(...precisions).toFixed(2)} to{" "}
                 {Math.max(...precisions).toFixed(2)}. The misses lie at the margins of the mapped extent.
               </p>
@@ -315,12 +314,12 @@ export default function Page() {
             </div>
             <figure className="figure">
               <ValidationTable scores={validation} />
-              <figcaption className="caption"><b>Table III</b>Switch to radar or both to see why optical change carries the footprint: radar alone recalled {pct(radarRecall["Syabrubesi"])} and {pct(radarRecall["Timure"])} of the mapped extent in the Syabrubesi and Timure gorges, where steep walls cause layover and shadow, but {pct(radarRecall["Bidur"])} at Bidur, where the valley widens.</figcaption>
+              <figcaption className="caption"><b>Table III</b> Switch to radar or both to see why optical change carries the footprint: radar alone recalled {pct(radarRecall["Syabrubesi"])} and {pct(radarRecall["Timure"])} of the mapped extent in the Syabrubesi and Timure gorges, where steep walls cause layover and shadow, but {pct(radarRecall["Bidur"])} at Bidur, where the valley widens.</figcaption>
             </figure>
             <div className="two-up">
               <figure className="figure" style={{ marginTop: 0 }}>
                 <F1Change first={f1ByArea(firstRule)} final={f1ByArea(validation)} heldOut={heldOutF1} />
-                <figcaption className="caption"><b>F1, by area</b>From a hand-set first rule without change vector analysis to the chosen rule, and the score when that area was held out of tuning.</figcaption>
+                <figcaption className="caption"><b>F1, by area</b> From a hand-set first rule without change vector analysis to the chosen rule, and the score when that area was held out of tuning.</figcaption>
               </figure>
               <div className="prose">
                 <p>
@@ -334,6 +333,7 @@ export default function Page() {
                 </p>
               </div>
             </div>
+            <SeeAlso href="/method/#check" label="Method, step 7">how the check against Copernicus works and what the scores mean.</SeeAlso>
           </section>
 
           {/* ---------------- B. Exposure ---------------- */}
@@ -341,7 +341,7 @@ export default function Page() {
             <div className="station-head"><span className="plate solid">B</span><h2 id="h-exposure">What lay in its path</h2></div>
             <div className="prose">
               <p className="lede">
-                The footprint contains {pct(destroyed.share)} of the buildings Copernicus graded as destroyed (
+                The open-data footprint of the Rasuwa flood contains {pct(destroyed.share)} of the buildings Copernicus graded as destroyed (
                 {n(destroyed.in_footprint)} of {n(destroyed.graded)}), {pct(roads.share_in_footprint)} of the{" "}
                 {roads.destroyed_road_km.toFixed(1)} km of road graded destroyed, and all {roads.destroyed_bridges} destroyed
                 bridges within {roads.bridge_tolerance_m} m.
@@ -354,11 +354,11 @@ export default function Page() {
             </div>
             <figure className="figure">
               <BuildingsChart pooled={buildings.cems_pooled} byArea={buildings.cems} />
-              <figcaption className="caption"><b>Fig. 5</b>Share of the buildings Copernicus graded in its three areas that lie inside our footprint, by damage grade. Destroyed buildings are almost all inside; possibly damaged ones mostly lie beyond it.</figcaption>
+              <figcaption className="caption"><b>Fig. 5</b> Share of the buildings Copernicus graded in its three areas that lie inside our footprint, by damage grade. Destroyed buildings are almost all inside; possibly damaged ones mostly lie beyond it.</figcaption>
             </figure>
             <figure className="figure">
               <CorridorMap view="exposure" />
-              <figcaption className="caption"><b>Exposure</b>Pink: our footprint. Blue: every building, road and bridge the Copernicus experts graded as damaged; a filled dot lies inside our footprint, a hollow one outside it. Tap or hover a mark for its grade. Hydropower plants on the main stem are named.</figcaption>
+              <figcaption className="caption"><b>Exposure</b> Pink: our footprint. Blue: every building, road and bridge the Copernicus experts graded as damaged; a filled dot lies inside our footprint, a hollow one outside it. Tap or hover a mark for its grade. Hydropower plants on the main stem are named.</figcaption>
             </figure>
 
             <h3 className="sub">Open data undercount what was hit</h3>
@@ -367,23 +367,24 @@ export default function Page() {
                 <p>
                   Along the corridor, {n(ob.in_footprint)} of the {n(ob.in_corridor)} Open Buildings footprints lie inside the
                   footprint. But within the Copernicus areas, Open Buildings holds fewer buildings than Copernicus graded as
-                  destroyed: Copernicus photo-interprets every structure on post-event imagery, while Open Buildings is mapped
+                  destroyed. Copernicus photo-interprets every structure on post-event imagery, while Open Buildings is mapped
                   from earlier imagery with a confidence cut-off.
                 </p>
                 <p>
                   The footprint holds {osmRoadKm.toFixed(1)} km of OpenStreetMap road and {osmBridges.road + osmBridges.foot}{" "}
                   bridges, {osmBridges.road} for roads and {osmBridges.foot} for pedestrians, against 53 footbridges the government
                   assessment reports damaged. Five named hydropower plants lie within 100 m of it: the Chilime powerhouse, the
-                  Trishuli dam and power station, Upper Trishuli 3A and the Upper Trishuli 3B powerhouse, with four unnamed weirs
-                  and dams. Two other projects on the corridor, Rasuwagadhi and Upper Trishuli 1, are not in OpenStreetMap.
+                  Trishuli dam and power station, Upper Trishuli 3A and the Upper Trishuli 3B powerhouse. Four unnamed weirs and dams
+                  are near it too. Two other projects on the corridor, Rasuwagadhi and Upper Trishuli 1, are not in OpenStreetMap.
                 </p>
                 <p>Exposure counts from open data are therefore a lower bound, and rapid loss estimates built on them will run low.</p>
               </div>
               <figure className="figure" style={{ marginTop: 0 }}>
                 <UndercountChart cems={cemsDestroyedIn} open={ob.in_footprint_by_cems_area} />
-                <figcaption className="caption"><b>Inside the footprint</b>Buildings Copernicus graded destroyed, and Open Buildings footprints, in each Copernicus area.</figcaption>
+                <figcaption className="caption"><b>Inside the footprint</b> Buildings Copernicus graded destroyed, and Open Buildings footprints, in each Copernicus area.</figcaption>
               </figure>
             </div>
+            <SeeAlso href="/method/#count" label="Method, step 8">how buildings, roads, bridges and hydropower sites were counted.</SeeAlso>
           </section>
 
           {/* ---------------- C. Lead time ---------------- */}
@@ -391,8 +392,9 @@ export default function Page() {
             <div className="station-head"><span className="plate solid">C</span><h2 id="h-leadtime">How much warning there was</h2></div>
             <div className="prose">
               <p className="lede">
-                The front reached Syabrubesi about {Math.round(syab.arrival_min)} minutes after the collapse, {smsLead} minutes
-                before the SMS alert, and Betrawati about {Math.round(lt["Betrawati"].arrival_min)} minutes after it.
+                In the 26 August 2026 Rasuwa flood, the front reached Syabrubesi at {syab.arrival_npt}, about{" "}
+                {Math.round(syab.arrival_min)} minutes after the collapse and {smsLead} minutes before the 09:15 SMS alert. It
+                reached Betrawati about {Math.round(lt["Betrawati"].arrival_min)} minutes after the collapse.
               </p>
               <p>
                 The river profile is the MERIT Hydro main stem, ordered downstream by upstream area, with bed slope <i>S</i>{" "}
@@ -427,16 +429,18 @@ export default function Page() {
               <p>
                 The fitted model implies a flood depth of {depth[0]} to {depth[2]} m (median {depth[1]} m, Manning&rsquo;s{" "}
                 <i>n</i> = {leadtime.implied_flood_depth_m.manning_n}), of the same order as the 9 m rise in 30 minutes that ICIMOD
-                reported on the Trishuli at Galchhi, further downstream, although depth was not used in the fit.
+                reported on the Trishuli at Galchhi, further downstream (<a href={SRC.thePrint}>ThePrint</a>), although depth was
+                not used in the fit.
               </p>
               <p>
-                The Flood Forecasting Division learned of the flood at 09:05, and SMS alerts went out at 09:15, after the front had
-                passed Timure and Syabrubesi and as it reached the Upper Trishuli plants and Betrawati. Near the border, even an
-                instant automatic alert gives only 5 to 10 minutes. Further downstream the time existed but was not used: an alert
+                The Flood Forecasting Division learned of the flood at 09:05, and SMS alerts went out at 09:15 (<a href={SRC.kpTimeline}>The
+                Kathmandu Post</a>), after the front had passed Timure and Syabrubesi and as it reached the Upper Trishuli plants and Betrawati. Near the border, even an
+                instant automatic alert gives only 5 to 10 minutes. Further downstream the time existed but was not used. An alert
                 triggered automatically, from the collapse&rsquo;s seismic signal or from upstream sensors with data shared across
                 the border, would have given {autoMid[0]} to {autoMid[2]} minutes at the midstream hydropower sites and Betrawati.
               </p>
             </div>
+            <SeeAlso href="/method/#timing" label="Method, step 9">how the flood front was timed, and what the 10,000 tries mean.</SeeAlso>
           </section>
 
           {/* ---------------- What it means ---------------- */}
@@ -458,25 +462,25 @@ export default function Page() {
             </div>
             <div className="two-up limits">
               <ol className="findings">
-                <li><span className="k">1</span><span>The timing observations come from news reports compiled after the event, and a gauge falling silent may partly reflect telemetry failure rather than the flood&rsquo;s arrival.</span></li>
-                <li><span className="k">2</span><span>The flood model is first-order and one-dimensional and ignores attenuation, so its downstream arrival times are early and its downstream warning times are minimums. A 2D hydraulic model would refine them.</span></li>
-                <li><span className="k">3</span><span>MERIT Hydro&rsquo;s 90 m grid limits the river profile and the valley mask.</span></li>
-                <li><span className="k">4</span><span>Validation is possible only where Copernicus mapped: three areas, with one control valley.</span></li>
+                <li><span className="k">1</span>{" "}<span>The timing observations come from news reports compiled after the event, and a gauge falling silent may partly reflect telemetry failure rather than the flood&rsquo;s arrival.</span></li>
+                <li><span className="k">2</span>{" "}<span>The flood model is first-order and one-dimensional and ignores attenuation, so its downstream arrival times are early and its downstream warning times are minimums. A 2D hydraulic model would refine them.</span></li>
+                <li><span className="k">3</span>{" "}<span>MERIT Hydro&rsquo;s 90 m grid limits the river profile and the valley mask.</span></li>
+                <li><span className="k">4</span>{" "}<span>Validation is possible only where Copernicus mapped: three areas, with one control valley.</span></li>
               </ol>
               <ol className="findings" start={5}>
-                <li><span className="k">5</span><span>
+                <li><span className="k">5</span>{" "}<span>
                   <strong>Our map misses part of what Copernicus mapped.</strong> In its three areas the footprint misses{" "}
                   {pct(1 - Math.max(...recalls))} to {pct(1 - Math.min(...recalls))} of the damage Copernicus outlined (recall{" "}
-                  {Math.min(...recalls).toFixed(2)} to {Math.max(...recalls).toFixed(2)}), and {pct(1 - Math.max(...precisions))} to{" "}
+                  {Math.min(...recalls).toFixed(2)} to {Math.max(...recalls).toFixed(2)}). In turn, {pct(1 - Math.max(...precisions))} to{" "}
                   {pct(1 - Math.min(...precisions))} of the footprint lies outside that outline. The misses lie mostly at the edges.
-                  Likely reasons, not separately tested: our pixels are 20 m across and patches under 0.8 ha are dropped, while
-                  Copernicus traced 0.5 m imagery by hand, so thin strips at the margins are lost; some flooded ground changed too
-                  little to pass the rule, such as a thin layer of silt or plants that survived or grew back before the late-October
-                  images; and in the narrow gorges radar cannot add a second look. The ground outside the outline may be change from
+                  There are three likely reasons, not separately tested. Our pixels are 20 m across and patches under 0.8 ha are
+                  dropped, while Copernicus traced 0.5 m imagery by hand, so thin strips at the margins are lost. Some flooded
+                  ground changed too little to pass the rule, such as a thin layer of silt, or plants that survived or grew back
+                  before the late-October images. And in the narrow gorges, radar cannot add a second look. The ground outside the outline may be change from
                   the late-September rains, or damage Copernicus did not draw.
-                  <span className="tech">On the map, compare our footprint with the solid black Copernicus outline. The dashed line only marks where Copernicus looked, not damage.</span>
+                  <span className="tech">{" "}On the map, compare our footprint with the solid black Copernicus outline. The dashed line only marks where Copernicus looked, not damage.</span>
                 </span></li>
-                <li><span className="k">6</span><span>The Sentinel-2 window runs to 28 October, so main-stem changes from the late-September rains cannot be separated from the August event, and Open Buildings comes from imagery that predates the event by several years.</span></li>
+                <li><span className="k">6</span>{" "}<span>The Sentinel-2 window runs to 28 October, so main-stem changes from the late-September rains cannot be separated from the August event, and Open Buildings comes from imagery that predates the event by several years.</span></li>
               </ol>
             </div>
             <div className="prose">
@@ -507,12 +511,7 @@ python -m rasuwa buildings
 python -m rasuwa infrastructure
 python -m rasuwa leadtime
 python -m rasuwa web             # map layers and imagery for this site`}</pre>
-            <div className="cite">
-              <p style={{ margin: 0 }}>
-                Acharya, N., and Pathak, S. <i>Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade,
-                Nepal, from open multi-sensor data.</i> Manuscript under review, 2026. Code: {REPO.replace("https://", "")}. Data: {DOI.replace("https://", "")}
-              </p>
-            </div>
+            <Cite />
           </section>
         </div>
       </div>

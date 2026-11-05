@@ -5,6 +5,25 @@ import { join } from "node:path";
 export const REPO = "https://github.com/Nischal642/rasuwa-2026-cascade";
 export const DOI = "https://doi.org/10.5281/zenodo.23887627";
 export const SITE = "https://rasuwaflood.nischalacharya642.com.np";
+export const PAPER =
+  "Downstream impacts and warning lead time of the 26 August 2026 Bhote Koshi–Trishuli cascade, Nepal, from open multi-sensor data";
+export const AUTHORS = [
+  { id: "nischal", name: "Nischal Acharya", orcid: "0009-0000-6113-2128" },
+  { id: "sagar", name: "Sagar Pathak", orcid: "0000-0001-9354-5605" },
+];
+// The site went live on PUBLISHED; bump UPDATED when the content changes.
+export const PUBLISHED = "2026-10-31";
+export const UPDATED = "2026-11-05";
+// Sources the site cites, as in the paper's reference list.
+export const SRC = {
+  usgs: "https://earthquake.usgs.gov/earthquakes/eventpage/us7000tbwb",
+  emsr927: "https://mapping.emergency.copernicus.eu/news/flood-in-nepal-emsr927/",
+  xinhua: "https://english.news.cn/20260828/59dbab39e95e4854a75f1acbf2251e22/c.html",
+  kpTimeline: "https://kathmandupost.com/national/2026/08/27/how-the-bhotekoshi-flood-unfolded-over-10-hours",
+  kpTrigger: "https://kathmandupost.com/national/2026/08/28/what-triggered-the-rasuwa-flood-scientists-piece-together-a-complex-chain-of-events",
+  kpAssessment: "https://kathmandupost.com/national/2026/09/10/rs723-billion-needed-to-rebuild-flood-hit-areas-government-assessment-finds",
+  thePrint: "https://theprint.in/feature/nepal-rasuwa-floods-glacial-collapse-usgs/3026053/",
+};
 
 const read = (name: string) => JSON.parse(readFileSync(join(process.cwd(), "..", "outputs", name), "utf8"));
 

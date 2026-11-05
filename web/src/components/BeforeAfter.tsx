@@ -42,7 +42,7 @@ export default function BeforeAfter() {
         <span className="plate corner l">{view.left}</span>
         <span className="plate corner r">{view.right}</span>
       </div>
-      <figcaption className="caption"><b>Figs. 1–2</b>{view.note}</figcaption>
+      <figcaption className="caption"><b>Figs. 1–2</b> {view.note}</figcaption>
     </figure>
   );
 }
