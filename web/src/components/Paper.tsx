@@ -1,10 +1,8 @@
 // The paper the site accompanies: byline, citation with downloads, and links between the two pages.
 import Link from "next/link";
 import { Fragment, type CSSProperties, type ReactNode } from "react";
+import { day } from "@/lib/format";
 import { AUTHORS, DOI, OG_IMAGE, PAPER, PUBLISHED, REPO, UPDATED } from "@/lib/results";
-
-const day = (iso: string) =>
-  new Date(`${iso}T00:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
 export function Byline({ style }: { style?: CSSProperties }) {
   return (
