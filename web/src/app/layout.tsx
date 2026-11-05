@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Source_Serif_4 } from "next/font/google";
+import { Barlow_Condensed, Noto_Serif_Devanagari, Source_Serif_4 } from "next/font/google";
 import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 import HatchDefs from "@/components/HatchDefs";
@@ -8,6 +8,8 @@ import { OG_IMAGE, REPO, SITE, SMS_LEAD } from "@/lib/results";
 
 const label = Barlow_Condensed({ variable: "--font-label", subsets: ["latin"], weight: ["400", "500", "600", "700"] });
 const text = Source_Serif_4({ variable: "--font-text", subsets: ["latin"], axes: ["opsz"], style: ["normal", "italic"] });
+// Only the Nepali summary uses it; not preloaded, and that section is not laid out until it nears the screen.
+const nepali = Noto_Serif_Devanagari({ variable: "--font-ne", subsets: ["devanagari"], preload: false });
 
 // The home page's metadata; /method/ overrides title, description, canonical and openGraph.
 const title = "Rasuwa (Bhotekoshi) flood 2026: the flood outran the warning";
@@ -26,7 +28,7 @@ export const viewport: Viewport = { themeColor: "#f2f5f0" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${label.variable} ${text.variable}`}>
+    <html lang="en" className={`${label.variable} ${text.variable} ${nepali.variable}`}>
       <body>
         <HatchDefs />
         <header>

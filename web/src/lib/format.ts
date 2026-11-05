@@ -7,6 +7,9 @@ export function pct(v: number) {
   return `${r > 5 || (r === 5 && q % 2) ? q + 1 : q} %`;
 }
 
+/** Devanagari digits for the Nepali summary: "08:49" -> "०८:४९" */
+export const ne = (v: string | number) => String(v).replace(/\d/g, (d) => "०१२३४५६७८९"[+d]);
+
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 /** 2023-09-17 -> 17 Sep 2023 */
 export const day = (iso: string) => { const [y, m, d] = iso.split("-").map(Number); return `${d} ${MONTHS[m - 1]} ${y}`; };
