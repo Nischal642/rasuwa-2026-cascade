@@ -26,7 +26,7 @@ export default function Rail({ sections: SECTIONS }: { sections: Section[] }) {
   const links = SECTIONS.map((s) => (
     <li key={s.id}>
       <a href={`#${s.id}`} aria-current={s.id === active ? "true" : undefined}>
-        <span className="rail-key">{s.key}</span>{s.name}
+        <span className="rail-key">{s.key} </span>{s.name}
       </a>
     </li>
   ));

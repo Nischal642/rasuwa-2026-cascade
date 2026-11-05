@@ -5,7 +5,8 @@ import Rail from "@/components/Rail";
 import { AREA, pct } from "@/lib/format";
 import { clock } from "@/lib/front";
 import JsonLd from "@/components/JsonLd";
-import { OG_IMAGE, SITE, buildings, f1ByArea, firstGuess, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation, type Params } from "@/lib/results";
+import { Byline, Cite, SeeAlso } from "@/components/Paper";
+import { OG_IMAGE, PUBLISHED, SITE, SRC, UPDATED, buildings, f1ByArea, firstGuess, firstRule, footprint, heldOutF1, infrastructure, leadtime, tuning, validation, type Params } from "@/lib/results";
 
 const f1Range = Object.values(f1ByArea(validation));
 const title = "Mapping and timing the 2026 Rasuwa flood: method, step by step";
@@ -24,6 +25,7 @@ const LD = {
   "@graph": [
     {
       "@type": "WebPage", "@id": `${SITE}/method/#webpage`, url: `${SITE}/method/`, name: title, description, inLanguage: "en",
+      datePublished: PUBLISHED, dateModified: UPDATED,
       isPartOf: { "@id": `${SITE}/#website` }, about: { "@id": `${SITE}/#paper` }, breadcrumb: { "@id": `${SITE}/method/#breadcrumb` },
     },
     {
@@ -47,6 +49,7 @@ const SECTIONS = [
   { id: "check", key: "7", name: "Check" },
   { id: "count", key: "8", name: "Count" },
   { id: "timing", key: "9", name: "Timing" },
+  { id: "cite", key: "", name: "Citation" },
 ];
 
 /** The five tuned settings, in the order of the sweep, with plain and technical names. */
@@ -108,7 +111,7 @@ function Stop({ href, step, title, line, inputs = [], outputs = [] }: {
       <div className="stop-in">{inputs.map((i) => <span key={i} className="plate given">{i}</span>)}</div>
       <div className="stop-spine" aria-hidden="true" />
       <div className="stop-step">
-        <a href={href}><span className="stop-n">{step}</span>{title}</a>
+        <a href={href}><span className="stop-n">{step} </span>{title}</a>
         <p>{line}</p>
       </div>
       <div className="stop-out">{outputs.map((o) => <span key={o} className="plate result">{o}</span>)}</div>
@@ -156,10 +159,11 @@ export default function MethodPage() {
           Every result on the study page comes out of one chain of steps. This page walks through it in order: what we started
           from, what we did to it, and how each setting was chosen and checked.
         </p>
+        <Byline />
         <ul className="legend method-key">
-          <li><span className="plate given">Blue</span>data other people collected</li>
-          <li><span className="plate">Graphite</span>a step we carried out</li>
-          <li><span className="plate result">Red</span>a result of this study</li>
+          <li><span className="plate given">Blue</span>{" "}data other people collected</li>
+          <li><span className="plate">Graphite</span>{" "}a step we carried out</li>
+          <li><span className="plate result">Red</span>{" "}a result of this study</li>
         </ul>
       </section>
 
@@ -289,7 +293,7 @@ export default function MethodPage() {
                 <tbody>
                   {SETTINGS.map((s) => (
                     <tr key={s.key}>
-                      <th scope="row">{s.plain}<span className="tech">{s.tech}{s.unit ? ` (${s.unit.trim()})` : ""}</span></th>
+                      <th scope="row">{s.plain}<span className="tech">{" "}{s.tech}{s.unit ? ` (${s.unit.trim()})` : ""}</span></th>
                       <td>
                         <span className="chips">
                           {grid[s.key].map((v) => (
@@ -319,9 +323,9 @@ export default function MethodPage() {
                   they mark is a <strong>miss</strong>.
                 </p>
                 <ul className="findings">
-                  <li><span className="k">P</span><span><strong>Precision:</strong> of the squares we marked, the share they marked too. Agreements ÷ (agreements + false alarms).</span></li>
-                  <li><span className="k">R</span><span><strong>Recall:</strong> of the squares they marked, the share we found. Agreements ÷ (agreements + misses).</span></li>
-                  <li><span className="k">F1</span><span><strong>F1:</strong> both in one number, high only when both are high. 2 × P × R ÷ (P + R).</span></li>
+                  <li><span className="k">P</span>{" "}<span><strong>Precision:</strong> of the squares we marked, the share they marked too. Agreements ÷ (agreements + false alarms).</span></li>
+                  <li><span className="k">R</span>{" "}<span><strong>Recall:</strong> of the squares they marked, the share we found. Agreements ÷ (agreements + misses).</span></li>
+                  <li><span className="k">F1</span>{" "}<span><strong>F1:</strong> both in one number, high only when both are high. 2 × P × R ÷ (P + R).</span></li>
                 </ul>
                 <p>
                   Each version was also run on the <strong>Langtang Khola valley</strong>, next door and untouched in 2026. Every
@@ -341,7 +345,7 @@ export default function MethodPage() {
                 </svg>
                 <figcaption className="caption">
                   Scores were computed on the same 20 m grid, inside each area&rsquo;s analysed region, against the
-                  Copernicus EMSR927 observed-event polygons. While sweeping, the speck filter was skipped to save time; the
+                  <a href={SRC.emsr927}>Copernicus EMSR927</a> observed-event polygons. While sweeping, the speck filter was skipped to save time; the
                   final check in step 6 uses the exact map.
                 </figcaption>
               </figure>
@@ -358,14 +362,14 @@ export default function MethodPage() {
               </p>
             </div>
             <ol className="findings two-by-two">
-              <li><span className="k">a</span><span><strong>No crying wolf.</strong> Any version that marked more than {maxControl} of the untouched Langtang valley floor was thrown out.
-                <span className="tech">The best version without this rule (ΔNDVI below {tuning.unconstrained_best.params.ndvi_drop.toFixed(2).replace("-", "−")}, <i>d</i> above {tuning.unconstrained_best.params.cva_min}) scored well against Copernicus but marked {(tuning.unconstrained_best.control_flagged * 100).toFixed(1)}&nbsp;% of the untouched valley, so it was rejected.</span></span></li>
-              <li><span className="k">b</span><span><strong>Test on an area it never saw.</strong> Settings were chosen on two areas and scored on the third, three times over, so each area was once the unseen test.
-                <span className="tech">Leave-one-area-out cross-validation. If the method only memorised the answers, the score on the unseen area would drop. It did not.</span></span></li>
-              <li><span className="k">c</span><span><strong>Keep the best of what is left.</strong> Among the survivors, the version with the highest average F1 over all three areas became the final rule.
-                <span className="tech">Final: ΔNDVI below {chosen.ndvi_drop.toFixed(2).replace("-", "−")}, <i>d</i> above {chosen.cva_min}, NDVI after below {chosen.ndvi_after_max}, |ΔVH| above {chosen.vh_db} dB, HAND below {chosen.hand_max_m} m; it marks {(tuning.final.control_flagged * 100).toFixed(1)}&nbsp;% of the control valley.</span></span></li>
-              <li><span className="k">d</span><span><strong>Check that it holds.</strong> The three tests chose nearly the same settings, and the unseen-area scores ({heldOut.map((v) => v.toFixed(2)).join(", ")}) match the normal ones. The rule works on ground it was not tuned on.
-                <span className="tech">Two of the three folds chose exactly the final settings; the Bidur fold differed only in ΔNDVI and NDVI after.</span></span></li>
+              <li><span className="k">a</span>{" "}<span><strong>No crying wolf.</strong> Any version that marked more than {maxControl} of the untouched Langtang valley floor was thrown out.
+                <span className="tech">{" "}The best version without this rule (ΔNDVI below {tuning.unconstrained_best.params.ndvi_drop.toFixed(2).replace("-", "−")}, <i>d</i> above {tuning.unconstrained_best.params.cva_min}) scored well against Copernicus but marked {(tuning.unconstrained_best.control_flagged * 100).toFixed(1)}&nbsp;% of the untouched valley, so it was rejected.</span></span></li>
+              <li><span className="k">b</span>{" "}<span><strong>Test on an area it never saw.</strong> Settings were chosen on two areas and scored on the third, three times over, so each area was once the unseen test.
+                <span className="tech">{" "}Leave-one-area-out cross-validation. If the method only memorised the answers, the score on the unseen area would drop. It did not.</span></span></li>
+              <li><span className="k">c</span>{" "}<span><strong>Keep the best of what is left.</strong> Among the survivors, the version with the highest average F1 over all three areas became the final rule.
+                <span className="tech">{" "}Final: ΔNDVI below {chosen.ndvi_drop.toFixed(2).replace("-", "−")}, <i>d</i> above {chosen.cva_min}, NDVI after below {chosen.ndvi_after_max}, |ΔVH| above {chosen.vh_db} dB, HAND below {chosen.hand_max_m} m; it marks {(tuning.final.control_flagged * 100).toFixed(1)}&nbsp;% of the control valley.</span></span></li>
+              <li><span className="k">d</span>{" "}<span><strong>Check that it holds.</strong> The three tests chose nearly the same settings, and the unseen-area scores ({heldOut.map((v) => v.toFixed(2)).join(", ")}) match the normal ones. The rule works on ground it was not tuned on.
+                <span className="tech">{" "}Two of the three folds chose exactly the final settings; the Bidur fold differed only in ΔNDVI and NDVI after.</span></span></li>
             </ol>
             <div className="table-wrap" tabIndex={0}>
               <table>
@@ -409,6 +413,7 @@ export default function MethodPage() {
                 <p><strong>Check.</strong> <code>python -m rasuwa validate</code> scores the exported map, with the speck filter, against the EMSR927 observed-event polygons.</p>
               </aside>
             </div>
+            <SeeAlso href="/#footprint" label="Result A">where the ground changed, on the study page.</SeeAlso>
           </section>
 
           {/* ---------------- 7. Check ---------------- */}
@@ -443,19 +448,19 @@ export default function MethodPage() {
 
             <h3 className="sub">Four scores, one picture</h3>
             <ol className="findings two-by-two">
-              <li><span className="k">P</span><span><strong>Precision: right when we say damaged.</strong> Both ÷ ours. At {ex.area}: {ex.both.toFixed(2)} ÷ {ex.ours.toFixed(2)} = <strong>{ex.s.precision.toFixed(2)}</strong>.
-                <span className="tech">Of the ground we marked, the share the experts marked too. Low precision would mean false alarms.</span></span></li>
-              <li><span className="k">R</span><span><strong>Recall: how much of their damage we found.</strong> Both ÷ Copernicus. At {ex.area}: {ex.both.toFixed(2)} ÷ {ex.them.toFixed(2)} = <strong>{ex.s.recall.toFixed(2)}</strong>.
-                <span className="tech">Of the ground the experts marked, the share we found. Low recall means misses.</span></span></li>
-              <li><span className="k">F1</span><span><strong>F1: the overall match.</strong> Both ÷ the average size of the two maps. At {ex.area}: {ex.both.toFixed(2)} ÷ {((ex.ours + ex.them) / 2).toFixed(2)} = <strong>{ex.s.f1.toFixed(2)}</strong>.
-                <span className="tech">2 × P × R ÷ (P + R). High only when precision and recall are both high, so marking the whole valley, which finds everything, would not fool it.</span></span></li>
-              <li><span className="k">IoU</span><span><strong>IoU: the strict overlap.</strong> Both ÷ everything either map marked. At {ex.area}: {ex.both.toFixed(2)} ÷ {ex.union.toFixed(2)} = <strong>{ex.s.iou.toFixed(2)}</strong>.
-                <span className="tech">Intersection over union. Every false alarm and every miss counts against it in full, so it is always lower than F1 (IoU = F1 ÷ (2 − F1)).</span></span></li>
+              <li><span className="k">P</span>{" "}<span><strong>Precision: right when we say damaged.</strong> Both ÷ ours. At {ex.area}: {ex.both.toFixed(2)} ÷ {ex.ours.toFixed(2)} = <strong>{ex.s.precision.toFixed(2)}</strong>.
+                <span className="tech">{" "}Of the ground we marked, the share the experts marked too. Low precision would mean false alarms.</span></span></li>
+              <li><span className="k">R</span>{" "}<span><strong>Recall: how much of their damage we found.</strong> Both ÷ Copernicus. At {ex.area}: {ex.both.toFixed(2)} ÷ {ex.them.toFixed(2)} = <strong>{ex.s.recall.toFixed(2)}</strong>.
+                <span className="tech">{" "}Of the ground the experts marked, the share we found. Low recall means misses.</span></span></li>
+              <li><span className="k">F1</span>{" "}<span><strong>F1: the overall match.</strong> Both ÷ the average size of the two maps. At {ex.area}: {ex.both.toFixed(2)} ÷ {((ex.ours + ex.them) / 2).toFixed(2)} = <strong>{ex.s.f1.toFixed(2)}</strong>.
+                <span className="tech">{" "}2 × P × R ÷ (P + R). High only when precision and recall are both high, so marking the whole valley, which finds everything, would not fool it.</span></span></li>
+              <li><span className="k">IoU</span>{" "}<span><strong>IoU: the strict overlap.</strong> Both ÷ everything either map marked. At {ex.area}: {ex.both.toFixed(2)} ÷ {ex.union.toFixed(2)} = <strong>{ex.s.iou.toFixed(2)}</strong>.
+                <span className="tech">{" "}Intersection over union. Every false alarm and every miss counts against it in full, so it is always lower than F1 (IoU = F1 ÷ (2 − F1)).</span></span></li>
             </ol>
             <figure className="figure">
               <ValidationTable scores={validation} />
               <figcaption className="caption">
-                <b>The results</b>All three areas, on all four scores. The buttons score parts of our map separately: switch to
+                <b>The results</b> All three areas, on all four scores. The buttons score parts of our map separately: switch to
                 Radar and its precision stays near 0.99, but it finds only {pct(radar[0])} and {pct(radar[1])} of the damage in
                 the Syabrubesi and Timure gorges, where steep walls block its sideways view, and {pct(radar[2])} at Bidur, where
                 the valley opens. The pictures carry the map; radar adds a small, reliable extra.
@@ -466,22 +471,22 @@ export default function MethodPage() {
             <div className="two-up">
               <figure className="figure" style={{ marginTop: 0 }}>
                 <F1Change first={f1ByArea(firstRule)} final={f1ByArea(validation)} heldOut={heldOutF1} />
-                <figcaption className="caption"><b>F1, by area</b>The axis starts at 0.5, so the gaps look larger than on a full scale.</figcaption>
+                <figcaption className="caption"><b>F1, by area</b> The axis starts at 0.5, so the gaps look larger than on a full scale.</figcaption>
               </figure>
               <ol className="findings">
                 <li><span className="k"><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" /></svg></span><span><strong>White circle:</strong> the first guess of step 3. F1 {f1First.map((v) => v.toFixed(2)).join(", ")}.</span></li>
                 <li><span className="k"><svg width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="6.5" fill="var(--pen)" /></svg></span><span><strong>Red dot:</strong> the final rule. Every area improved; Timure most, because its debris covered riverbed and roads that were bare already, which only the colour-change test can see.</span></li>
                 <li><span className="k"><svg width="16" height="16" aria-hidden="true"><line x1="8" x2="8" y1="1" y2="15" stroke="var(--pen-2)" strokeWidth="3" /></svg></span><span><strong>Blue line:</strong> the score that area got when its answer key was hidden while the settings were chosen (step 5). It is the surprise-exam score.
-                  <span className="tech">Held-out F1 {heldOut.map((v) => v.toFixed(2)).join(", ")}. Each sits on its red dot: the rule works on ground it was not tuned on, which is why it can be trusted along the rest of the 80 km corridor, where no answer key exists.</span></span></li>
+                  <span className="tech">{" "}Held-out F1 {heldOut.map((v) => v.toFixed(2)).join(", ")}. Each sits on its red dot: the rule works on ground it was not tuned on, which is why it can be trusted along the rest of the 80 km corridor, where no answer key exists.</span></span></li>
               </ol>
             </div>
 
             <h3 className="sub">What the check says</h3>
             <ol className="findings two-by-two">
-              <li><span className="k">1</span><span><strong>Careful.</strong> When our map says damaged, the experts agree {pct(Math.min(...precisions))} to {pct(Math.max(...precisions))} of the time. False alarms are rare, and the untouched control valley stays {(tuning.final.control_flagged * 100).toFixed(1)}&nbsp;% marked.</span></li>
-              <li><span className="k">2</span><span><strong>A little small.</strong> It finds {pct(Math.min(...recalls))} to {pct(Math.max(...recalls))} of what the experts drew. The misses lie mostly at the edges, most likely strips thinner than our 20 m squares, ground that changed only faintly, and gorges radar cannot see into.</span></li>
-              <li><span className="k">3</span><span><strong>Not tuned to the answers.</strong> Areas hidden while choosing the settings score as well as the rest, so the result is not an artefact of fitting.</span></li>
-              <li><span className="k">4</span><span><strong>Checked only where Copernicus looked.</strong> Three areas and one control valley. Copernicus is a human drawing too, so a few &ldquo;misses&rdquo; or &ldquo;extras&rdquo; may be theirs rather than ours.</span></li>
+              <li><span className="k">1</span>{" "}<span><strong>Careful.</strong> When our map says damaged, the experts agree {pct(Math.min(...precisions))} to {pct(Math.max(...precisions))} of the time. False alarms are rare, and the untouched control valley stays {(tuning.final.control_flagged * 100).toFixed(1)}&nbsp;% marked.</span></li>
+              <li><span className="k">2</span>{" "}<span><strong>A little small.</strong> It finds {pct(Math.min(...recalls))} to {pct(Math.max(...recalls))} of what the experts drew. The misses lie mostly at the edges, most likely strips thinner than our 20 m squares, ground that changed only faintly, and gorges radar cannot see into.</span></li>
+              <li><span className="k">3</span>{" "}<span><strong>Not tuned to the answers.</strong> Areas hidden while choosing the settings score as well as the rest, so the result is not an artefact of fitting.</span></li>
+              <li><span className="k">4</span>{" "}<span><strong>Checked only where Copernicus looked.</strong> Three areas and one control valley. Copernicus is a human drawing too, so a few &ldquo;misses&rdquo; or &ldquo;extras&rdquo; may be theirs rather than ours.</span></li>
             </ol>
             <div className="prose">
               <p className="lede" style={{ marginTop: "2rem" }}>
@@ -490,6 +495,7 @@ export default function MethodPage() {
                 corridor rather than three small areas.
               </p>
             </div>
+            <SeeAlso href="/#validation" label="Result A">the scores against Copernicus, on the study page.</SeeAlso>
           </section>
 
           {/* ---------------- 7. Count ---------------- */}
@@ -499,15 +505,16 @@ export default function MethodPage() {
               <p className="lede">With the footprint fixed, the lists of buildings, roads, bridges and power plants are laid over it and counted. Nothing is tuned here.</p>
             </div>
             <ol className="findings two-by-two">
-              <li><span className="k">B</span><span><strong>Buildings</strong> count as inside when the 20 m square under them is marked.
-                <span className="tech">Copernicus graded building points (3,922) and Google Open Buildings centroids with confidence 0.75 or more.</span></span></li>
-              <li><span className="k">R</span><span><strong>Roads</strong> are measured by the length that runs through marked squares.
-                <span className="tech">Each line is sampled every 5 m; Copernicus roads graded destroyed and OpenStreetMap roads by type.</span></span></li>
-              <li><span className="k">Br</span><span><strong>Bridges</strong> count when they are within 40 m of the footprint, since they cross the river at its edge.
-                <span className="tech">Copernicus bridges graded destroyed; OpenStreetMap road and foot bridges.</span></span></li>
-              <li><span className="k">H</span><span><strong>Hydropower sites</strong> count when they are within 100 m of the footprint.
-                <span className="tech">OpenStreetMap power plants, generators, dams and weirs.</span></span></li>
+              <li><span className="k">B</span>{" "}<span><strong>Buildings</strong> count as inside when the 20 m square under them is marked.
+                <span className="tech">{" "}Copernicus graded building points (3,922) and Google Open Buildings centroids with confidence 0.75 or more.</span></span></li>
+              <li><span className="k">R</span>{" "}<span><strong>Roads</strong> are measured by the length that runs through marked squares.
+                <span className="tech">{" "}Each line is sampled every 5 m; Copernicus roads graded destroyed and OpenStreetMap roads by type.</span></span></li>
+              <li><span className="k">Br</span>{" "}<span><strong>Bridges</strong> count when they are within 40 m of the footprint, since they cross the river at its edge.
+                <span className="tech">{" "}Copernicus bridges graded destroyed; OpenStreetMap road and foot bridges.</span></span></li>
+              <li><span className="k">H</span>{" "}<span><strong>Hydropower sites</strong> count when they are within 100 m of the footprint.
+                <span className="tech">{" "}OpenStreetMap power plants, generators, dams and weirs.</span></span></li>
             </ol>
+            <SeeAlso href="/#exposure" label="Result B">what lay in the flood&rsquo;s path, on the study page.</SeeAlso>
           </section>
 
           {/* ---------------- 8. Timing ---------------- */}
@@ -531,8 +538,9 @@ export default function MethodPage() {
               </div>
               <aside className="note">
                 <p>
-                  <strong>Exactly.</strong> The collapse is timed at 08:37 NPT by its seismic signal (USGS us7000tbwb). The border
-                  time is from video at Gyirong Port; the gauge times are Flood Forecasting Division records as reported. The front
+                  <strong>Exactly.</strong> The collapse is timed at 08:37 NPT by its seismic signal (<a href={SRC.usgs}>USGS
+                  us7000tbwb</a>). The border time is from video at Gyirong Port (<a href={SRC.xinhua}>Xinhua</a>); the gauge times
+                  are Flood Forecasting Division records as reported by <a href={SRC.kpTimeline}>The Kathmandu Post</a>. The front
                   reaches Syabrubesi 13 minutes after the collapse at the latest, and Betrawati is given a ±5 minute window, 38 to
                   48 minutes.
                 </p>
@@ -583,9 +591,9 @@ export default function MethodPage() {
                   it might have been 09:15 or 09:25. So instead of trusting one guess, the computer tries many:
                 </p>
                 <ol className="findings">
-                  <li><span className="k">1</span><span>Say Betrawati was hit at 09:22. Work out every other time.</span></li>
-                  <li><span className="k">2</span><span>Say it was 09:17. Work them all out again.</span></li>
-                  <li><span className="k">3</span><span>Say 09:24, and so on.</span></li>
+                  <li><span className="k">1</span>{" "}<span>Say Betrawati was hit at 09:22. Work out every other time.</span></li>
+                  <li><span className="k">2</span>{" "}<span>Say it was 09:17. Work them all out again.</span></li>
+                  <li><span className="k">3</span>{" "}<span>Say 09:24, and so on.</span></li>
                 </ol>
                 <p>
                   It does this 10,000 times, so each place ends up with 10,000 possible arrival times. We report the typical one,
@@ -668,6 +676,12 @@ python -m rasuwa validate    # 7     the check against Copernicus
 python -m rasuwa buildings   # 8
 python -m rasuwa infrastructure
 python -m rasuwa leadtime    # 9`}</pre>
+            <SeeAlso href="/#leadtime" label="Result C">how much warning there was, on the study page.</SeeAlso>
+          </section>
+
+          <section id="cite" className="station" aria-labelledby="h-cite">
+            <div className="station-head"><h2 id="h-cite">Citation</h2></div>
+            <Cite />
           </section>
         </div>
       </div>
