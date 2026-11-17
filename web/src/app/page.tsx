@@ -41,11 +41,10 @@ const LD = {
     },
     ...PEOPLE.map((a) => ({ "@type": "Person", "@id": `${SITE}/#${a.id}`, name: a.name, jobTitle: "Geomatics Engineer", sameAs: `https://orcid.org/${a.orcid}` })),
     {
-      "@type": "Event", "@id": `${SITE}/#event`, name: "Rasuwa (Bhotekoshi) flood, 26 August 2026",
+      // Not "Event": Google reads that as a ticketed event and reports missing offers, performer and so on.
+      "@type": "Thing", "@id": `${SITE}/#event`, name: "Rasuwa (Bhotekoshi) flood, 26 August 2026",
       alternateName: ["Bhote Koshi–Trishuli cascade", "Rasuwa flood", "Bhotekoshi flood"],
       description: "A rock-ice avalanche on the Langtang Lirung massif became a debris flow and flood along the Lhende Khola, Bhote Koshi and Trishuli rivers.",
-      startDate: "2026-08-26T08:37:00+05:45",
-      location: { "@type": "Place", name: "Rasuwa District, Nepal", address: { "@type": "PostalAddress", addressRegion: "Rasuwa", addressCountry: "NP" } },
     },
     {
       "@type": "Dataset", "@id": DOI, url: DOI, identifier: DOI, name: "rasuwa-2026-cascade: code and results",
