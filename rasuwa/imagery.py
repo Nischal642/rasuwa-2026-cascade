@@ -4,7 +4,8 @@ import datetime as dt
 
 import ee
 
-from .common import EVENT, FIG, OUT, PLACES, grid_figure, save_png, slug
+from .common import EVENT, FIG, OUT, PLACES, S2_VIS, grid_figure, save_png, slug
+from .footprint import layers
 
 
 BEFORE_AFTER_PLACES = ['Syabrubesi', 'Timure', 'Trishuli Bridge']  # Vantor post-event coverage
@@ -149,3 +150,20 @@ def run_planet():
     save_png(planet_view('2026-08-26', '2026-08-27'), PLANET_VIS, box, aug)
     grid_figure([('Syabrubesi, 27 May 2026', may, 'Syabrubesi, 26 Aug 2026\nabout 2 h after the collapse', aug)],
                 f'{FIG}/planet_draft.png', 'PlanetScope visual, 6 km box. Imagery: Planet Labs, CC BY-NC 4.0')
+
+
+def run_s2_before_after():
+    """Sentinel-2 before/after at the Vantor places: the footprint's own composites, free to republish (CC BY)."""
+    L = layers()
+    rows = []
+    for name in BEFORE_AFTER_PLACES:
+        lon, lat = PLACES[name]
+        box = ee.Geometry.Point([lon, lat]).buffer(1500).bounds()  # 3 km box: 300 Sentinel-2 pixels across
+        s = slug(name)
+        for tag in ('before', 'after'):
+            save_png(L[f's2_{tag}'], S2_VIS, box, f'{FIG}/s2_{s}_{tag}.png')
+        rows.append((f'{name}, Aug-Oct 2025', f'{FIG}/s2_{s}_before.png',
+                     f'{name}, Aug-Oct 2026', f'{FIG}/s2_{s}_after.png'))
+    grid_figure(rows, f'{FIG}/s2_before_after_draft.png',
+                'Sentinel-2 median composites, 27 Aug to 28 Oct, 3 km boxes. '
+                'Contains modified Copernicus Sentinel data 2025-2026.')
