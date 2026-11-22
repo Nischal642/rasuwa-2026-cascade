@@ -76,6 +76,7 @@ Pass `--project ID` to use a different Earth Engine project for one run.
 |---|---|---|
 | `before-after` | `figures/before_after_draft.png` | Fig. 1 |
 | `planet` | `figures/planet_draft.png` | Fig. 2 |
+| `s2-before-after` | `figures/s2_before_after_draft.png` | Fig 1 in the PLOS ONE version (replaces Figs. 1-2, whose imagery is CC BY-NC) |
 | `footprint` | `outputs/footprint_areas.json`, `figures/footprint_draft.png` | Fig. 3 |
 | `validate` | `outputs/validation.json`, `figures/validation_draft.png` | Table III, Fig. 4 |
 | `buildings` | `outputs/buildings.json`, `figures/buildings_draft.png` | Fig. 5 |

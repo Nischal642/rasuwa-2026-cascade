@@ -4,6 +4,7 @@ Command line (PNGs go to figures/, tables to outputs/):
     python -m rasuwa inventory     what is in the Vantor and Planet collections
     python -m rasuwa before-after   Vantor before/after at Syabrubesi, Timure and Bidur
     python -m rasuwa planet         PlanetScope on 27 May and on the morning of 26 Aug
+    python -m rasuwa s2-before-after Sentinel-2 before/after at the same places (CC BY, for PLOS ONE)
     python -m rasuwa export         compute the footprint once into data/footprint/ (GeoTIFF tiles; slow)
     python -m rasuwa footprint      areas and map from the exported footprint (fast, local)
     python -m rasuwa validate       score the footprint against Copernicus EMS EMSR927 (data/emsr927/)
@@ -24,6 +25,7 @@ from . import exposure, footprint, imagery, leadtime, validation, web
 from .common import FIG, OUT, init
 
 STEPS = {'inventory': imagery.run_inventory, 'before-after': imagery.run_before_after, 'planet': imagery.run_planet,
+         's2-before-after': imagery.run_s2_before_after,
          'export': footprint.run_export, 'footprint': footprint.run_footprint, 'validate': validation.run_validate,
          'buildings': exposure.run_buildings, 'infrastructure': exposure.run_infrastructure,
          'leadtime': leadtime.run_leadtime, 'web': web.run_web}
